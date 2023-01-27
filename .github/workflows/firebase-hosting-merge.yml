@@ -25,3 +25,4 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_FYDP_BREAD }}"
           channelId: live
           projectId: fydp-bread
+          entryPoint: ./frontend
