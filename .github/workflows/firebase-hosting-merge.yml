@@ -8,6 +8,11 @@ on:
       - "frontend/**"
     branches:
       - main
+
+defaults:
+  run:
+    working-directory: frontend
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
