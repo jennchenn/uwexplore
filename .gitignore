@@ -24,3 +24,5 @@ venv/
 __pycache__/
 
 **/firebaseServiceAccount.json
+
+.vscode/
