@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.0.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "lint-fix": "^0.24.0",
     "prettier": "^2.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
