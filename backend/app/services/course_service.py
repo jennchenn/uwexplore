@@ -6,4 +6,10 @@ class CourseService:
         self.logger = logger
 
     def get_courses(self):
-        return [course.to_dict() for course in Course.query.all()]
+        courses = []
+
+        for result in Course.objects:
+            result_dict = result.to_serializable_dict()
+            courses.append(result_dict)
+
+        return courses

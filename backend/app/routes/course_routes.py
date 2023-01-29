@@ -6,7 +6,7 @@ from ..services.course_service import CourseService
 
 course_service = CourseService(current_app.logger)
 
-blueprint = Blueprint("course", __name__, url_prefix="/course")
+blueprint = Blueprint("course", __name__, url_prefix="/courses")
 
 
 @blueprint.route("/", methods=["GET"], strict_slashes=False)

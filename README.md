@@ -1,6 +1,6 @@
 # fydp
 
-Postgres + Flask + React
+Mongo + Flask + React
 
 ## Local Development Setup
 
