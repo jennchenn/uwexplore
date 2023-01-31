@@ -1,32 +1,62 @@
 // import React from "react";
-// import "./App.css";
-
+import "./App.css";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Stack from "@mui/material/Stack";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+
 import Navbar from "./components/Navbar";
 
+const sectionSizes = {
+  default: { search: 4, calendar: 8 },
+  allCal: { search: 0, calendar: 12 },
+};
+
 function App() {
+  const [searchWidth, setSearchWidth] = useState(sectionSizes.default.search);
+  const [calendarWidth, setCalendarWidth] = useState(
+    sectionSizes.default.calendar,
+  );
+  const [sectionInView, setSectionInView] = useState("both");
+
+  const collapseSearch = () => {
+    setSearchWidth(sectionSizes.allCal.search);
+    setCalendarWidth(sectionSizes.allCal.calendar);
+    setSectionInView("calendar");
+  };
+
+  const expandSearch = () => {
+    setSearchWidth(sectionSizes.default.search);
+    setCalendarWidth(sectionSizes.default.calendar);
+    setSectionInView("both");
+  };
+
   return (
     <Box>
       <Navbar></Navbar>
       <Grid container>
-        <Grid xs={4} style={{ background: "purple", height: "95vh" }}>
+        <Grid xs={searchWidth} className="search-base">
           Search
+          <KeyboardDoubleArrowLeftIcon
+            className="search-collapse-icon"
+            onClick={collapseSearch}
+          ></KeyboardDoubleArrowLeftIcon>
         </Grid>
-        <Grid xs={8} style={{ background: "pink", height: "95vh" }}>
+        <Grid xs={calendarWidth} className="calendar-base">
           <Stack>
-            <div style={{ background: "blue" }}>Calendar</div>
-            <div
-              style={{
-                background: "green",
-                position: "fixed",
-                bottom: "0",
-                width: "100%",
-              }}
-            >
-              Ceab
+            <div>
+              Calendar
+              <KeyboardDoubleArrowRightIcon
+                style={{
+                  display: sectionInView === "both" ? "none" : "inline-block",
+                }}
+                className="cal-collapse-icon"
+                onClick={expandSearch}
+              ></KeyboardDoubleArrowRightIcon>
             </div>
+            <div className="ceab-base">Ceab</div>
           </Stack>
         </Grid>
       </Grid>
