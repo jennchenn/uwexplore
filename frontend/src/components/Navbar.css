@@ -1,0 +1,4 @@
+.customize-toolbar {
+  min-height: 5vh;
+  background: var(--primary);
+}

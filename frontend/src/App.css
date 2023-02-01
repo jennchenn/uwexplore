@@ -1,0 +1,45 @@
+/* APP COLOURS */
+:root {
+  --primary: #9572cb;
+  /* --primary-variant: #FFFFFF; */
+  --secondary: #4f3578;
+  /* --secondary-variant: #FFFFFF; */
+  --background-light: #ebebeb;
+  --background-medium: #e4e4e4;
+  --background-dark: #bdbdbd;
+  --warning: #701717;
+}
+
+.calendar-base {
+  height: 95vh;
+  background-color: var(--background-light);
+}
+
+.ceab-base {
+  background-color: var(--primary);
+  /* todo: height is placeholder */
+  height: 200px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.search-base {
+  height: 95vh;
+  background-color: var(--background-medium);
+}
+
+.cal-collapse-icon {
+  float: left;
+  cursor: pointer;
+}
+
+.search-collapse-icon {
+  float: right;
+}
+
+.cal-collapse-icon:hover,
+.search-collapse-icon:hover {
+  color: var(--primary);
+  cursor: pointer;
+}
