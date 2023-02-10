@@ -1,4 +1,3 @@
-// import React from "react";
 import "./App.css";
 import { useState } from "react";
 import Box from "@mui/material/Box";
@@ -37,27 +36,44 @@ function App() {
     <Box>
       <Navbar></Navbar>
       <Grid container>
-        <Grid xs={searchWidth} className="search-base">
-          Search
-          <KeyboardDoubleArrowLeftIcon
-            className="search-collapse-icon"
-            onClick={collapseSearch}
-          ></KeyboardDoubleArrowLeftIcon>
+        <Grid xs={searchWidth}>
+          <Box
+            style={{
+              maxHeight: "92vh",
+              overflow: "auto",
+              position: "sticky",
+              top: "8vh",
+            }}
+          >
+            Search
+            <KeyboardDoubleArrowLeftIcon
+              className="search-collapse-icon"
+              onClick={collapseSearch}
+            ></KeyboardDoubleArrowLeftIcon>
+          </Box>
         </Grid>
         <Grid xs={calendarWidth} className="calendar-base">
-          <Stack>
-            <div>
-              Calendar
-              <KeyboardDoubleArrowRightIcon
-                style={{
-                  display: sectionInView === "both" ? "none" : "inline-block",
-                }}
-                className="cal-collapse-icon"
-                onClick={expandSearch}
-              ></KeyboardDoubleArrowRightIcon>
-            </div>
-            <div className="ceab-base">Ceab</div>
-          </Stack>
+          <Box
+            style={{
+              maxHeight: "92vh",
+              overflow: "auto",
+              position: "sticky",
+              top: "8vh",
+            }}
+          >
+            <Stack direction="column">
+              <div>
+                Calendar
+                <KeyboardDoubleArrowRightIcon
+                  style={{
+                    display: sectionInView === "both" ? "none" : "inline-block",
+                  }}
+                  className="cal-collapse-icon"
+                  onClick={expandSearch}
+                ></KeyboardDoubleArrowRightIcon>
+              </div>
+            </Stack>
+          </Box>
         </Grid>
       </Grid>
     </Box>
