@@ -12,8 +12,8 @@ import Button from "@mui/material/Button";
 export default function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar className="customize-toolbar">
+      <AppBar position="fixed" elevation={0}>
+        <Toolbar className="customize-toolbar" sx={{ height: "3vh" }}>
           {/* <IconButton
             size="large"
             edge="start"
