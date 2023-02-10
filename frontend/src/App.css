@@ -11,7 +11,7 @@
 }
 
 .calendar-base {
-  height: 95vh;
+  height: 100vh;
   background-color: var(--background-light);
 }
 
@@ -25,7 +25,7 @@
 }
 
 .search-base {
-  height: 95vh;
+  height: 100vh;
   background-color: var(--background-medium);
 }
 
