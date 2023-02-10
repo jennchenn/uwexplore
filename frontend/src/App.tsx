@@ -7,6 +7,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 
 import Navbar from "./components/Navbar";
+import Search from "./components/Search";
 
 const sectionSizes = {
   default: { search: 4, calendar: 8 },
@@ -45,11 +46,12 @@ function App() {
               top: "8vh",
             }}
           >
-            Search
             <KeyboardDoubleArrowLeftIcon
               className="search-collapse-icon"
               onClick={collapseSearch}
             ></KeyboardDoubleArrowLeftIcon>
+            {/* todo: will this keep results? something better than empty tag? optimized? */}
+            {sectionInView === "calendar" ? <></> : <Search />}
           </Box>
         </Grid>
         <Grid xs={calendarWidth} className="calendar-base">
