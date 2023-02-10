@@ -37,7 +37,7 @@ function App() {
     <Box>
       <Navbar></Navbar>
       <Grid container>
-        <Grid xs={searchWidth}>
+        <Grid xs={searchWidth} className="search-base">
           <Box
             style={{
               maxHeight: "92vh",

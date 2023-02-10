@@ -1,4 +1,4 @@
 .customize-toolbar {
   min-height: 8vh !important;
-  background: var(--primary);
+  background: var(--primary-dark);
 }

@@ -1,32 +1,40 @@
 /* APP COLOURS */
 :root {
-  --primary: #9572cb;
-  /* --primary-variant: #FFFFFF; */
-  --secondary: #4f3578;
-  /* --secondary-variant: #FFFFFF; */
-  --background-light: #ebebeb;
-  --background-medium: #e4e4e4;
-  --background-dark: #bdbdbd;
-  --warning: #701717;
+  --primary-light: #c4c1ff;
+  --primary: #6c63ff;
+  --primary-dark: #564fcc;
+
+  --background-light: #f7f7f7;
+  --background-medium: #ebebeb;
+
+  --black-light: #cccccc;
+  --black-medium: #999999;
+  --black-dark: #666666;
+  --black-darker: #333333;
+
+  --warning-light: #ff8181;
+  --warning: #ff6161;
+  --warning-dark: #cc4e4e;
+
+  --conflict-light: #fdecb7;
+  --conflict: #f9d04a;
+  --conflict-dark: #c7a63b;
+
+  --success-light: #ebfbde;
+  --success: #7dbd48;
+  --success-dark: #5e8e36;
+
+  --white: #ffffff;
+  --black: #000000;
 }
 
 .calendar-base {
   height: 100vh;
-  background-color: var(--background-light);
-}
-
-.ceab-base {
-  background-color: var(--primary);
-  /* todo: height is placeholder */
-  height: 200px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
 }
 
 .search-base {
   height: 100vh;
-  background-color: var(--background-medium);
+  box-shadow: 3px 0 5px -1px var(--black-light);
 }
 
 .cal-collapse-icon {
