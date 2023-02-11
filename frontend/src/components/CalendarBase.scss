@@ -5,13 +5,26 @@
   height: 0px !important;
 }
 
-.rbc-time-view {
-  border-radius: 10px;
-  box-shadow: 0 2px 4px 1px var(--black-light);
+.rbc-day-slot .rbc-events-container {
+  margin-right: 0px;
+}
+
+.rbc-event {
+  text-align: center;
+}
+
+.rbc-day-slot .rbc-event-label {
+  align-self: center;
+  padding-right: 0px;
 }
 
 .rbc-header {
   border-bottom: none;
+}
+
+.rbc-time-view {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 1px var(--black-light);
 }
 
 .box-style {
