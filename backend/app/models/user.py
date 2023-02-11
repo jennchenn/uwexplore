@@ -1,9 +1,9 @@
 from mongoengine import (
     Document,
-    Enum,
-    EnumField,
     EmbeddedDocument,
     EmbeddedDocumentField,
+    Enum,
+    EnumField,
     ListField,
     ObjectId,
     ObjectIdField,
