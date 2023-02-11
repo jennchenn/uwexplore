@@ -1,7 +1,7 @@
 from mongoengine import (
     DateTimeField,
-    Document,
     DoubleField,
+    EmbeddedDocument,
     Enum,
     EnumField,
     IntField,
@@ -28,7 +28,7 @@ class ClassType(Enum):
     LAB = "LAB"
 
 
-class Section(Document):
+class Section(EmbeddedDocument):
     _id = ObjectIdField(required=True, default=ObjectId)
     day = ListField(EnumField(Weekday), required=True)
     term_code = StringField(required=True)
