@@ -4,12 +4,12 @@ on:
   # Triggers the workflow on push or pull request events for the main branch
   push:
     paths:
-      - "frontend/**"
+      - "backend/**"
     branches:
       - main
   pull_request:
     paths:
-      - "frontend/**"
+      - "backend/**"
     branches:
       - main
 
