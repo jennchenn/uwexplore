@@ -1,4 +1,17 @@
-from mongoengine import Document, ListField, ObjectId, ObjectIdField, StringField
+from mongoengine import (
+    Document,
+    Enum,
+    EnumField,
+    ListField,
+    ObjectId,
+    ObjectIdField,
+    StringField,
+)
+
+
+class Role(Enum):
+    STUDENT = "STUDENT"
+    ADMIN = "ADMIN"
 
 
 class User(Document):
@@ -8,6 +21,7 @@ class User(Document):
     grad_year = StringField()  # fk?
     program = ObjectIdField()  # fk?
     schedules = ListField(ObjectIdField())
+    role = EnumField(Role, default=Role.STUDENT, required=True)
 
     def to_serializable_dict(self):
         """
