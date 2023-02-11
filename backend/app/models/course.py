@@ -1,14 +1,14 @@
+from enum import Enum
+
 from mongoengine import (
     DateTimeField,
     Document,
-    DoubleField,
     EmbeddedDocument,
     EmbeddedDocumentListField,
-    Enum,
     EnumField,
+    FloatField,
     IntField,
     ListField,
-    ObjectId,
     ObjectIdField,
     StringField,
 )
@@ -31,11 +31,11 @@ class ClassType(Enum):
 
 
 class Section(EmbeddedDocument):
-    _id = ObjectIdField(required=True, default=ObjectId)
+    _id = ObjectIdField(required=True)
     day = ListField(EnumField(Weekday), required=True)
     term_code = StringField(required=True)
-    start_time = DoubleField(required=True)
-    end_time = DoubleField(required=True)
+    start_time = FloatField(required=True)
+    end_time = FloatField(required=True)
     class_number = IntField(required=True)  # 4178
     location = StringField(required=True)  # E5 6008
     type = EnumField(ClassType, required=True)  # LEC
@@ -66,16 +66,16 @@ class CourseType(Enum):
 
 
 class Course(Document):
-    _id = ObjectIdField(required=True, default=ObjectId)
+    _id = ObjectIdField(required=True)
     name = StringField(required=True)
     department = StringField(required=True)
     code = StringField(required=True)
     description = StringField(required=True)
-    cse_weight = DoubleField(required=True)
-    ceab_math = DoubleField(required=True)
-    ceab_sci = DoubleField(required=True)
-    ceab_eng = DoubleField(required=True)
-    ceab_design = DoubleField(required=True)
+    cse_weight = FloatField(required=True)
+    ceab_math = FloatField(required=True)
+    ceab_sci = FloatField(required=True)
+    ceab_eng = FloatField(required=True)
+    ceab_design = FloatField(required=True)
     course_type = EnumField(CourseType)
     sections = EmbeddedDocumentListField(Section)
 
