@@ -31,6 +31,7 @@ class ClassType(Enum):
 class Section(Document):
     _id = ObjectIdField(required=True, default=ObjectId)
     day = ListField(EnumField(Weekday), required=True)
+    term_code = StringField(required=True)
     start_time = DoubleField(required=True)
     end_time = DoubleField(required=True)
     class_number = IntField(required=True)  # 4178

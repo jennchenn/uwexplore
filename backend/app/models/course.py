@@ -1,12 +1,15 @@
 from mongoengine import (
     Document,
     DoubleField,
+    EmbeddedDocumentListField,
     Enum,
     EnumField,
     ObjectId,
     ObjectIdField,
     StringField,
 )
+
+from .section import Section
 
 
 class CourseType(Enum):
@@ -29,7 +32,8 @@ class Course(Document):
     ceab_sci = DoubleField(required=True)
     ceab_eng = DoubleField(required=True)
     ceab_design = DoubleField(required=True)
-    type = EnumField(CourseType)
+    course_type = EnumField(CourseType)
+    sections = EmbeddedDocumentListField(Section)
 
     def to_serializable_dict(self):
         """
