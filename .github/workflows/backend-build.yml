@@ -28,7 +28,7 @@ jobs:
 
       # building the docker containers
       - name: Build the docker-compose stack
-        run: docker-compose up py-backend -d
+        run: docker-compose -f docker-compose.ci.yml up -d
 
       # check running containers
       - name: Check running containers
