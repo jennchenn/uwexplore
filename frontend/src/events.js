@@ -1,7 +1,7 @@
 // Date(year, month, day, hour, minute)
 // Calendar currently set to the week of Jan 02(Mon)-06(Fri)
 
-export default [
+const events = [
   {
     id: 0,
     title: "Sample Class 1",
@@ -31,3 +31,5 @@ export default [
     end: new Date(2023, 0, 2, 17),
   },
 ];
+
+export default events;
