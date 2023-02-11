@@ -1,18 +1,18 @@
+from enum import Enum
+
 from mongoengine import (
     Document,
     EmbeddedDocument,
     EmbeddedDocumentField,
-    Enum,
     EnumField,
     ListField,
-    ObjectId,
     ObjectIdField,
     StringField,
 )
 
 
 class Schedule(EmbeddedDocument):
-    _id = ObjectIdField(required=True, default=ObjectId)
+    _id = ObjectIdField(required=True)
     term = StringField(required=True)
     name = StringField()
     courses = ListField(ObjectIdField(), required=True)
@@ -34,7 +34,7 @@ class Role(Enum):
 
 
 class User(Document):
-    _id = ObjectIdField(required=True, default=ObjectId)
+    _id = ObjectIdField(required=True)
     auth_id = StringField(required=True)
     name = StringField(required=True)
     grad_year = StringField()

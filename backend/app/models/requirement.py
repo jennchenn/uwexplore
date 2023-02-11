@@ -1,8 +1,8 @@
-from mongoengine import Document, IntField, ObjectId, ObjectIdField
+from mongoengine import Document, IntField, ObjectIdField
 
 
 class Requirement(Document):
-    _id = ObjectIdField(required=True, default=ObjectId)
+    _id = ObjectIdField(required=True)
     grad_year = IntField(required=True)
     cse_a = IntField(required=True)
     cse_b = IntField(required=True)
