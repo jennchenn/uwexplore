@@ -31,7 +31,7 @@ class ClassType(Enum):
 
 
 class Section(EmbeddedDocument):
-    _id = ObjectIdField(required=True)
+    _id = ObjectIdField()
     day = ListField(EnumField(Weekday), required=True)
     term_code = StringField(required=True)
     start_time = FloatField(required=True)
@@ -66,7 +66,7 @@ class CourseType(Enum):
 
 
 class Course(Document):
-    _id = ObjectIdField(required=True)
+    _id = ObjectIdField()
     name = StringField(required=True)
     department = StringField(required=True)
     code = StringField(required=True)

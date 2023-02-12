@@ -12,7 +12,7 @@ from mongoengine import (
 
 
 class Schedule(EmbeddedDocument):
-    _id = ObjectIdField(required=True)
+    _id = ObjectIdField()
     term = StringField(required=True)
     name = StringField()
     courses = ListField(ObjectIdField(), required=True)
@@ -34,9 +34,10 @@ class Role(Enum):
 
 
 class User(Document):
-    _id = ObjectIdField(required=True)
-    auth_id = StringField(required=True)
+    _id = ObjectIdField()
     name = StringField(required=True)
+    auth_id = StringField(required=True)
+    email = StringField(required=True)
     grad_year = StringField()
     program = StringField()
     active_schedule = EmbeddedDocumentField(Schedule)
