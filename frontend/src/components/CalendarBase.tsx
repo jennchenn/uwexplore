@@ -15,8 +15,9 @@ export default function CalendarBase() {
 
   // for popup modal when clicking a course on the calendar
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setmodalTitle] = useState("placeholder title");
-  const [modalInfo, setmodalInfo] = useState("placeholder info");
+  const [modalTitle, setModalTitle] = useState("placeholder title");
+  const [modalInfo, setModalInfo] = useState("placeholder info");
+  const [modalID, setModalID] = useState(0);
 
   const handleCourseSelectEvent = useCallback(
     (event: any) => {
@@ -35,12 +36,18 @@ export default function CalendarBase() {
         event.location === "" ? "" : "\n" + event.location
       } ${event.instructor === "" ? "" : "\n" + event.instructor}`;
 
-      setmodalTitle(event.title);
-      setmodalInfo(eventDetails);
+      setModalTitle(event.title);
+      setModalInfo(eventDetails);
+      setModalID(event.id);
       setModalOpen(true);
     },
     [localizer],
   );
+
+  const handleCourseDeletion = () => {
+    // todo: implement deletion
+    console.log(`this will eventually delete course with ID:${modalID}`);
+  };
 
   const eventStyleGetter = (event: HTMLTextAreaElement) => {
     let style = {
@@ -107,6 +114,7 @@ export default function CalendarBase() {
           setModalOpen={setModalOpen}
           courseColors={courseColors}
           availableBackgroundColors={backgroundColors}
+          handleCourseDeletion={handleCourseDeletion}
         ></CalendarModal>
       </div>
     </Box>
