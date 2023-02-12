@@ -2,6 +2,7 @@ import { useMemo, useCallback, useState } from "react";
 import Box from "@mui/material/Box";
 import moment from "moment";
 import "./CalendarBase.scss";
+import backgroundColors from "../styles/calendarCourseBackgroundColors";
 import events from "../APIClients/events";
 import CalendarModal from "./CalendarModal";
 
@@ -17,11 +18,29 @@ export default function CalendarBase() {
   const [modalTitle, setmodalTitle] = useState("placeholder title");
   const [modalInfo, setmodalInfo] = useState("placeholder info");
 
-  const handleCourseSelectEvent = useCallback((event: HTMLTextAreaElement) => {
-    setmodalTitle(event.title);
-    setmodalInfo(event.value);
-    setModalOpen(true);
-  }, []);
+  const handleCourseSelectEvent = useCallback(
+    (event: any) => {
+      // assemble course time from start and end times
+      let eventTime = "";
+      if (event.start) {
+        eventTime = `${localizer.format(
+          event.start,
+          "h:mm a",
+        )} - ${localizer.format(event.end, "h:mm a")}`.toUpperCase();
+      }
+
+      // assemble course details with checks for empty fields
+      // todo: validate with real data
+      let eventDetails = `${eventTime === "" ? "" : eventTime} ${
+        event.location === "" ? "" : "\n" + event.location
+      } ${event.instructor === "" ? "" : "\n" + event.instructor}`;
+
+      setmodalTitle(event.title);
+      setmodalInfo(eventDetails);
+      setModalOpen(true);
+    },
+    [localizer],
+  );
 
   const eventStyleGetter = (event: HTMLTextAreaElement) => {
     let style = {
@@ -33,21 +52,6 @@ export default function CalendarBase() {
     };
   };
 
-  // colour options for courses on calendar
-  const availableColors = useMemo(() => {
-    const availableBackgroundColors = [
-      "#ff6961",
-      "#ffb480",
-      "#e5d54a",
-      "#42d6a4",
-      "#08cad1",
-      "#59adf6",
-      "#9d94ff",
-      "#c780e8",
-    ];
-    return availableBackgroundColors;
-  }, []);
-
   const courseColors = useMemo(() => {
     const results: any = {};
     let colorMap = new Map();
@@ -58,13 +62,14 @@ export default function CalendarBase() {
         // Get a unique hex color for this title
         colorMap.set(
           title,
-          availableColors[colorIndex++ % availableColors.length],
+          // using mod so colours repeat after end of list is reached
+          backgroundColors[colorIndex++ % backgroundColors.length],
         );
       }
       results[event.title] = colorMap.get(title);
     }
     return results;
-  }, [availableColors]);
+  }, []);
 
   const { defaultDate, formats, views } = useMemo(
     () => ({
@@ -101,7 +106,7 @@ export default function CalendarBase() {
           modalOpen={modalOpen}
           setModalOpen={setModalOpen}
           courseColors={courseColors}
-          availableBackgroundColors={availableColors}
+          availableBackgroundColors={backgroundColors}
         ></CalendarModal>
       </div>
     </Box>

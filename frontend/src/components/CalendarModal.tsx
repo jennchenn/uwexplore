@@ -54,7 +54,7 @@ export default function CalendarModal({
         onChange={handleChange}
         value={courseColors[modalTitle] || selectedValue}
       >
-        {availableBackgroundColors.map((color) => (
+        {availableBackgroundColors.map((color, i) => (
           <Radio
             value={color}
             sx={{
@@ -63,6 +63,7 @@ export default function CalendarModal({
                 color: { color },
               },
             }}
+            key={i}
           ></Radio>
         ))}
       </RadioGroup>
