@@ -30,6 +30,20 @@ const events = [
     start: new Date(2023, 0, 2, 15),
     end: new Date(2023, 0, 2, 17),
   },
+  {
+    id: 5,
+    title: "Sample Class 4",
+    value: "3:00PM - 5:00 PM \nE5 6004 \nSean Speziale",
+    start: new Date(2023, 0, 2, 15),
+    end: new Date(2023, 0, 2, 17),
+  },
+  {
+    id: 6,
+    title: "Sample Class 1",
+    value: "3:00PM - 5:00 PM \nE5 6004 \nSean Speziale",
+    start: new Date(2023, 0, 5, 10, 30),
+    end: new Date(2023, 0, 5, 14, 20),
+  },
 ];
 
 export default events;
