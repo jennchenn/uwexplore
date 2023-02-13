@@ -13,6 +13,12 @@ class UserService:
         self.logger = logger
 
     def create_user(self, user):
+        """
+        Create a new user in MongoDB and if necessary in Firebase
+        :param user: new user metadata to be added
+        :type user: CreateUserDTO
+        :raise Exception: if error encountered adding user in Firebase or MongoDB
+        """
         try:
             if user.sign_up_method == "PASSWORD":
                 firebase_user = firebase_admin.auth.create_user(
@@ -59,31 +65,25 @@ class UserService:
             )
             raise e
 
-        user_dict = UserService._user_to_dict_and_remove_auth_id(new_user)
-        return user_dict
+        return new_user.to_serializable_dict()
 
     def get_user_by_email(self, email):
+        """
+        Retrieve user information based on email address
+        :param email: Email address of user to search for
+        :type email: String
+        :raise KeyError: if user with that email address not found
+        :raise Exception: if error encountered retrieving user from Firebase/from database
+        """
         try:
             firebase_user = firebase_admin.auth.get_user_by_email(email)
             user = User.objects("auth_id" == firebase_user.uid).first()
             if not user:
                 raise KeyError(f"No user with email={email}")
-            return UserService._user_to_dict_and_remove_auth_id(user)
+            return user.to_serializable_dict()
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to get user with email={email}. Reason={reason if reason else str(e)}"
             )
             raise e
-
-    @staticmethod
-    def _user_to_dict_and_remove_auth_id(user):
-        """
-        Convert a User document to a serializable dict and remove the
-        auth id field
-        :param user: the user
-        :type user: User
-        """
-        user_dict = user.to_serializable_dict()
-        user_dict.pop("auth_id", None)
-        return user_dict
