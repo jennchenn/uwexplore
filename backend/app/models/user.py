@@ -34,9 +34,8 @@ class Role(Enum):
 
 
 class User(Document):
-    _id = ObjectIdField()
     name = StringField(required=True)
-    auth_id = StringField(required=True)
+    auth_id = StringField(required=True, primary_key=True)
     email = StringField(required=True)
     grad_year = StringField()
     program = StringField()
@@ -49,8 +48,7 @@ class User(Document):
         ObjectId must be converted to a string.
         """
         dict = self.to_mongo().to_dict()
-        id = dict.pop("_id", None)
-        dict["id"] = str(id)
+        dict.pop("_id", None)  # this is the auth_id
         return dict
 
     meta = {"collection": "users"}
