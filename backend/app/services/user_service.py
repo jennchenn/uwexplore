@@ -60,8 +60,21 @@ class UserService:
             raise e
 
         user_dict = UserService._user_to_dict_and_remove_auth_id(new_user)
-        print(user_dict)
         return user_dict
+
+    def get_user_by_email(self, email):
+        try:
+            firebase_user = firebase_admin.auth.get_user_by_email(email)
+            user = User.objects("auth_id" == firebase_user.uid).first()
+            if not user:
+                raise KeyError(f"No user with email={email}")
+            return UserService._user_to_dict_and_remove_auth_id(user)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get user with email={email}. Reason={reason if reason else str(e)}"
+            )
+            raise e
 
     @staticmethod
     def _user_to_dict_and_remove_auth_id(user):
