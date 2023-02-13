@@ -2,8 +2,8 @@ import json
 
 from flask import Blueprint, current_app, jsonify, request
 
-from ..services.user_service import UserService
 from ..resources.user_dto import CreateUserDTO
+from ..services.user_service import UserService
 
 user_service = UserService(current_app.logger)
 
