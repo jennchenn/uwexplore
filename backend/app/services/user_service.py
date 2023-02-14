@@ -32,9 +32,9 @@ class UserService:
 
             try:
                 new_user = User(
+                    _id=auth_id,
                     name=user.name,
                     email=user.email,
-                    auth_id=auth_id,
                     grad_year=user.grad_year,
                     role=user.role,
                 ).save()
@@ -77,7 +77,7 @@ class UserService:
         """
         try:
             firebase_user = firebase_admin.auth.get_user_by_email(email)
-            user = User.objects("auth_id" == firebase_user.uid).first()
+            user = User.objects(_id=firebase_user.uid).first()
             if not user:
                 raise KeyError(f"No user with email={email}")
             return user.to_serializable_dict()
