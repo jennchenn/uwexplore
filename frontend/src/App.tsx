@@ -8,6 +8,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
+import Calendar from "./components/CalendarBase";
 
 const sectionSizes = {
   default: { search: 4, calendar: 8 },
@@ -64,16 +65,14 @@ function App() {
             }}
           >
             <Stack direction="column">
-              <div>
-                Calendar
-                <KeyboardDoubleArrowRightIcon
-                  style={{
-                    display: sectionInView === "both" ? "none" : "inline-block",
-                  }}
-                  className="cal-collapse-icon"
-                  onClick={expandSearch}
-                ></KeyboardDoubleArrowRightIcon>
-              </div>
+              <KeyboardDoubleArrowRightIcon
+                style={{
+                  display: sectionInView === "both" ? "none" : "inline-block",
+                }}
+                className="cal-collapse-icon"
+                onClick={expandSearch}
+              ></KeyboardDoubleArrowRightIcon>
+              <Calendar />
             </Stack>
           </Box>
         </Grid>
