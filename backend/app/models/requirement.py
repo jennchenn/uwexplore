@@ -2,7 +2,7 @@ from mongoengine import Document, IntField, ObjectIdField
 
 
 class Requirement(Document):
-    _id = ObjectIdField(required=True)
+    _id = ObjectIdField()
     grad_year = IntField(required=True)
     cse_a = IntField(required=True)
     cse_b = IntField(required=True)
