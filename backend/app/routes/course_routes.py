@@ -21,7 +21,7 @@ def get_courses():
 
 @blueprint.route("/saved", methods=["GET"], strict_slashes=False)
 @require_login
-def get_saved_courses():
+def get_saved_courses(curr_user, *args, **kwargs):
     try:
         return jsonify({"success": "ok"}), 200
     except Exception as e:
