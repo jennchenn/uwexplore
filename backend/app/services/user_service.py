@@ -101,7 +101,7 @@ class UserService:
         """
         try:
             uid = self._get_uid_by_token(access_token)
-            return self._get_user_by_auth_id(uid)
+            return self._get_user_by_id(uid)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -109,7 +109,6 @@ class UserService:
             )
             raise e
 
-    # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
     def login(self, email, password):
         """
         Authenticate user by email and password
@@ -149,7 +148,6 @@ class UserService:
             "refresh_token": response_json["refreshToken"],
         }
 
-    # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
     def refresh_token(self, refresh_token):
         """
         Return new ID token given refresh token
@@ -189,9 +187,9 @@ class UserService:
             "refresh_token": response_json["refresh_token"],
         }
 
-    def _get_user_by_auth_id(self, auth_id):
+    def _get_user_by_id(self, id):
         try:
-            user = User.objects(auth_id=auth_id).first()
+            user = User.objects(_id=id).first()
             if not user:
                 raise KeyError(f"No user with ID")
             return user.to_serializable_dict()
@@ -205,6 +203,7 @@ class UserService:
     def _get_uid_by_token(self, access_token):
         try:
             decoded_token = firebase_admin.auth.verify_id_token(access_token)
+            print(decoded_token, flush=True)
             return decoded_token["uid"]
         except Exception as e:
             reason = getattr(e, "message", None)
