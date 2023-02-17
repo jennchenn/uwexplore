@@ -109,6 +109,7 @@ class UserService:
             )
             raise e
 
+    # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
     def login(self, email, password):
         """
         Authenticate user by email and password
@@ -148,6 +149,7 @@ class UserService:
             "refresh_token": response_json["refreshToken"],
         }
 
+    # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
     def refresh_token(self, refresh_token):
         """
         Return new ID token given refresh token
