@@ -205,7 +205,6 @@ class UserService:
     def _get_uid_by_token(self, access_token):
         try:
             decoded_token = firebase_admin.auth.verify_id_token(access_token)
-            print(decoded_token, flush=True)
             return decoded_token["uid"]
         except Exception as e:
             reason = getattr(e, "message", None)
