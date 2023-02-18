@@ -77,4 +77,7 @@ def get_course_term_offered(course):
     return terms
 
 
-get_course_reviews("cs115")
+# # testing code
+# value = "cs115"
+# get_course_reviews(value)
+# get_course_term_offered(value)
