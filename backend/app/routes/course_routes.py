@@ -11,7 +11,11 @@ blueprint = Blueprint("course", __name__, url_prefix="/courses")
 @blueprint.route("/", methods=["GET"], strict_slashes=False)
 def get_courses():
     try:
-        result = course_service.get_courses()
+        args = request.args.to_dict(flat=False)
+        result = course_service.get_courses(
+            course_codes=args.get("code", None),
+            search_query=args.get("query", None),
+        )
         return jsonify(result), 200
 
     except Exception as e:
