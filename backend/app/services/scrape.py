@@ -27,9 +27,10 @@ def get_course_reviews(course):
     soup = BeautifulSoup(content, 'html.parser')
 
     rating = soup.find_all('div', attrs={'class': 'sc-pcJja jjDvpo'})
-    easy_rating = rating[0].text
-    useful_rating = rating[1].text
-    liked_rating = soup.find('div', attrs={'class': 'sc-psQdR iYtUny'}).text
+    easy_rating = rating[0].text if rating[0].text[-1] == "%" else ""
+    useful_rating = rating[1].text if rating[1].text[-1] == "%" else ""
+    liked_rating = soup.find('div', attrs={'class': 'sc-psQdR iYtUny'}).text if \
+        soup.find('div', attrs={'class': 'sc-psQdR iYtUny'}).text[-1] == "%" else ""
     comments_count = int(re.findall(r'\d+', soup.find('a', attrs={'class': 'sc-qPwPv gjSZrg'}).text)[0])
     ratings_count = int(re.findall(r'\d+', soup.find('div', attrs={'class': 'sc-qXRQq hXXFXN'}).text)[0])
     comments = []
@@ -74,3 +75,6 @@ def get_course_term_offered(course):
 
     driver.quit()
     return terms
+
+
+get_course_reviews("cs115")
