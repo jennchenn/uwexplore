@@ -11,10 +11,12 @@ blueprint = Blueprint("course", __name__, url_prefix="/courses")
 @blueprint.route("/", methods=["GET"], strict_slashes=False)
 def get_courses():
     try:
+        # set flat=False to allow multiple values for each arg
+        # format of args is { arg: [ val1, ... ] }
         args = request.args.to_dict(flat=False)
         result = course_service.get_courses(
             course_codes=args.get("code", None),
-            search_query=args.get("query", None),
+            search_query_list=args.get("query", None),
         )
         return jsonify(result), 200
 

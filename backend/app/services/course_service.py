@@ -5,48 +5,42 @@ class CourseService:
     def __init__(self, logger):
         self.logger = logger
 
-        def get_courses(self, course_codes=None, search_query=None):
-            try:
-                filters = []
+    def get_courses(self, course_codes=None, search_query_list=None):
+        """
+        Retrieve courses in database based on specified filters
+        :param course_codes: A list of course codes to search by e.g. '1', '2'
+        :type course_codes: list of strings
+        :param search_query_list: Keyword to run case-insensitive search for in description/title
+        :type search_query_list: list of one string element
+        :raise Exception: if error encountered querying the database or unpacking args
+        """
+        try:
+            filters = []
 
-                if course_codes:
-                    code_filter = []
-                    for code in course_codes:
-                        code_filter.append({"code": {"$regex": f"^{code}"}})
-                    filters.append({"$or": code_filter})
+            if course_codes:
+                code_filter = []
+                for code in course_codes:
+                    code_filter.append({"code": {"$regex": f"^{code}"}})
+                filters.append({"$or": code_filter})
 
-                if search_query:
-                    # we expect search_query to be a list of size 1, so we fetch the actual string
-                    keyword = search_query[0]
-                    # {"$options": "i"} allows for case insensitive search
-                    filters.append(
-                        {
-                            "$or": [
-                                {"name": {"$regex": f"{keyword}", "$options": "i"}},
-                                {
-                                    "description": {
-                                        "$regex": f"{keyword}",
-                                        "$options": "i",
-                                    }
-                                },
-                            ]
-                        }
-                    )
-
-                courses = []
-                for result in Course.objects(__raw__={"$and": filters}):
-                    result_dict = result.to_serializable_dict()
-                    courses.append(result_dict)
-                return courses
-
-            except Exception as e:
-                reason = getattr(e, "message", None)
-                self.logger.error(
-                    "Failed to create user. Reason = {reason}".format(
-                        reason=(reason if reason else str(e))
-                    )
+            if search_query_list:
+                # we expect search_query to be a list of size 1, so we fetch the actual string
+                keyword = search_query_list[0]
+                # {"$options": "i"} allows for case insensitive search
+                filters.append(
+                    {
+                        "$or": [
+                            {"name": {"$regex": f"{keyword}", "$options": "i"}},
+                            {"description": {"$regex": f"{keyword}", "$options": "i"}},
+                        ]
+                    }
                 )
-                raise e
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
 
     def get_saved_courses_by_user(self, user):
         try:
