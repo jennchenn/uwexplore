@@ -2,10 +2,9 @@ import os
 import random
 import sys
 
+from app import create_app
 from app.models.course import Course, CourseType
 from app.models.user import User
-
-from app import create_app
 
 
 def add_courses():
