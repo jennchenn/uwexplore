@@ -1,5 +1,6 @@
 from enum import Enum
 
+from bson.objectid import ObjectId
 from mongoengine import (
     DateTimeField,
     Document,
@@ -31,7 +32,7 @@ class ClassType(Enum):
 
 
 class Section(EmbeddedDocument):
-    _id = ObjectIdField()
+    _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
     day = ListField(EnumField(Weekday), required=True)
     term_code = StringField(required=True)
     start_time = FloatField(required=True)
