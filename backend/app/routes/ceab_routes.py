@@ -1,5 +1,6 @@
 from flask import Blueprint, current_app, jsonify
 
+# from ..middlewares.authentication import require_login
 from ..services.ceab_service import CeabService
 
 ceab_service = CeabService(current_app.logger)
@@ -8,9 +9,10 @@ blueprint = Blueprint("ceab", __name__, url_prefix="/ceab")
 
 
 @blueprint.route("/", methods=["GET"], strict_slashes=False)
-def get_ceab():
+# @require_login
+def get_ceab(curr_user):
     try:
-        result = ceab_service.get_ceab_numbers(None)
+        result = ceab_service.get_ceab_numbers(curr_user)
         return jsonify(result), 200
 
     except Exception as e:
