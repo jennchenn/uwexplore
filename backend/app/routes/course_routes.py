@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app, jsonify
 
 from ..middlewares.authentication import require_login
 from ..services.course_service import CourseService
