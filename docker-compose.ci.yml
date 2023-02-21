@@ -6,9 +6,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    depends_on:
-      mongo:
-        condition: service_healthy
     ports:
       - 5000:5000
     dns:
@@ -17,10 +14,6 @@ services:
       - ./backend:/app
     environment:
       - TEST_MONGODB_URL
-      - TEST_MONGO_USER
-      - TEST_MONGO_PASS
-      - TEST_MONGO_HOST
-      - TEST_MONGO_DB
       - FIREBASE_PROJECT_ID
       - FIREBASE_PRIVATE_KEY_ID
       - FIREBASE_PRIVATE_KEY
@@ -33,17 +26,3 @@ services:
       - FIREBASE_WEB_API_KEY
       - FIREBASE_REFRESH_TOKEN_URL
       - FIREBASE_SIGN_IN_URL
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${TEST_MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${TEST_MONGO_PASS}
-      MONGO_INITDB_DATABASE: ${TEST_MONGO_DB}
-    healthcheck:
-      test: mongosh --eval 'db.runCommand("ping").ok' --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - 27017:27017

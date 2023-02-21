@@ -122,7 +122,6 @@ DEFAULT_COURSES = [
 ]
 
 
-# TODO: remove this step when migrations are configured to run against test db
 def seed_database():
     for course in DEFAULT_COURSES:
         course.save()

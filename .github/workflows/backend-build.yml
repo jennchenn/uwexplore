@@ -3,15 +3,15 @@ name: Docker build backend
 on:
   # Triggers the workflow on push or pull request events for the main branch
   push:
-    # paths:
-    #   - "backend/**"
-  #   branches:
-  #     - main
-  # pull_request:
-  #   paths:
-  #     - "backend/**"
-  #   branches:
-  #     - main
+    paths:
+      - "backend/**"
+    branches:
+      - main
+  pull_request:
+    paths:
+      - "backend/**"
+    branches:
+      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,10 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEST_MONGODB_URL: ${{ secrets.TEST_MONGODB_URL }}
-      # TEST_MONGO_USER: ${{ secrets.TEST_MONGO_USER }}
-      # TEST_MONGO_PASS: ${{ secrets.TEST_MONGO_PASS }}
-      # TEST_MONGO_DB: ${{ secrets.TEST_MONGO_DB }}
-      # TEST_MONGODB_URL: ${{ format('mongodb://{0}:{1}@{2}:27017/{3}', secrets.TEST_MONGO_USER, secrets.TEST_MONGO_PASS, secrets.TEST_MONGO_HOST, secrets.TEST_MONGO_DB) }}
 
       FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
       FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
