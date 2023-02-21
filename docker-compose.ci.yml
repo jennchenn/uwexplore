@@ -3,10 +3,12 @@ version: "3.7"
 services:
   py-backend:
     container_name: backend
-    restart: always
     build:
       context: ./backend
       dockerfile: Dockerfile
+    depends_on:
+      mongo:
+        condition: service_healthy
     ports:
       - 5000:5000
     dns:
@@ -14,4 +16,19 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - MONGODB_URL
+      - TEST_MONGO_USER
+      - TEST_MONGO_PASS
+      - TEST_MONGO_HOST
+      - TEST_MONGO_DB
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME: TEST_MONGO_USER
+      - MONGO_INITDB_ROOT_PASSWORD: TEST_MONGO_PASS
+      - MONGO_INITDB_DATABASE: TEST_MONGO_DB
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u $MONGO_INITDB_ROOT_USERNAME -p $MONGO_INITDB_ROOT_PASSWORD --quiet | grep 1
+      interval: 10s
+      timeout: 5s
+      retries: 5

@@ -5,13 +5,13 @@ on:
   push:
     paths:
       - "backend/**"
-    branches:
-      - main
-  pull_request:
-    paths:
-      - "backend/**"
-    branches:
-      - main
+  #   branches:
+  #     - main
+  # pull_request:
+  #   paths:
+  #     - "backend/**"
+  #   branches:
+  #     - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,7 +21,24 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     env:
-      MONGODB_URL: ${{ secrets.MONGODB_URL_DEV }}
+      TEST_MONGO_USER: ${{ secrets.TEST_MONGO_USER }}
+      TEST_MONGO_PASS: ${{ secrets.TEST_MONGO_PASS }}
+      TEST_MONGO_DB: ${{ secrets.TEST_MONGO_DB }}
+      TEST_MONGODB_URL: format('mongodb://{0}:{1}@{2}:27017/{3}', ${{ secrets.TEST_MONGO_USER }}, ${{ secrets.TEST_MONGO_PASS }}, ${{ secrets.TEST_MONGO_HOST }}, ${{ secrets.TEST_MONGO_DB }})
+    services:
+      mongo:
+        image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: ${TEST_MONGO_USER}
+          MONGO_INITDB_ROOT_PASSWORD: ${TEST_MONGO_PASS}
+          MONGO_INITDB_DATABASE: ${TEST_MONGO_DB}
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
 
     steps:
       - uses: actions/checkout@v2
@@ -33,3 +50,6 @@ jobs:
       # check running containers
       - name: Check running containers
         run: docker ps -a
+
+      - name: Run backend unit tests
+        run: docker exec backend -c "pip install -e . && pytest"
