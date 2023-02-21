@@ -16,6 +16,7 @@ services:
     volumes:
       - ./backend:/app
     environment:
+      - TEST_MONGODB_URL
       - TEST_MONGO_USER
       - TEST_MONGO_PASS
       - TEST_MONGO_HOST
@@ -44,3 +45,5 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    ports:
+      - 27017:27017
