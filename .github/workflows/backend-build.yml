@@ -26,6 +26,18 @@ jobs:
       TEST_MONGO_DB: ${{ secrets.TEST_MONGO_DB }}
       TEST_MONGODB_URL: ${{ format('mongodb://{0}:{1}@{2}:27017/{3}', secrets.TEST_MONGO_USER, secrets.TEST_MONGO_PASS, secrets.TEST_MONGO_HOST, secrets.TEST_MONGO_DB) }}
 
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
+      FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+      FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+      FIREBASE_CLIENT_ID: ${{ secrets.FIREBASE_CLIENT_ID }}
+      FIREBASE_AUTH_URI: ${{ secrets.FIREBASE_AUTH_URI }}
+      FIREBASE_TOKEN_URI: ${{ secrets.FIREBASE_TOKEN_URI }}
+      FIREBASE_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_AUTH_PROVIDER_X509_CERT_URL }}
+      FIREBASE_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }}
+      FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}
+      FIREBASE_REFRESH_TOKEN_URL: ${{ secrets.FIREBASE_REFRESH_TOKEN_URL }}
+      FIREBASE_SIGN_IN_URL: ${{ secrets.FIREBASE_SIGN_IN_URL }}
     steps:
       - uses: actions/checkout@v3
 
@@ -38,4 +50,4 @@ jobs:
         run: docker ps -a
 
       - name: Run backend unit tests
-        run: docker exec backend /bin/bash -c "pytest"
+        run: docker exec backend /bin/bash -c "python -m pytest"
