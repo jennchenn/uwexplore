@@ -86,6 +86,9 @@ class Course(Document):
         ObjectId must be converted to a string.
         """
         dict = self.to_mongo().to_dict()
+        for section in dict.get("sections", []):
+            id = section.pop("_id", None)
+            section["id"] = str(id)
         id = dict.pop("_id", None)
         dict["id"] = str(id)
         return dict
