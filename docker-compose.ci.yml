@@ -28,7 +28,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD: TEST_MONGO_PASS
       - MONGO_INITDB_DATABASE: TEST_MONGO_DB
     healthcheck:
-      test: mongo
+      test: mongosh --eval 'db.runCommand("ping").ok' --quiet
       interval: 10s
       timeout: 5s
       retries: 5

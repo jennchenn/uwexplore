@@ -25,20 +25,20 @@ jobs:
       TEST_MONGO_PASS: ${{ secrets.TEST_MONGO_PASS }}
       TEST_MONGO_DB: ${{ secrets.TEST_MONGO_DB }}
       TEST_MONGODB_URL: format('mongodb://{0}:{1}@{2}:27017/{3}', ${{ secrets.TEST_MONGO_USER }}, ${{ secrets.TEST_MONGO_PASS }}, ${{ secrets.TEST_MONGO_HOST }}, ${{ secrets.TEST_MONGO_DB }})
-    services:
-      mongo:
-        image: mongo
-        env:
-          MONGO_INITDB_ROOT_USERNAME: ${TEST_MONGO_USER}
-          MONGO_INITDB_ROOT_PASSWORD: ${TEST_MONGO_PASS}
-          MONGO_INITDB_DATABASE: ${TEST_MONGO_DB}
-        options: >-
-          --health-cmd mongo
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
+    # services:
+    #   mongo:
+    #     image: mongo
+    #     env:
+    #       MONGO_INITDB_ROOT_USERNAME: ${TEST_MONGO_USER}
+    #       MONGO_INITDB_ROOT_PASSWORD: ${TEST_MONGO_PASS}
+    #       MONGO_INITDB_DATABASE: ${TEST_MONGO_DB}
+    #     options: >-
+    #       --health-cmd mongo
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
+    #     ports:
+    #       - 27017:27017
 
     steps:
       - uses: actions/checkout@v2
