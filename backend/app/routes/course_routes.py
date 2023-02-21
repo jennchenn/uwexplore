@@ -34,3 +34,14 @@ def get_saved_courses(curr_user):
     except Exception as e:
         error_message = getattr(e, "message", None)
         return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
+@blueprint.route("/past", methods=["GET"], strict_slashes=False)
+@require_login
+def get_past_courses(curr_user):
+    try:
+        result = course_service.get_past_courses_by_user(curr_user)
+        return jsonify(result), 200
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500

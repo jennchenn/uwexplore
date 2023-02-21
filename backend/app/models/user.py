@@ -60,6 +60,7 @@ class User(Document):
     schedule = EmbeddedDocumentField(Schedule)
     role = EnumField(Role, default=Role.STUDENT, required=True)
     saved_courses = ListField(ObjectIdField())
+    past_courses = ListField(ObjectIdField())
 
     def to_serializable_dict(self):
         """

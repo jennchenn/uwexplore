@@ -77,3 +77,19 @@ class CourseService:
                 f"Failed to get courses. Reason={reason if reason else str(e)}"
             )
             raise e
+
+    def get_past_courses_by_user(self, user):
+        try:
+            past_courses = []
+            past_courses_list = user.get("past_courses")
+            if past_courses_list:
+                for course_id in past_courses_list:
+                    course = Course.objects(_id=course_id).first()
+                    past_courses.append(course.to_serializable_dict())
+            return past_courses
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
