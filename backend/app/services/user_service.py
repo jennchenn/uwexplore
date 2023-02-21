@@ -35,7 +35,7 @@ class UserService:
 
             try:
                 new_user = User(
-                    _id=auth_id,
+                    auth_id=auth_id,
                     name=user.name,
                     email=user.email,
                     grad_year=user.grad_year,
@@ -101,7 +101,7 @@ class UserService:
         """
         try:
             uid = self._get_uid_by_token(access_token)
-            return self._get_user_by_id(uid)
+            return self._get_user_by_auth_id(uid)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -189,9 +189,9 @@ class UserService:
             "refresh_token": response_json["refresh_token"],
         }
 
-    def _get_user_by_id(self, id):
+    def _get_user_by_auth_id(self, auth_id):
         try:
-            user = User.objects(_id=id).first()
+            user = User.objects(auth_id=auth_id).first()
             if not user:
                 raise KeyError(f"No user with ID")
             return user.to_serializable_dict()
