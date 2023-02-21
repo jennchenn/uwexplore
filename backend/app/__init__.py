@@ -21,7 +21,11 @@ def create_app(config_name):
     app.config["CORS_SUPPORTS_CREDENTIALS"] = True
     CORS(app)
 
-    app.config["MONGODB_URL"] = os.getenv("MONGODB_URL")
+    app.config["MONGODB_URL"] = (
+        os.getenv("TEST_MONGODB_URL")
+        if app.config["TESTING"]
+        else os.getenv("MONGODB_URL")
+    )
 
     Limiter(
         get_remote_address,
