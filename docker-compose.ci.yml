@@ -28,7 +28,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD: TEST_MONGO_PASS
       - MONGO_INITDB_DATABASE: TEST_MONGO_DB
     healthcheck:
-      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u $MONGO_INITDB_ROOT_USERNAME -p $MONGO_INITDB_ROOT_PASSWORD --quiet | grep 1
+      test: mongo
       interval: 10s
       timeout: 5s
       retries: 5
