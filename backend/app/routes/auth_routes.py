@@ -20,3 +20,28 @@ def signup():
     except Exception as e:
         error_message = getattr(e, "message", None)
         return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
+@blueprint.route("/login", methods=["POST"], strict_slashes=False)
+def login():
+    try:
+        email = request.json["email"]
+        password = request.json["password"]
+        result = user_service.login(email, password)
+        return jsonify(result), 200
+
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
+@blueprint.route("/refresh", methods=["POST"], strict_slashes=False)
+def refresh_token():
+    try:
+        refresh_token = request.json["refresh_token"]
+        result = user_service.refresh_token(refresh_token)
+        return jsonify(result), 200
+
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500
