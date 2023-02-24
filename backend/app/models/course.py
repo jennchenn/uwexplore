@@ -1,5 +1,6 @@
 from enum import Enum
 
+from bson.objectid import ObjectId
 from mongoengine import (
     DateTimeField,
     Document,
@@ -31,7 +32,7 @@ class ClassType(Enum):
 
 
 class Section(EmbeddedDocument):
-    _id = ObjectIdField()
+    _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
     day = ListField(EnumField(Weekday), required=True)
     term_code = StringField(required=True)
     start_time = FloatField(required=True)
@@ -71,11 +72,11 @@ class Course(Document):
     department = StringField(required=True)
     code = StringField(required=True)
     description = StringField(required=True)
-    cse_weight = FloatField(required=True)
-    ceab_math = FloatField(required=True)
-    ceab_sci = FloatField(required=True)
-    ceab_eng = FloatField(required=True)
-    ceab_design = FloatField(required=True)
+    cse_weight = FloatField(required=True, default=0.0)
+    ceab_math = FloatField(required=True, default=0.0)
+    ceab_sci = FloatField(required=True, default=0.0)
+    ceab_eng = FloatField(required=True, default=0.0)
+    ceab_design = FloatField(required=True, default=0.0)
     course_type = EnumField(CourseType)
     sections = EmbeddedDocumentListField(Section)
 
@@ -85,6 +86,9 @@ class Course(Document):
         ObjectId must be converted to a string.
         """
         dict = self.to_mongo().to_dict()
+        for section in dict.get("sections", []):
+            id = section.pop("_id", None)
+            section["id"] = str(id)
         id = dict.pop("_id", None)
         dict["id"] = str(id)
         return dict
