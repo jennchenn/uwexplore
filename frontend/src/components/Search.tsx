@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
+import SearchCards from "./SearchCards";
 
 export default function Search() {
   return (
@@ -51,6 +52,7 @@ export default function Search() {
               </Typography>
             </CardContent>
           </Card>
+          <SearchCards />
         </Stack>
       </Box>
     </div>
