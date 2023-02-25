@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Filter changed files
         uses: dorny/paths-filter@v2
@@ -32,7 +32,7 @@ jobs:
               - "backend/**"
       - name: Set up Node.js
         if: steps.changes.outputs.frontend == 'true'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "14.19"
           cache: "yarn"

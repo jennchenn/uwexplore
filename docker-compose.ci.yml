@@ -1,9 +1,8 @@
 version: "3.7"
 
 services:
-  py-backend:
+  backend:
     container_name: backend
-    restart: always
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -14,4 +13,16 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - MONGODB_URL
+      - TEST_MONGODB_URL
+      - FIREBASE_PROJECT_ID
+      - FIREBASE_PRIVATE_KEY_ID
+      - FIREBASE_PRIVATE_KEY
+      - FIREBASE_CLIENT_EMAIL
+      - FIREBASE_CLIENT_ID
+      - FIREBASE_AUTH_URI
+      - FIREBASE_TOKEN_URI
+      - FIREBASE_AUTH_PROVIDER_X509_CERT_URL
+      - FIREBASE_CLIENT_X509_CERT_URL
+      - FIREBASE_WEB_API_KEY
+      - FIREBASE_REFRESH_TOKEN_URL
+      - FIREBASE_SIGN_IN_URL
