@@ -37,6 +37,7 @@ export default function Search() {
               Filter
             </Button>
           </Stack>
+          {/* todo: conditionally show welcome card */}
           <Card sx={{ minWidth: 100 }}>
             <CardContent>
               <InfoIcon sx={{ display: "inline" }} />

@@ -1,15 +1,19 @@
 import { useState } from "react";
+import courses from "../APIClients/courses.js";
+import moment from "moment";
+
+// MUI component imports
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import courses from "../APIClients/courses.js";
-import IconButton from "@mui/material/IconButton";
-import moment from "moment";
 import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
+// MUI table imports
+import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,18 +21,16 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 
+//MUI icon imports
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-// import StarBorderIcon from "@mui/icons-material/StarBorder";
-// import StarIcon from "@mui/icons-material/Star";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-// TODO: add button, figure out how to pin :(
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+// styles for table cells, format taken from MUI docs
+const StyledTableCell = styled(TableCell)(({}) => ({
   [`&.${tableCellClasses.head}`]: {
     fontSize: 12,
     padding: "2px",
@@ -46,6 +48,7 @@ export default function SearchCards() {
     Record<string, any>
   >({});
 
+  // currently only allowing one card to be expanded at a time
   const handleExpandClick = (courseToExpand: any) => {
     if (expandedCard === courseToExpand.id) {
       setExpandedCard("");
@@ -54,6 +57,7 @@ export default function SearchCards() {
     }
   };
 
+  // todo: move bookmarked courses into a "saved courses" area
   const handleBookmarkClick = (courseToBookmark: any) => {
     if (courseToBookmark.id in bookmarkedCourses) {
       const newBookmarks = { ...bookmarkedCourses };
@@ -69,9 +73,12 @@ export default function SearchCards() {
 
   return (
     <Box>
+      {/* todo: clean up styles */}
+      {/* todo: proper call to get courses */}
       {courses.map((course, i) => (
         <Card style={{ marginTop: "20px" }} elevation={2} key={i}>
           <CardContent>
+            {/* TOP BAR (CONDENSED INFO) */}
             <Stack
               direction="row"
               style={{
@@ -115,11 +122,13 @@ export default function SearchCards() {
                 </IconButton>
               </div>
             </Stack>
+            {/* BODY CONTENT (EXPANDED INFO) */}
             <Collapse in={expandedCard === course.id ? true : false}>
               <Typography variant="body2">
                 {course.department} {course.code} - {course.description}
               </Typography>
               <br />
+              {/* COURSE INFO TABLE */}
               <TableContainer component={Paper}>
                 <Table aria-label="simple table" size="small">
                   <TableHead>
@@ -135,6 +144,7 @@ export default function SearchCards() {
                   </TableHead>
                   <TableBody>
                     {course.sections.map((section) => {
+                      // Format days of the week courses are held (TUESDAY, FRIDAY -> TU, F)
                       let days = "";
                       for (let i = 0; i < section.day.length; i++) {
                         if (section.day[i].slice(0, 1) == "T") {
@@ -177,6 +187,7 @@ export default function SearchCards() {
                           </StyledTableCell>
                           <StyledTableCell>{days}</StyledTableCell>
                           <StyledTableCell>{section.location}</StyledTableCell>
+                          {/* todo: add instructor info */}
                           <StyledTableCell>N/A</StyledTableCell>
                         </TableRow>
                       );
@@ -184,6 +195,7 @@ export default function SearchCards() {
                   </TableBody>
                 </Table>
               </TableContainer>
+              {/* todo: add prereq and antireq info */}
             </Collapse>
           </CardContent>
         </Card>
