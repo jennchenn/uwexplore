@@ -30,7 +30,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 // styles for table cells, format taken from MUI docs
-const StyledTableCell = styled(TableCell)(({}) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     fontSize: 12,
     padding: "2px",
