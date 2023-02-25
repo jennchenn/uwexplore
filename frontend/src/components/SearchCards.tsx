@@ -8,6 +8,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import courses from "../APIClients/courses.js";
+import IconButton from "@mui/material/IconButton";
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -18,15 +19,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
+// TODO: add button, favourites button, collapse func. ~ask about obtaining instructor?
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     // backgroundColor: theme.palette.common.black,
     // color: theme.palette.common.white,
     fontSize: 12,
     padding: "2px",
+    fontWeight: "bold",
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 10,
+    fontSize: "0.8rem",
     padding: "2px",
   },
 }));
@@ -35,23 +44,48 @@ export default function SearchCards() {
   return (
     <Box>
       {courses.map((course, i) => (
-        <Card style={{ marginTop: "20px" }} elevation={2}>
+        <Card style={{ marginTop: "20px" }} elevation={2} key={i}>
           <CardContent>
-            <Typography variant="h5">{course.name}</Typography>
+            {/* todo: possibly get rid of stack and just use a div or smtn, 
+            so i can align the add button all the way right */}
+            <Stack
+              direction="row"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              {/* https://stackoverflow.com/questions/58257228/how-to-switch-materialui-icon-when-clicked */}
+              <IconButton
+                aria-label="expand more"
+                style={{ paddingLeft: "0px" }}
+              >
+                <StarBorderIcon />
+              </IconButton>
+              <Typography variant="h6">{course.name}</Typography>
+              <IconButton aria-label="add course">
+                <AddCircleIcon />
+              </IconButton>
+              <IconButton aria-label="expand more">
+                <ExpandLessIcon />
+              </IconButton>
+            </Stack>
             <Typography variant="body2">
               {course.department} {course.code} - {course.description}
             </Typography>
+            <br />
             <TableContainer component={Paper}>
               <Table aria-label="simple table" size="small">
                 <TableHead>
                   <TableRow>
                     <StyledTableCell>Section</StyledTableCell>
-                    <StyledTableCell align="right">Class</StyledTableCell>
-                    <StyledTableCell align="right">Enrolled</StyledTableCell>
-                    <StyledTableCell align="right">Time</StyledTableCell>
-                    <StyledTableCell align="right">Date</StyledTableCell>
-                    <StyledTableCell align="right">Location</StyledTableCell>
-                    <StyledTableCell align="right">Instructor</StyledTableCell>
+                    <StyledTableCell>Class</StyledTableCell>
+                    <StyledTableCell>Enrolled</StyledTableCell>
+                    <StyledTableCell>Time</StyledTableCell>
+                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCell>Location</StyledTableCell>
+                    <StyledTableCell>Instructor</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,14 +99,13 @@ export default function SearchCards() {
                       <StyledTableCell component="th" scope="row">
                         {section.type.slice(0, 3)} {section.number}
                       </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {section.class_number}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>{section.class_number}</StyledTableCell>
+                      <StyledTableCell>
                         {section.enrolled_number}/{section.capacity}
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         {/* there's gotta be an easier way LOL - find some library */}
+                        {/* if doing it like this, use 24hr time to save some space... */}
                         {Math.floor(section.start_time / 60) > 12
                           ? Math.floor(section.start_time / 60) - 12
                           : Math.floor(section.start_time / 60)}
@@ -91,14 +124,12 @@ export default function SearchCards() {
                           : section.end_time % 60}{" "}
                         {Math.floor(section.end_time / 60) > 12 ? "PM" : "AM"}
                       </StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>
                         {/* todo: fix this issue! */}
                         {section.day.toString().slice(0, 1)}
                       </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {section.location}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">N/A</StyledTableCell>
+                      <StyledTableCell>{section.location}</StyledTableCell>
+                      <StyledTableCell>N/A</StyledTableCell>
                     </TableRow>
                   ))}
                 </TableBody>
