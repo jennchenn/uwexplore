@@ -28,13 +28,13 @@ def require_login(api_func):
                     401,
                 )
             try:
-                user_service.get_user_by_token(access_token)
+                user = user_service.get_user_by_token(access_token)
             except Exception:
                 return (
                     jsonify({"error": "Invalid id provided."}),
                     401,
                 )
-            return api_func(*args, **kwargs)
+            return api_func(user, *args, **kwargs)
 
         except Exception:
             return (
