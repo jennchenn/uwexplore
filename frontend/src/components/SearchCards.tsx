@@ -147,7 +147,7 @@ export default function SearchCards() {
                       // Format days of the week courses are held (TUESDAY, FRIDAY -> TU, F)
                       let days = "";
                       for (let i = 0; i < section.day.length; i++) {
-                        if (section.day[i].slice(0, 1) == "T") {
+                        if (section.day[i].slice(0, 1) === "T") {
                           days = days.concat(section.day[i].slice(0, 2));
                         } else {
                           days = days.concat(section.day[i].slice(0, 1));
