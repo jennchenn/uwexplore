@@ -26,15 +26,17 @@ class Weekday(Enum):
 
 
 class ClassType(Enum):
-    LEC = "LECTURE"
-    TUT = "TUTORIAL"
+    LEC = "LEC"
+    TUT = "TUT"
     LAB = "LAB"
+    SEM = "SEM"
 
 
 class Section(EmbeddedDocument):
     _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
     day = ListField(EnumField(Weekday), required=True)
     term_code = StringField(required=True)
+    instructor = StringField()
     start_time = FloatField(required=True)
     end_time = FloatField(required=True)
     class_number = IntField(required=True)  # 4178
@@ -79,6 +81,9 @@ class Course(Document):
     ceab_design = FloatField(required=True, default=0.0)
     course_type = EnumField(CourseType)
     sections = EmbeddedDocumentListField(Section)
+    prerequisites = ListField(ObjectIdField)
+    antirequisites = ListField(ObjectIdField)
+    tags = ListField(StringField)
 
     def to_serializable_dict(self):
         """
