@@ -209,10 +209,22 @@ def get_last_six_term_class_schedule_details():
     return last_six_term_class_schedule_details
 
 
+# Important Dates Opendata API requests
+def get_important_dates():
+    response = requests.get(f"{api_path}ImportantDates", headers=header)
+    if response.status_code == 200:
+        print("sucessfully fetched the data")
+        formatted_print(response.json())
+        return response.json()
+    else:
+        print(
+            f"{response.status_code} error with your request")
+
+
 def formatted_print(obj):
     text = json.dumps(obj, sort_keys=True, indent=4)
     print(text)
 
 
 # testing
-get_last_six_terms()
+get_important_dates()
