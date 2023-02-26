@@ -103,7 +103,11 @@ export default function SearchCards() {
                   )}
                 </IconButton>
               </Tooltip>
-              <Typography variant="h6">{course.name}</Typography>
+              {/* todo: conditional styling for very long course names ex. CS 146*/}
+              <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+                {course.department}
+                {course.code} - {course.name}
+              </Typography>
               <div style={{ marginLeft: "auto", marginRight: "0px" }}>
                 <Tooltip title="Add Course to Calendar" arrow>
                   <IconButton aria-label="add course">
@@ -124,9 +128,7 @@ export default function SearchCards() {
             </Stack>
             {/* BODY CONTENT (EXPANDED INFO) */}
             <Collapse in={expandedCard === course.id ? true : false}>
-              <Typography variant="body2">
-                {course.department} {course.code} - {course.description}
-              </Typography>
+              <Typography variant="body2">{course.description}</Typography>
               <br />
               {/* COURSE INFO TABLE */}
               <TableContainer component={Paper}>
@@ -144,10 +146,10 @@ export default function SearchCards() {
                   </TableHead>
                   <TableBody>
                     {course.sections.map((section) => {
-                      // Format days of the week courses are held (TUESDAY, FRIDAY -> TU, F)
+                      // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
                       let days = "";
                       for (let i = 0; i < section.day.length; i++) {
-                        if (section.day[i].slice(0, 1) === "T") {
+                        if (section.day[i].slice(0, 2) === "TH") {
                           days = days.concat(section.day[i].slice(0, 2));
                         } else {
                           days = days.concat(section.day[i].slice(0, 1));
