@@ -22,6 +22,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M, Weekday.W],
                     term_code="1229",
+                    instructor="Mr. Peanutbutter",
                     start_time=510,
                     end_time=590,
                     class_number=4877,
@@ -36,6 +37,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T, Weekday.TH],
                     term_code="1229",
+                    instructor="Princess Carolyn",
                     start_time=510,
                     end_time=590,
                     class_number=4878,
@@ -50,6 +52,7 @@ def add_courses():
                 Section(
                     day=[Weekday.F],
                     term_code="1229",
+                    instructor="Princess Carolyn",
                     start_time=510,
                     end_time=560,
                     class_number=4879,
@@ -74,6 +77,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M, Weekday.W],
                     term_code="1229",
+                    instructor="Todd Chavez",
                     start_time=600,
                     end_time=680,
                     class_number=4977,
@@ -88,6 +92,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T, Weekday.TH],
                     term_code="1229",
+                    instructor="Todd Chavez",
                     start_time=600,
                     end_time=680,
                     class_number=4978,
@@ -102,6 +107,7 @@ def add_courses():
                 Section(
                     day=[Weekday.F],
                     term_code="1229",
+                    instructor="Todd Chavez",
                     start_time=600,
                     end_time=650,
                     class_number=4979,
@@ -126,6 +132,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T, Weekday.F],
                     term_code="1229",
+                    instructor="Diane Nguyen",
                     start_time=900,
                     end_time=980,
                     class_number=4077,
@@ -140,6 +147,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Diane Nguyen",
                     start_time=1140,
                     end_time=1190,
                     class_number=4979,
@@ -165,6 +173,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M, Weekday.F],
                     term_code="1229",
+                    instructor="Meow Meow Fuzzyface",
                     start_time=810,
                     end_time=900,
                     class_number=4021,
@@ -179,6 +188,7 @@ def add_courses():
                 Section(
                     day=[Weekday.TH],
                     term_code="1229",
+                    instructor="Meow Meow Fuzzyface",
                     start_time=1140,
                     end_time=1190,
                     class_number=4022,
@@ -193,6 +203,7 @@ def add_courses():
                 Section(
                     day=[Weekday.W],
                     term_code="1229",
+                    instructor="Meow Meow Fuzzyface",
                     start_time=720,
                     end_time=830,
                     class_number=4023,
@@ -218,6 +229,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M, Weekday.F],
                     term_code="1229",
+                    instructor="Ralph Stilton",
                     start_time=810,
                     end_time=900,
                     class_number=4123,
@@ -232,6 +244,7 @@ def add_courses():
                 Section(
                     day=[Weekday.TH],
                     term_code="1229",
+                    instructor="Ralph Stilton",
                     start_time=1140,
                     end_time=1190,
                     class_number=4124,
@@ -246,6 +259,7 @@ def add_courses():
                 Section(
                     day=[Weekday.W],
                     term_code="1229",
+                    instructor="Neal McBeal",
                     start_time=720,
                     end_time=830,
                     class_number=4125,
@@ -271,6 +285,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T, Weekday.F],
                     term_code="1229",
+                    instructor="Dean Squooshyface",
                     start_time=900,
                     end_time=980,
                     class_number=4192,
@@ -285,6 +300,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Dean Squooshyface",
                     start_time=1140,
                     end_time=1190,
                     class_number=4193,
@@ -310,6 +326,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T, Weekday.F],
                     term_code="1229",
+                    instructor="Charley Witherspoon",
                     start_time=900,
                     end_time=980,
                     class_number=4910,
@@ -324,6 +341,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Charley Witherspoon",
                     start_time=1140,
                     end_time=1190,
                     class_number=4911,
@@ -350,6 +368,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T, Weekday.F],
                     term_code="1229",
+                    instructor="Crackerjack Sugarman",
                     start_time=900,
                     end_time=980,
                     class_number=4419,
@@ -364,6 +383,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Crackerjack Sugarman",
                     start_time=1140,
                     end_time=1190,
                     class_number=4420,
@@ -389,6 +409,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T, Weekday.F],
                     term_code="1229",
+                    instructor="Rutabaga Rabitowitz",
                     start_time=900,
                     end_time=980,
                     class_number=4900,
@@ -403,6 +424,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Rutabaga Rabitowitz",
                     start_time=1140,
                     end_time=1190,
                     class_number=4901,
@@ -427,6 +449,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=600,
                     end_time=680,
                     class_number=1010,
@@ -441,6 +464,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=690,
                     end_time=780,
                     class_number=1011,
@@ -455,6 +479,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=600,
                     end_time=680,
                     class_number=1012,
@@ -469,6 +494,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=690,
                     end_time=780,
                     class_number=1013,
@@ -483,6 +509,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=790,
                     end_time=880,
                     class_number=1014,
@@ -507,6 +534,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=600,
                     end_time=680,
                     class_number=1110,
@@ -521,6 +549,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=690,
                     end_time=780,
                     class_number=1111,
@@ -535,6 +564,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=600,
                     end_time=680,
                     class_number=1112,
@@ -549,6 +579,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=690,
                     end_time=780,
                     class_number=1113,
@@ -563,6 +594,7 @@ def add_courses():
                 Section(
                     day=[Weekday.T],
                     term_code="1229",
+                    instructor="Judah Mannowdog",
                     start_time=790,
                     end_time=880,
                     class_number=1114,
@@ -587,6 +619,7 @@ def add_courses():
                 Section(
                     day=[Weekday.M],
                     term_code="1229",
+                    instructor="Virgil Van Cleef",
                     start_time=1140,
                     end_time=1250,
                     class_number=1509,
