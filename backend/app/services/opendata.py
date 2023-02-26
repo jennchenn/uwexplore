@@ -221,6 +221,65 @@ def get_important_dates():
             f"{response.status_code} error with your request")
 
 
+# Location Opendata API requests
+def get_locations():
+    response = requests.get(f"{api_path}Locations", headers=header)
+    if response.status_code == 200:
+        print("sucessfully fetched the data")
+        formatted_print(response.json())
+        return response.json()
+    else:
+        print(
+            f"{response.status_code} error with your request")
+
+
+# Subject Opendata API requests
+def get_all_subjects():
+    response = requests.get(f"{api_path}Subjects", headers=header)
+    if response.status_code == 200:
+        print("sucessfully fetched the data")
+        formatted_print(response.json())
+        return response.json()
+    else:
+        print(
+            f"{response.status_code} error with your request")
+
+
+def get_subject_by_code(code):
+    response = requests.get(f"{api_path}Subjects/{code}", headers=header)
+    if response.status_code == 200:
+        print("sucessfully fetched the data")
+        formatted_print(response.json())
+        return response.json()
+    else:
+        print(
+            f"{response.status_code} error with your request")
+
+
+# Exam Schedule Opendata API requests
+def get_exam_schedule_by_term(code):
+    # this looks to be broken on the side of the university -- not reliable
+    response = requests.get(f"{api_path}ExamSchedules/{code}", headers=header)
+    if response.status_code == 200:
+        print("sucessfully fetched the data")
+        formatted_print(response.json())
+        return response.json()
+    else:
+        print(
+            f"{response.status_code} error with your request")
+
+
+def get_current_exam_schedule():
+    response = requests.get(f"{api_path}ExamSchedules", headers=header)
+    if response.status_code == 200:
+        print("sucessfully fetched the data")
+        formatted_print(response.json())
+        return response.json()
+    else:
+        print(
+            f"{response.status_code} error with your request")
+
+
 def formatted_print(obj):
     text = json.dumps(obj, sort_keys=True, indent=4)
     print(text)
