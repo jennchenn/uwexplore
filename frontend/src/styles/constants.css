@@ -1,3 +1,36 @@
 :root {
+  /*********** Typography. *************/
+  /* Font families. */
+  --font-family: "Inter", normal;
+
+  /* Font sizes. */
+  --font-size-h1: 24px;
+  --font-size-h2: 20px;
+  --font-size-h3: 18px;
+  --font-size-h4: 16px;
+  --font-size-h5: 14px;
+  --font-size-h6: 13px;
+  --font-size-text: 12px;
+
+  /* Font weights. */
+  --font-weight-bold: 700;
+  --font-weight-regular: 600;
+  --font-weight-thin: 400;
+
+  /* Line heights. */
+  --line-height-xxs: 15px;
+  --line-height-xs: 16px;
+  --line-height-s: 17px;
+  --line-height-m: 19px;
+  --line-height-l: 22px;
+  --line-height-xl: 24px;
+  --line-height-xxl: 29px;
+
+  /* Letter spacings. */
+  --letter-spacing: -0.03em;
+
+  /************* Colors. *************/
+
   --white: #ffffff;
+  --black: #000000;
 }

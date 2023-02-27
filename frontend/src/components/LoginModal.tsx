@@ -1,4 +1,4 @@
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal, TextField, Typography } from "@mui/material";
 import "../styles/LoginModal.css";
 
 type LoginModalProps = {
@@ -19,12 +19,13 @@ export default function LoginModal({ modalOpen = true, ...LoginModalProps }) {
       aria-describedby="login-modal-description"
     >
       <Box className="login-modal">
-        <Typography id="login-modal-title" variant="h5">
+        <div className="login-modal-title heading-1">
           {LoginModalProps.modalTitle} THIS
-        </Typography>
-        <Typography id="login-modal-description">
+        </div>
+        <div className="login-modal-description heading-6">
           {LoginModalProps.modalInfo} lorel
-        </Typography>
+        </div>
+        <TextField id="filled-basic" label="Filled" variant="filled" />
       </Box>
     </Modal>
   );
