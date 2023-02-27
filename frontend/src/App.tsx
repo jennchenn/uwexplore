@@ -11,7 +11,7 @@ import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 
 const sectionSizes = {
-  default: { search: 4, calendar: 8 },
+  default: { search: 5, calendar: 7 },
   allCal: { search: 0, calendar: 12 },
 };
 
