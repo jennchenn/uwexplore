@@ -7,7 +7,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 544px;
-  background-color: var(--white);
+  background-color: var(--bg-1);
   border-radius: 11px;
   box-shadow: 24;
   display: flex;
@@ -17,10 +17,9 @@
 }
 
 .login-modal-title {
-  color: var(--black);
+  color: var(--black-1);
 }
 
 .login-modal-description {
-  opacity: 0.6;
-  color: var(--black);
+  color: var(--black-3);
 }
