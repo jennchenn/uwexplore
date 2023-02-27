@@ -1,3 +1,5 @@
+@import "./styles/constants.css";
+
 /* APP COLOURS */
 :root {
   --primary-light: #c4c1ff;
@@ -50,4 +52,11 @@
 .search-collapse-icon:hover {
   color: var(--primary);
   cursor: pointer;
+}
+
+.text-input {
+  background-color: var(--bg-3);
+  border: none;
+  border-radius: 10px;
+  padding: 19px 32px;
 }

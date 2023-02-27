@@ -23,3 +23,10 @@
 .login-modal-description {
   color: var(--black-3);
 }
+
+.email-field {
+  border-radius: 10px;
+  background-color: var(--bg-3);
+  padding: 18px;
+  border-bottom: 0px;
+}

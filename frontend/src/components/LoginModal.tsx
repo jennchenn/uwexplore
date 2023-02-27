@@ -1,5 +1,6 @@
-import { Box, Modal, TextField, Typography } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import "../styles/LoginModal.css";
+import TextInput from "./TextInput";
 
 type LoginModalProps = {
   modalTitle: string;
@@ -11,6 +12,8 @@ type LoginModalProps = {
 };
 
 export default function LoginModal({ modalOpen = true, ...LoginModalProps }) {
+  const inputStyles = { width: "-webkit-fill-available", margin: "8px 72px" };
+
   return (
     <Modal
       open={modalOpen}
@@ -25,7 +28,12 @@ export default function LoginModal({ modalOpen = true, ...LoginModalProps }) {
         <div className="login-modal-description heading-6">
           {LoginModalProps.modalInfo} lorel
         </div>
-        <TextField id="filled-basic" label="Filled" variant="filled" />
+        <TextInput placeholder="Email" styles={inputStyles} type="email" />
+        <TextInput
+          placeholder="Password"
+          styles={inputStyles}
+          type="password"
+        />
       </Box>
     </Modal>
   );
