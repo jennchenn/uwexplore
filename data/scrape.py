@@ -6,9 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import re
 
+UWFLOW_URL = "https://uwflow.com/course/"
 
 def get_course_reviews(course):
-    url = "https://uwflow.com/course/" + course
+    url = UWFLOW_URL + course
 
     options = Options()
     options.add_argument("--headless")
