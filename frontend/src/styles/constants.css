@@ -32,11 +32,11 @@
   /************* Colors. *************/
   /* Main. */
   --main-purple-1: #564fcc;
-  --main-purple-2: #5c63ff;
+  --main-purple-2: #6c63ff;
   --main-purple-3: #8982ff;
-  --main-purple-3: #a7a1ff;
-  --main-purple-3: #c4c1ff;
-  --main-purple-3: #e2e0ff;
+  --main-purple-4: #a7a1ff;
+  --main-purple-5: #c4c1ff;
+  --main-purple-6: #e2e0ff;
 
   /* Black. */
   --black-1: #000000;
