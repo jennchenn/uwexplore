@@ -11,10 +11,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "frontend/**"
-      - "backend/**"
-      - "data/**"
 
 jobs:
   run-lint:
