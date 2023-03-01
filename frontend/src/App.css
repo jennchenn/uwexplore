@@ -1,10 +1,5 @@
 @import "./styles/constants.css";
 
-/* APP COLOURS */
-:root {
-  --primary: #6c63ff;
-}
-
 .calendar-base {
   height: 100vh;
 }
@@ -25,7 +20,7 @@
 
 .cal-collapse-icon:hover,
 .search-collapse-icon:hover {
-  color: var(--primary);
+  color: var(--main-purple-2);
   cursor: pointer;
 }
 
