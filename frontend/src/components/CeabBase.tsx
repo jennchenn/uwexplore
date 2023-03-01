@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Unstable_Grid2";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
@@ -38,10 +39,10 @@ export default function CeabBase() {
   };
 
   return (
-    <Box sx={{ m: 2 }}>
+    <Grid sx={{ m: "0px 30px 30px", display: "grid" }} container>
       <Stack direction="row" spacing={2}>
         {/* LHS: CEAB REQUIREMENTS */}
-        <Box sx={{ width: "50%" }}>
+        <Grid xs={6}>
           <Card elevation={2}>
             <CardContent>
               <Typography sx={{ display: "inline" }} variant="h6">
@@ -51,7 +52,7 @@ export default function CeabBase() {
                 {CeabRequirements.map((requirement, i) => (
                   <ProgressBar
                     label={requirement.label}
-                    // todo: get user's ceab vals from taken courses
+                    // todo: get user's ceab vals from taken courses and map properly
                     completed="50"
                     total={requirement.requirement}
                     key={i}
@@ -60,11 +61,21 @@ export default function CeabBase() {
               </Stack>
             </CardContent>
           </Card>
-        </Box>
+        </Grid>
         {/* RHS: PAST COURSES */}
-        <Box sx={{ width: "50%" }}>
-          <Card elevation={2} sx={{ backgroundColor: "#F7F7F7" }}>
-            <CardContent>
+        <Grid xs={6}>
+          <Card
+            elevation={2}
+            sx={{
+              backgroundColor: "var(--background-light)",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <CardContent
+              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+            >
               <Stack direction="row">
                 <Typography sx={{ display: "inline" }} variant="h6">
                   Past Courses
@@ -94,15 +105,20 @@ export default function CeabBase() {
                   </Select>
                 </FormControl>
               </Stack>
-              <Paper elevation={0} sx={{ padding: 2 }}>
-                <Paper elevation={0} sx={{ backgroundColor: "#F7F7F7", p: 2 }}>
-                  Added past courses will appear here
+              <Box sx={{ display: "flex", height: "100%", flex: 1 }}>
+                <Paper elevation={0} sx={{ padding: 2, width: "100%" }}>
+                  <Paper
+                    elevation={0}
+                    sx={{ backgroundColor: "var(--background-light)", p: 2 }}
+                  >
+                    Added past courses will appear here
+                  </Paper>
                 </Paper>
-              </Paper>
+              </Box>
             </CardContent>
           </Card>
-        </Box>
+        </Grid>
       </Stack>
-    </Box>
+    </Grid>
   );
 }
