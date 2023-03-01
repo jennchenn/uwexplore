@@ -76,9 +76,3 @@ def get_course_term_offered(course):
 
     driver.quit()
     return terms
-
-
-# # testing code
-# value = "cs115"
-# get_course_reviews(value)
-# get_course_term_offered(value)
