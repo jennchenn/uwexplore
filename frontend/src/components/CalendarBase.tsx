@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useState } from "react";
 import Box from "@mui/material/Box";
 import moment from "moment";
-import "./CalendarBase.scss";
+import "../styles/CalendarBase.scss";
 import backgroundColors from "../styles/calendarCourseBackgroundColors";
 import events from "../APIClients/events";
 import CalendarModal from "./CalendarModal";
