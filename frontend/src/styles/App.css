@@ -1,5 +1,6 @@
 /* APP COLOURS */
 :root {
+  --primary-lighter: #e2e0ff;
   --primary-light: #c4c1ff;
   --primary: #6c63ff;
   --primary-dark: #564fcc;
@@ -23,6 +24,8 @@
   --success-light: #ebfbde;
   --success: #7dbd48;
   --success-dark: #5e8e36;
+
+  --ceab-completed: #89bf83;
 
   --white: #ffffff;
   --black: #000000;

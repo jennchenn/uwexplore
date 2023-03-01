@@ -1,0 +1,33 @@
+.bar-label-styles {
+  color: black;
+  font-size: 0.7em;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 600;
+}
+
+.component-container {
+  display: flex;
+}
+
+.container-styles {
+  height: 20px;
+  min-width: 75%;
+  background-color: var(--primary-lighter);
+  border-radius: 50px;
+  position: relative;
+  margin-left: auto;
+}
+
+.filler-styles {
+  height: 100%;
+  border-radius: inherit;
+  text-align: right;
+  position: absolute;
+}
+
+.label-styles {
+  font-size: 0.9em;
+}
