@@ -11,6 +11,12 @@ import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import LoginBase from "./components/LoginBase";
 
+export interface Props {
+  className?: string;
+  style?: Object;
+  name?: string;
+}
+
 const sectionSizes = {
   default: { search: 4, calendar: 8 },
   allCal: { search: 0, calendar: 12 },
