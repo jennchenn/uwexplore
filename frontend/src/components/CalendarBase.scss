@@ -1,6 +1,6 @@
 // Calendar component requires a sass sheet for custom styles
 @import "react-big-calendar/lib/sass/styles";
-@import "./styles/Constants.css";
+@import "../styles/Constants.css";
 
 .rbc-allday-cell {
   height: 0px !important;
