@@ -141,4 +141,7 @@ def test_calculate_ceab_numbers_success(ceab_service):
         "PD ELEC": 0,
         "SCI": 0.0,
         "TE": 1,
+        "TE & CSE": 1,
+        "MATH & SCI": 84.0,
+        "ENG SCI & ENG DES": 42.0,
     }

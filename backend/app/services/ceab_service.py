@@ -17,6 +17,9 @@ class CeabRequirements(Enum):
     ENG_SCI = "ENG SCI"
     ENG_DES = "ENG DES"
     CSE_WEIGHT = "CSE WEIGHT"
+    TE_CSE = "TE & CSE"
+    MATH_SCI = "MATH & SCI"
+    ENG_SCI_DES = "ENG SCI & ENG DES"
 
 
 class CeabService:
@@ -24,6 +27,12 @@ class CeabService:
         self.logger = logger
 
     def get_ceab_numbers(self, user):
+        """
+        Calculate CEAB numbers based on user
+        :param user: User object to fetch CEAB numbers for
+        :type user: dict
+        :raise Exception: if error encountered when fetching CEAB numbers or adding them
+        """
         try:
             requirements_counts = {}
             for r in CeabRequirements:
@@ -52,6 +61,9 @@ class CeabService:
                 ] += course_info.ceab_eng_design
                 if course_info.course_type:
                     requirements_counts[course_info.course_type.value] += 1
+
+            # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
+            self._sum_requirements(requirements_counts)
             return requirements_counts
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -59,3 +71,17 @@ class CeabService:
                 f"Failed to get CEAB numbers. Reason={reason if reason else str(e)}"
             )
             raise e
+
+    def _sum_requirements(self, requirements_counts):
+        requirements_counts[CeabRequirements.TE_CSE.value] = (
+            requirements_counts[CeabRequirements.TE.value]
+            + requirements_counts[CeabRequirements.CSE.value]
+        )
+        requirements_counts[CeabRequirements.MATH_SCI.value] = (
+            requirements_counts[CeabRequirements.MATH.value]
+            + requirements_counts[CeabRequirements.SCI.value]
+        )
+        requirements_counts[CeabRequirements.ENG_SCI_DES.value] = (
+            requirements_counts[CeabRequirements.ENG_SCI.value]
+            + requirements_counts[CeabRequirements.ENG_DES.value]
+        )
