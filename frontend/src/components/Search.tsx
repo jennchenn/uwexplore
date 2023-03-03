@@ -16,7 +16,7 @@ import SearchCards from "./SearchCards";
 export default function Search() {
   return (
     <div>
-      <Box sx={{ m: 2 }}>
+      <Box sx={{ m: 2, paddingBottom: "60px" }}>
         <Stack direction="column" spacing={2}>
           <Stack direction="row" spacing={2}>
             <TextField

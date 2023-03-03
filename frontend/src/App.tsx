@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
+import CoursesOnCalendar from "./components/CoursesOnCalendar";
 
 const sectionSizes = {
   default: { search: 5, calendar: 7 },
@@ -39,6 +40,7 @@ function App() {
     <Box>
       <Navbar></Navbar>
       <Grid container>
+        {/* LHS SEARCH */}
         <Grid xs={searchWidth} className="search-base">
           <Box
             style={{
@@ -55,7 +57,9 @@ function App() {
             {/* todo: will this keep results? something better than empty tag? optimized? */}
             {sectionInView === "calendar" ? <></> : <Search />}
           </Box>
+          <CoursesOnCalendar />
         </Grid>
+        {/* RHS CALENDAR */}
         <Grid xs={calendarWidth} className="calendar-base">
           <Box
             style={{
