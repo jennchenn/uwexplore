@@ -409,7 +409,7 @@ def add_courses():
         Course(
             name="Introduction to Machine Learning",
             department="MSCI",
-            code="446",
+            code="546",
             description="This course covers algorithmic and statistical foundations of data mining: extracting previously unknown and useful information from data. Topics include exploratory data analysis, data cleaning, data transformations, association rule mining, and both supervised and unsupervised learning. Methods typically covered include, but are not limited to: the Apriori algorithm, Bayesian inference, decision trees, linear and logistic regression, nearest-neighbor classification, and k-means clustering. [Offered: W]",
             ceab_eng=25.2,
             ceab_design=16.8,

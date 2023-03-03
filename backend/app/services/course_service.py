@@ -20,8 +20,14 @@ class CourseService:
             if course_codes:
                 code_filter = []
                 for code in course_codes:
-                    code_filter.append({"code": {"$regex": f"^{code}"}})
-                filters.append({"$or": code_filter})
+                    if (
+                        code == "5"
+                    ):  # this is a general catch-all for codes that don't start with 1-4
+                        code_filter.append({"code": {"$regex": f"^[^1234]"}})
+                    else:
+                        code_filter.append({"code": {"$regex": f"^{code}"}})
+                if code_filter:
+                    filters.append({"$or": code_filter})
 
             if search_query_list:
                 # we expect search_query to be a list of size 1, so we fetch the actual string
@@ -36,6 +42,19 @@ class CourseService:
                         ]
                     }
                 )
+
+            courses = []
+            if filters:
+                query_results = Course.objects(__raw__={"$and": filters}).order_by(
+                    "department"
+                )
+            else:
+                query_results = Course.objects.order_by("department")
+            for result in query_results:
+                result_dict = result.to_serializable_dict()
+                courses.append(result_dict)
+            return courses
+
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
