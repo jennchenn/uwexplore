@@ -46,7 +46,7 @@ class CourseService:
             courses = []
             if filters:
                 query_results = Course.objects(__raw__={"$and": filters}).order_by(
-                    "department"
+                    "department", "course_code"
                 )
             else:
                 query_results = Course.objects.order_by("department")
