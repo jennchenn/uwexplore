@@ -23,10 +23,3 @@
   color: var(--main-purple-2);
   cursor: pointer;
 }
-
-.text-input {
-  background-color: var(--bg-3);
-  border: none;
-  border-radius: 10px;
-  padding: 19px 32px;
-}
