@@ -32,6 +32,7 @@ class CourseService:
                         "$or": [
                             {"name": {"$regex": f"{keyword}", "$options": "i"}},
                             {"description": {"$regex": f"{keyword}", "$options": "i"}},
+                            {"department": {"$regex": f"{keyword}", "$options": "i"}},
                         ]
                     }
                 )
