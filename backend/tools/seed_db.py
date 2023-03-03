@@ -17,7 +17,6 @@ def add_courses():
             code="111",
             description="Functions: trigonometric, exponential, log, inverse functions. Differential calculus: limits, continuity, derivatives, differentials, applications. Sequences and series: convergence, power series, Taylor expansions. Simple numerical methods. [Offered: F]",
             ceab_math=42.0,
-            course_type=CourseType.REQUIRED,
             sections=[
                 Section(
                     day=[Weekday.M, Weekday.W],
@@ -72,7 +71,6 @@ def add_courses():
             code="112",
             description="Integration: Indefinite and definite integral; techniques of integration; improper integrals, numerical methods, applications. Vector differential calculus: Partial, total, and directional derivative; Gradient divergence and curl; Jacobian. Applications. [Offered: W, S]",
             ceab_math=42.0,
-            course_type=CourseType.REQUIRED,
             sections=[
                 Section(
                     day=[Weekday.M, Weekday.W],
@@ -127,7 +125,6 @@ def add_courses():
             code="114",
             description="Matrices and linear systems: determinants, eigenvalues and eigenvectors, LU decomposition, conditioning, numerical methods. First order ordinary differential equations: analytical techniques, applications, elementary numerical methods, convergence. [Offered: W, S]",
             ceab_math=36.0,
-            course_type=CourseType.REQUIRED,
             prerequisites=["SYDE 113"],
             tags=["matrices", "linear algebra"],
             sections=[
@@ -170,7 +167,6 @@ def add_courses():
             description="Computer systems, problem solving, data and programs, structured programming, arrays, matrices and pointers, correct and efficient algorithms, data structures. [Offered: F]",
             ceab_eng_sci=27.0,
             ceab_eng_design=27.0,
-            course_type=CourseType.REQUIRED,
             prerequisites=["SYDE 101L"],
             tags=["computer", "programming"],
             sections=[
@@ -228,7 +224,6 @@ def add_courses():
             description="The methodology of design, situation of concern; needs analysis and problem definition, engineering analysis and generation of alternative solutions, design prototyping, and design documentation. The lecture material is supplemented by a term-long design project done in small groups that develops hands-on experience with electromechanical prototyping. [Offered: S]",
             ceab_eng_sci=14.3,
             ceab_eng_design=42.8,
-            course_type=CourseType.REQUIRED,
             sections=[
                 Section(
                     day=[Weekday.M, Weekday.F],
@@ -284,7 +279,6 @@ def add_courses():
             description="An introductory course in engineering thermodynamics structured for students in Systems Design. Classical thermodynamics is presented as the systematic study of energy; its use, degradation, and waste. Introduction to heat transfer by conduction, convection, and radiation. Applications focus on problems of energy and environment. The concepts of statistical thermodynamics are introduced. [Offered: S]",
             ceab_sci=18.9,
             ceab_eng_sci=23.1,
-            course_type=CourseType.REQUIRED,
             prerequisites=["SYDE 383"],
             tags=["thermodynamics", "physics"],
             sections=[

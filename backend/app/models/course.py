@@ -65,7 +65,6 @@ class CourseType(Enum):
     LIST_B = "LIST B"
     LIST_C = "LIST C"
     LIST_D = "LIST D"
-    REQUIRED = "REQUIRED"
     CSE = "CSE"
     PD_COMP = "PD COMP"
     PD_ELEC = "PD ELEC"

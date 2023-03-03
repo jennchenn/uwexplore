@@ -17,7 +17,6 @@ class CeabRequirements(Enum):
     ENG_SCI = "ENG SCI"
     ENG_DES = "ENG DES"
     CSE_WEIGHT = "CSE WEIGHT"
-    REQUIRED = "REQUIRED"
 
 
 class CeabService:
@@ -51,7 +50,8 @@ class CeabService:
                 requirements_counts[
                     CeabRequirements.ENG_DES.value
                 ] += course_info.ceab_eng_design
-                requirements_counts[course_info.course_type.value] += 1
+                if course_info.course_type:
+                    requirements_counts[course_info.course_type.value] += 1
             return requirements_counts
         except Exception as e:
             reason = getattr(e, "message", None)
