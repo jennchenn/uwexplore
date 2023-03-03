@@ -81,9 +81,9 @@ class Course(Document):
     ceab_design = FloatField(required=True, default=0.0)
     course_type = EnumField(CourseType)
     sections = EmbeddedDocumentListField(Section)
-    prerequisites = ListField(ObjectIdField)
-    antirequisites = ListField(ObjectIdField)
-    tags = ListField(StringField)
+    prerequisites = ListField(StringField())
+    antirequisites = ListField(StringField())
+    tags = ListField(StringField())
 
     def to_serializable_dict(self):
         """
