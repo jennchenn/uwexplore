@@ -1,9 +1,9 @@
 import json
-import requests
 from enum import Enum
 
+import requests
 
-API_KEY = 'API KEY HERE'
+API_KEY = "API KEY HERE"
 
 
 class Season(Enum):
@@ -33,35 +33,33 @@ def next_season(current, year):
     return current, result, year
 
 
-header = {'x-api-key': API_KEY, 'accept': 'application/json'}
-api_path = 'https://openapi.data.uwaterloo.ca/v3/'
+header = {"x-api-key": API_KEY, "accept": "application/json"}
+api_path = "https://openapi.data.uwaterloo.ca/v3/"
 
 
 # Term Opendata API requests
 def get_current_term():
-    response = requests.get(api_path + 'Terms/current', headers=header)
+    response = requests.get(api_path + "Terms/current", headers=header)
     if response.status_code == 200:
         print("sucessfully fetched the data")
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_all_terms():
-    response = requests.get(api_path + 'Terms', headers=header)
+    response = requests.get(api_path + "Terms", headers=header)
     if response.status_code == 200:
         print("sucessfully fetched the data")
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_last_six_terms():
-    current_term = get_current_term()['nameShort']
+    current_term = get_current_term()["nameShort"]
     current_year = int(current_term[0:4])
     current_season = current_term[-1].upper()
 
@@ -81,8 +79,8 @@ def get_last_six_terms():
     result = {}
 
     for term in all_terms:
-        if term['nameShort'] in wanted_terms.keys():
-            result[term['termCode']] = term
+        if term["nameShort"] in wanted_terms.keys():
+            result[term["termCode"]] = term
 
     return result
 
@@ -94,8 +92,7 @@ def get_term_by_code(code):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_term_by_year(year):
@@ -105,8 +102,7 @@ def get_term_by_year(year):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 # Course Opendata API requests
@@ -118,8 +114,7 @@ def get_courses_by_term(code):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_courses_by_term_and_course(code, course_id):
@@ -129,8 +124,7 @@ def get_courses_by_term_and_course(code, course_id):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_courses_by_term_and_subject(code, subject):
@@ -140,8 +134,7 @@ def get_courses_by_term_and_subject(code, subject):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_last_six_term_all_courses():
@@ -157,12 +150,16 @@ def get_last_six_term_all_courses():
 
 def get_last_six_term_course_details_from_class_schedule():
     # this gets course details with the class schedule endpoint course id results
-    last_six_term_class_schedule_course_id = get_last_six_term_class_schedule_course_id()
+    last_six_term_class_schedule_course_id = (
+        get_last_six_term_class_schedule_course_id()
+    )
     last_six_term_course_details = {}
 
     for code in last_six_term_class_schedule_course_id.keys():
         for course_id in last_six_term_class_schedule_course_id[code]:
-            last_six_term_course_details[code][course_id] = get_courses_by_term_and_course(code, course_id)
+            last_six_term_course_details[code][
+                course_id
+            ] = get_courses_by_term_and_course(code, course_id)
 
     return last_six_term_course_details
 
@@ -175,19 +172,19 @@ def get_class_schedule_by_term(code):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_class_schedule_by_term_and_course(code, course_id):
-    response = requests.get(f"{api_path}ClassSchedules/{code}/{course_id}", headers=header)
+    response = requests.get(
+        f"{api_path}ClassSchedules/{code}/{course_id}", headers=header
+    )
     if response.status_code == 200:
         print("sucessfully fetched the data")
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_last_six_term_class_schedule_course_id():
@@ -201,13 +198,16 @@ def get_last_six_term_class_schedule_course_id():
 
 
 def get_last_six_term_class_schedule_details():
-    last_six_term_class_schedule_course_id = get_last_six_term_class_schedule_course_id()
+    last_six_term_class_schedule_course_id = (
+        get_last_six_term_class_schedule_course_id()
+    )
     last_six_term_class_schedule_details = {}
 
     for code in last_six_term_class_schedule_course_id.keys():
         for course_id in last_six_term_class_schedule_course_id[code]:
-            last_six_term_class_schedule_details[code][course_id] = get_class_schedule_by_term_and_course(code,
-                                                                                                          course_id)
+            last_six_term_class_schedule_details[code][
+                course_id
+            ] = get_class_schedule_by_term_and_course(code, course_id)
 
     return last_six_term_class_schedule_details
 
@@ -220,8 +220,7 @@ def get_important_dates():
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 # Location Opendata API requests
@@ -232,8 +231,7 @@ def get_locations():
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 # Subject Opendata API requests
@@ -244,8 +242,7 @@ def get_all_subjects():
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_subject_by_code(code):
@@ -255,8 +252,7 @@ def get_subject_by_code(code):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 # Exam Schedule Opendata API requests
@@ -268,8 +264,7 @@ def get_exam_schedule_by_term(code):
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def get_current_exam_schedule():
@@ -279,8 +274,7 @@ def get_current_exam_schedule():
         formatted_print(response.json())
         return response.json()
     else:
-        print(
-            f"{response.status_code} error with your request")
+        print(f"{response.status_code} error with your request")
 
 
 def formatted_print(obj):
