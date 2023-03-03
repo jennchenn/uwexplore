@@ -66,6 +66,9 @@ class CourseType(Enum):
     LIST_C = "LIST C"
     LIST_D = "LIST D"
     REQUIRED = "REQUIRED"
+    CSE = "CSE"
+    PD_COMP = "PD COMP"
+    PD_ELEC = "PD ELEC"
 
 
 class Course(Document):
@@ -77,8 +80,8 @@ class Course(Document):
     cse_weight = FloatField(required=True, default=0.0)
     ceab_math = FloatField(required=True, default=0.0)
     ceab_sci = FloatField(required=True, default=0.0)
-    ceab_eng = FloatField(required=True, default=0.0)
-    ceab_design = FloatField(required=True, default=0.0)
+    ceab_eng_sci = FloatField(required=True, default=0.0)
+    ceab_eng_design = FloatField(required=True, default=0.0)
     course_type = EnumField(CourseType)
     sections = EmbeddedDocumentListField(Section)
     prerequisites = ListField(StringField())
