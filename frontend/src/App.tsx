@@ -9,7 +9,6 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
-import LoginBase from "./components/LoginBase";
 
 export interface Props {
   className?: string;
@@ -80,7 +79,6 @@ function App() {
                 className="cal-collapse-icon"
                 onClick={expandSearch}
               ></KeyboardDoubleArrowRightIcon>
-              <LoginBase />
               <Calendar />
             </Stack>
           </Box>
