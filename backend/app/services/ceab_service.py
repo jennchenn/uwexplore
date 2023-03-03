@@ -1,4 +1,3 @@
-from collections import defaultdict
 from enum import Enum
 
 from ..models.course import Course
@@ -17,10 +16,8 @@ class CeabRequirements(Enum):
     SCI = "SCI"
     ENG_SCI = "ENG SCI"
     ENG_DES = "ENG DES"
-    TE_CSE = "TE & CSE"
-    MATH_SCI = "MATH & SCI"
-    ENG_SCI_DES = "ENG SCI & ENG DES"
     CSE_WEIGHT = "CSE WEIGHT"
+    REQUIRED = "REQUIRED"
 
 
 class CeabService:
@@ -29,7 +26,9 @@ class CeabService:
 
     def get_ceab_numbers(self, user):
         try:
-            requirements_counts = defaultdict(lambda: 0)
+            requirements_counts = {}
+            for r in CeabRequirements:
+                requirements_counts[r.value] = 0
             current_schedule = user.get("schedule")
             past_courses = []
             # TODO: add ceab requirements from past courses once implemented
@@ -40,26 +39,23 @@ class CeabService:
                 course_id = course["course_id"]
                 course_info = Course.objects(_id=course_id).first()
                 requirements_counts[
-                    CeabRequirements.CSE_WEIGHT
+                    CeabRequirements.CSE_WEIGHT.value
                 ] += course_info.cse_weight
-                requirements_counts[CeabRequirements.MATH] += course_info.ceab_math
-                requirements_counts[CeabRequirements.SCI] += course_info.ceab_sci
                 requirements_counts[
-                    CeabRequirements.ENG_SCI
+                    CeabRequirements.MATH.value
+                ] += course_info.ceab_math
+                requirements_counts[CeabRequirements.SCI.value] += course_info.ceab_sci
+                requirements_counts[
+                    CeabRequirements.ENG_SCI.value
                 ] += course_info.ceab_eng_sci
                 requirements_counts[
-                    CeabRequirements.ENG_DES
+                    CeabRequirements.ENG_DES.value
                 ] += course_info.ceab_eng_design
-                requirements_counts[course_info.course_type] += 1
-            return self._format_dict(requirements_counts)
+                requirements_counts[course_info.course_type.value] += 1
+            return requirements_counts
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to get CEAB numbers. Reason={reason if reason else str(e)}"
             )
             raise e
-
-    def _format_dict(self, requirements_counts):
-        # list count keys are of type CeabRequirements; convert to string for return
-        string_keys = [key.value for key in requirements_counts.keys()]
-        return dict(zip(string_keys, list(requirements_counts.values())))
