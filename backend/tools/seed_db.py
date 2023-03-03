@@ -662,7 +662,7 @@ def get_random_course_ids(courses, num_courses=3):
 
 
 def get_schedule_courses(courses, num_courses=3):
-    saved_courses = get_random_course_ids(courses, num_courses)
+    scheduled_courses = get_random_course_ids(courses, num_courses)
     course_colors = [
         "#ff6961",
         "#ffb480",
@@ -673,16 +673,16 @@ def get_schedule_courses(courses, num_courses=3):
         "#9d94ff",
         "#c780e8",
     ]
-    schedule_courses = []
-    for course_oid in saved_courses:
-        schedule_courses.append(
+    schedule = []
+    for course_oid in scheduled_courses:
+        schedule.append(
             ScheduleCourses(
                 course_id=course_oid,
                 section_id=Course.objects(_id=course_oid).first().sections[0]._id,
                 color=random.choice(course_colors),
             )
         )
-    return schedule_courses
+    return schedule
 
 
 def add_users():
