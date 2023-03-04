@@ -41,3 +41,5 @@ class Schedule(Document):
         id = dict.pop("_id", None)
         dict["id"] = str(id)
         return dict
+
+    meta = {"collection": "schedules"}
