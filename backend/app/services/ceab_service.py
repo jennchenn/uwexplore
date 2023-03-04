@@ -64,6 +64,7 @@ class CeabService:
 
             # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
             self._sum_requirements(requirements_counts)
+            self._round_requirements(requirements_counts)
             return requirements_counts
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -85,3 +86,8 @@ class CeabService:
             requirements_counts[CeabRequirements.ENG_SCI.value]
             + requirements_counts[CeabRequirements.ENG_DES.value]
         )
+
+    def _round_requirements(self, requirements_counts):
+        # Python float addition sometimes adds lots of decimals - round this before returning
+        for req, value in requirements_counts.items():
+            requirements_counts[req] = round(value, 1)
