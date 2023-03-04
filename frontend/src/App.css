@@ -1,32 +1,4 @@
-/* APP COLOURS */
-:root {
-  --primary-light: #c4c1ff;
-  --primary: #6c63ff;
-  --primary-dark: #564fcc;
-
-  --background-light: #f7f7f7;
-  --background-medium: #ebebeb;
-
-  --black-light: #cccccc;
-  --black-medium: #999999;
-  --black-dark: #666666;
-  --black-darker: #333333;
-
-  --warning-light: #ff8181;
-  --warning: #ff6161;
-  --warning-dark: #cc4e4e;
-
-  --conflict-light: #fdecb7;
-  --conflict: #f9d04a;
-  --conflict-dark: #c7a63b;
-
-  --success-light: #ebfbde;
-  --success: #7dbd48;
-  --success-dark: #5e8e36;
-
-  --white: #ffffff;
-  --black: #000000;
-}
+@import "./styles/Constants.css";
 
 .calendar-base {
   height: 100vh;
@@ -34,7 +6,7 @@
 
 .search-base {
   height: 100vh;
-  box-shadow: 3px 0 5px -1px var(--black-light);
+  box-shadow: 3px 0 5px -1px var(--black-5);
 }
 
 .cal-collapse-icon {
@@ -48,6 +20,6 @@
 
 .cal-collapse-icon:hover,
 .search-collapse-icon:hover {
-  color: var(--primary);
+  color: var(--main-purple-2);
   cursor: pointer;
 }

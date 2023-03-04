@@ -10,6 +10,12 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 
+export interface Props {
+  className?: string;
+  style?: Object;
+  name?: string;
+}
+
 const sectionSizes = {
   default: { search: 5, calendar: 7 },
   allCal: { search: 0, calendar: 12 },
@@ -37,6 +43,7 @@ function App() {
   return (
     <Box>
       <Navbar></Navbar>
+
       <Grid container>
         <Grid xs={searchWidth} className="search-base">
           <Box
