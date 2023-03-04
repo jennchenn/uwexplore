@@ -46,6 +46,26 @@ class Schedule(EmbeddedDocument):
         return dict
 
 
+class PastCourses(EmbeddedDocument):
+    term_1a = ListField(ObjectIdField())
+    term_1b = ListField(ObjectIdField())
+    term_2a = ListField(ObjectIdField())
+    term_2b = ListField(ObjectIdField())
+    term_3a = ListField(ObjectIdField())
+    term_3b = ListField(ObjectIdField())
+    term_4a = ListField(ObjectIdField())
+    term_4b = ListField(ObjectIdField())
+    term_other = ListField(ObjectIdField())
+
+    def to_serializable_dict(self):
+        """
+        Returns a dict representation of the document that is JSON serializable
+        ObjectId must be converted to a string.
+        """
+        dict = self.to_mongo().to_dict()
+        return dict
+
+
 class Role(Enum):
     STUDENT = "STUDENT"
     ADMIN = "ADMIN"
@@ -60,7 +80,7 @@ class User(Document):
     schedule = EmbeddedDocumentField(Schedule)
     role = EnumField(Role, default=Role.STUDENT, required=True)
     saved_courses = ListField(ObjectIdField())
-    past_courses = ListField(ObjectIdField())
+    past_courses = EmbeddedDocumentField(PastCourses)
 
     def to_serializable_dict(self):
         """

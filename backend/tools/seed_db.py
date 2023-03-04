@@ -5,7 +5,7 @@ import sys
 
 from app import create_app
 from app.models.course import ClassType, Course, CourseType, Section, Weekday
-from app.models.user import Schedule, ScheduleCourses, User
+from app.models.user import PastCourses, Schedule, ScheduleCourses, User
 
 
 def add_courses():
@@ -700,6 +700,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_HOKKAIDO_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 3),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 3)),
+            past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
         User(
             name="Melon Bread",
@@ -709,6 +710,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_MELON_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 7),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 7)),
+            past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
         User(
             name="Egg Bread",
@@ -718,6 +720,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_EGG_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 4),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 4)),
+            past_courses=PastCourses(term_4a=get_random_course_ids(courses, 2)),
         ),
         User(
             name="Brioche Bread",
@@ -727,6 +730,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_BRIOCHE_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 2),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 2)),
+            past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
     ]
     for user in users:
