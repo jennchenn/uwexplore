@@ -23,6 +23,31 @@ def require_login(api_func):
         try:
             access_token = get_token(request)
             if not access_token:
+                return api_func(*args, **kwargs)
+            try:
+                user = user_service.get_user_by_token(access_token)
+            except Exception:
+                return (
+                    jsonify({"error": "Invalid id provided."}),
+                    401,
+                )
+            return api_func(user, *args, **kwargs)
+
+        except Exception:
+            return (
+                jsonify({"error": "Error, please try again."}),
+                500,
+            )
+
+    return wrapper
+
+
+def optional_login(api_func):
+    @wraps(api_func)
+    def wrapper(*args, **kwargs):
+        try:
+            access_token = get_token(request)
+            if not access_token:
                 return (
                     jsonify({"error": "You are not logged in."}),
                     401,
