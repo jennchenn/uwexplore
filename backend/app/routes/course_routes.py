@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, jsonify
+from flask import Blueprint, current_app, jsonify, request
 
 from ..middlewares.authentication import require_login
 from ..services.course_service import CourseService
@@ -11,7 +11,13 @@ blueprint = Blueprint("course", __name__, url_prefix="/courses")
 @blueprint.route("/", methods=["GET"], strict_slashes=False)
 def get_courses():
     try:
-        result = course_service.get_courses()
+        # set flat=False to allow multiple values for each arg
+        # format of args is { arg: [ val1, ... ] }
+        args = request.args.to_dict(flat=False)
+        result = course_service.get_courses(
+            course_codes=args.get("code", None),
+            search_query_list=args.get("query", None),
+        )
         return jsonify(result), 200
 
     except Exception as e:
