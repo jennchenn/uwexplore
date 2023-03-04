@@ -33,7 +33,7 @@ export default function FilteringMenu({ setShowFilterMenu }: Props) {
 
   return (
     <Box>
-      <Card sx={{ backgroundColor: "var(--background-light)" }}>
+      <Card>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <Grid container>
