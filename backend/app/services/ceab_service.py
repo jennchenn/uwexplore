@@ -1,6 +1,7 @@
 from enum import Enum
 
 from ..models.course import Course
+from ..models.schedule import Schedule
 
 
 class CeabRequirements(Enum):
@@ -37,11 +38,18 @@ class CeabService:
             requirements_counts = {}
             for r in CeabRequirements:
                 requirements_counts[r.value] = 0
-            current_schedule = user.get("schedule")
+
+            courses = []
+
+            if user.get("schedule"):
+                current_schedule_id = user.get("schedule")
+                current_schedule = Schedule.objects(id=current_schedule_id).first()
+                courses += current_schedule["courses"]
+
             past_courses = []
             # TODO: add ceab requirements from past courses once implemented
             # past_courses = user.get("past_courses")
-            courses = current_schedule["courses"] + past_courses
+            courses += past_courses
 
             for course in courses:
                 course_id = course["course_id"]
