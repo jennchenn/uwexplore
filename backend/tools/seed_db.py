@@ -5,7 +5,8 @@ import sys
 
 from app import create_app
 from app.models.course import ClassType, Course, CourseType, Section, Weekday
-from app.models.user import PastCourses, Schedule, ScheduleCourses, User
+from app.models.schedule import Schedule, ScheduleCourses
+from app.models.user import PastCourses, User
 
 
 def add_courses():
@@ -680,7 +681,7 @@ def get_schedule_courses(courses, num_courses=3):
 
 
 def add_users():
-    print("Seeding users...")
+    print("Seeding users and schedules...")
     courses = Course.objects.all()
     users = [
         User(
@@ -690,7 +691,6 @@ def add_users():
             program="SYDE",
             auth_id=os.getenv("TEST_USER_CLOUD_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 1),
-            schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 1)),
         ),
         User(
             name="Hokkaido Milk Bread",
@@ -699,7 +699,6 @@ def add_users():
             program="BME",
             auth_id=os.getenv("TEST_USER_HOKKAIDO_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 3),
-            schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 3)),
             past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
         User(
@@ -709,7 +708,6 @@ def add_users():
             program="SYDE",
             auth_id=os.getenv("TEST_USER_MELON_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 7),
-            schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 7)),
             past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
         User(
@@ -719,7 +717,6 @@ def add_users():
             program="SYDE",
             auth_id=os.getenv("TEST_USER_EGG_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 4),
-            schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 4)),
             past_courses=PastCourses(term_4a=get_random_course_ids(courses, 2)),
         ),
         User(
@@ -729,11 +726,14 @@ def add_users():
             program="BME",
             auth_id=os.getenv("TEST_USER_BRIOCHE_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 2),
-            schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 2)),
             past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
     ]
     for user in users:
+        schedule = Schedule(
+            term="1229", courses=get_schedule_courses(courses, random.randint(0, 5))
+        ).save()
+        user.schedule = schedule
         user.save()
 
 
