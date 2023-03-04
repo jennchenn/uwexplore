@@ -40,7 +40,15 @@ class CeabService:
             if user.get("schedule"):
                 current_schedule_id = user.get("schedule")
                 current_schedule = Schedule.objects(id=current_schedule_id).first()
-                courses += current_schedule["courses"]
+                courses += [
+                    str(course["course_id"]) for course in current_schedule["courses"]
+                ]
+
+            if user.get("past_courses"):
+                for past_course_list in user.get("past_courses").values():
+                    print(past_course_list)
+                    courses += [str(id) for id in past_course_list]
+                    print(courses)
 
             return self._calculate_requirements(courses)
         except Exception as e:
@@ -59,7 +67,9 @@ class CeabService:
         """
         try:
             current_schedule = Schedule.objects(id=schedule_id).first()
-            courses = current_schedule["courses"]
+            courses = [
+                str(course["course_id"]) for course in current_schedule["courses"]
+            ]
             return self._calculate_requirements(courses)
 
         except Exception as e:
@@ -74,8 +84,7 @@ class CeabService:
         for r in CeabRequirements:
             requirements_counts[r.value] = 0
 
-        for course in courses:
-            course_id = course["course_id"]
+        for course_id in courses:
             course_info = Course.objects(_id=course_id).first()
             requirements_counts[
                 CeabRequirements.CSE_WEIGHT.value

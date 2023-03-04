@@ -6,7 +6,7 @@ from flask import current_app
 
 from app.models.course import ClassType, Course, CourseType, Section, Weekday
 from app.models.schedule import Schedule, ScheduleCourses
-from app.models.user import User
+from app.models.user import PastCourses, User
 from app.services.ceab_service import CeabService
 
 
@@ -124,13 +124,38 @@ def seed_database():
         program="SYDE",
         auth_id="auth",
         schedule=schedule,
+        past_courses=PastCourses(term_1a=course_ids),
     )
     user.save()
 
 
-def test_calculate_ceab_numbers_success(ceab_service):
+def test_calculate_ceab_numbers_for_user_success(ceab_service):
     user = User.objects().first().to_serializable_dict()
-    res = ceab_service.get_ceab_numbers(user)
+    res = ceab_service.get_ceab_numbers_by_user(user)
+    # TODO: shouldn't hardcode these
+    assert res == {
+        "CSE ALL": 0,
+        "CSE WEIGHT": 0.0,
+        "ENG DES": 33.6,
+        "ENG SCI": 50.4,
+        "LIST A": 0,
+        "LIST B": 0,
+        "LIST C": 0,
+        "LIST D": 0,
+        "MATH": 168.0,
+        "PD COMP": 0,
+        "PD ELEC": 0,
+        "SCI": 0.0,
+        "TE": 2,
+        "TE & CSE": 2,
+        "MATH & SCI": 168.0,
+        "ENG SCI & ENG DES": 84.0,
+    }
+
+
+def test_calculate_ceab_numbers_by_schedule_success(ceab_service):
+    schedule = Schedule.objects().first().to_serializable_dict()
+    res = ceab_service.get_ceab_numbers_by_schedule(schedule["id"])
     # TODO: shouldn't hardcode these
     assert res == {
         "CSE ALL": 0,
