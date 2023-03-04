@@ -1,4 +1,4 @@
-// import { useState, useEffect } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -11,9 +11,17 @@ import Typography from "@mui/material/Typography";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
+
+import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
 
 export default function Search() {
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+
+  const handleShowFilterMenu = () => {
+    setShowFilterMenu(!showFilterMenu);
+  };
+
   return (
     <div>
       <Box sx={{ m: 2 }}>
@@ -33,10 +41,19 @@ export default function Search() {
                 ),
               }}
             />
-            <Button variant="outlined" startIcon={<FilterAltIcon />}>
+            <Button
+              variant="outlined"
+              startIcon={<FilterAltIcon />}
+              onClick={handleShowFilterMenu}
+            >
               Filter
             </Button>
           </Stack>
+          {showFilterMenu === true ? (
+            <FilteringMenu setShowFilterMenu={setShowFilterMenu} />
+          ) : (
+            false
+          )}
           {/* todo: conditionally show welcome card */}
           <Card sx={{ minWidth: 100 }}>
             <CardContent>
