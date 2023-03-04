@@ -90,4 +90,4 @@ class CeabService:
     def _round_requirements(self, requirements_counts):
         # Python float addition sometimes adds lots of decimals - round this before returning
         for req, value in requirements_counts.items():
-            requirements_counts[req] = round(value, 1)
+            requirements_counts[req] = round(value, 2)
