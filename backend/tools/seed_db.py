@@ -731,7 +731,7 @@ def add_users():
     ]
     for user in users:
         schedule = Schedule(
-            term="1229", courses=get_schedule_courses(courses, random.randint(0, 5))
+            term="1229", courses=get_schedule_courses(courses, random.randint(1, 5))
         ).save()
         user.schedule = schedule
         user.save()
