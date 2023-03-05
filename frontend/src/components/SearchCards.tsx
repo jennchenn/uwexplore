@@ -196,16 +196,14 @@ export default function SearchCards() {
                           {section.enrolled_number}/{section.capacity}
                         </StyledTableCell>
                         <StyledTableCell>
-                          {moment
-                            .utc()
+                          {moment()
                             .startOf("day")
-                            .add(section.start_time, "minutes")
+                            .add(section.start_time, "seconds")
                             .format("hh:mm A")}
                           {" - "}
-                          {moment
-                            .utc()
+                          {moment()
                             .startOf("day")
-                            .add(section.end_time, "minutes")
+                            .add(section.end_time, "seconds")
                             .format("hh:mm A")}
                         </StyledTableCell>
                         <StyledTableCell>{days}</StyledTableCell>
