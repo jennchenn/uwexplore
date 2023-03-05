@@ -198,12 +198,12 @@ export default function SearchCards() {
                         <StyledTableCell>
                           {moment()
                             .startOf("day")
-                            .add(section.start_time, "seconds")
+                            .add(section.start_time, "milliseconds")
                             .format("hh:mm A")}
                           {" - "}
                           {moment()
                             .startOf("day")
-                            .add(section.end_time, "seconds")
+                            .add(section.end_time, "milliseconds")
                             .format("hh:mm A")}
                         </StyledTableCell>
                         <StyledTableCell>{days}</StyledTableCell>
