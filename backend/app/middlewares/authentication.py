@@ -23,7 +23,10 @@ def require_login(api_func):
         try:
             access_token = get_token(request)
             if not access_token:
-                return api_func(*args, **kwargs)
+                return (
+                    jsonify({"error": "You are not logged in."}),
+                    401,
+                )
             try:
                 user = user_service.get_user_by_token(access_token)
             except Exception:
@@ -48,10 +51,7 @@ def optional_login(api_func):
         try:
             access_token = get_token(request)
             if not access_token:
-                return (
-                    jsonify({"error": "You are not logged in."}),
-                    401,
-                )
+                return api_func(None, *args, **kwargs)
             try:
                 user = user_service.get_user_by_token(access_token)
             except Exception:
