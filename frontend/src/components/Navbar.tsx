@@ -6,12 +6,24 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import LoginModal from "./LoginModal";
 import CustomButton from "./CustomButton";
+import SignUp from "./SignUpModal";
 // import IconButton from "@mui/material/IconButton";
 // import MenuIcon from "@mui/icons-material/Menu";
 
 // todo: customize menu
 export default function Navbar() {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+
+  const handleCreateModalOpen = () => {
+    setSignUpModalOpen(true);
+    setLoginModalOpen(false);
+  };
+
+  const handleLoginModalOpen = () => {
+    setLoginModalOpen(true);
+    setSignUpModalOpen(false);
+  };
 
   return (
     <>
@@ -33,17 +45,21 @@ export default function Navbar() {
             <CustomButton
               type="secondary"
               className="login-signup-nav-button"
-              onClick={() => setModalOpen(true)}
+              onClick={() => setLoginModalOpen(true)}
               text="Login/Signup"
             />
           </Toolbar>
         </AppBar>
       </Box>
       <LoginModal
-        modalTitle="LOGIN"
-        modalInfo="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sollicitudin dapibus nisi, quis eleifend felis pharetra vel. Mauris ac iaculis mauris."
-        open={modalOpen}
-        setOpen={setModalOpen}
+        open={loginModalOpen}
+        setOpen={setLoginModalOpen}
+        linkOpen={handleCreateModalOpen}
+      />
+      <SignUp
+        open={signUpModalOpen}
+        setOpen={setSignUpModalOpen}
+        linkOpen={handleLoginModalOpen}
       />
     </>
   );
