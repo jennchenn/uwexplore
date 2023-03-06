@@ -36,6 +36,7 @@ class Section(EmbeddedDocument):
     _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
     day = ListField(EnumField(Weekday), required=True)
     term_code = StringField(required=True)
+    term_name = StringField(required=True)  # Winter 2023
     instructor = StringField()
     start_time = FloatField(required=True)
     end_time = FloatField(required=True)
@@ -45,6 +46,7 @@ class Section(EmbeddedDocument):
     number = StringField(required=True)  # 001
     start_date = DateTimeField(required=True)
     end_date = DateTimeField(required=True)
+    course_id = ObjectIdField(required=True)
     enrolled_number = IntField()
     capacity = IntField()
 
@@ -75,7 +77,9 @@ class Course(Document):
     name = StringField(required=True)
     department = StringField(required=True)
     code = StringField(required=True)
+    course_id = StringField(required=True, unique=True)
     description = StringField(required=True)
+    description_abbreviated = StringField()
     cse_weight = FloatField(required=True, default=0.0)
     ceab_math = FloatField(required=True, default=0.0)
     ceab_sci = FloatField(required=True, default=0.0)
