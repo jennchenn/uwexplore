@@ -4,8 +4,8 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import LoginModal from "./LoginModal";
+import CustomButton from "./CustomButton";
 // import IconButton from "@mui/material/IconButton";
 // import MenuIcon from "@mui/icons-material/Menu";
 
@@ -30,9 +30,12 @@ export default function Navbar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               UWChoose
             </Typography>
-            <Button color="inherit" onClick={() => setModalOpen(true)}>
-              Login
-            </Button>
+            <CustomButton
+              type="secondary"
+              className="login-signup-nav-button"
+              onClick={() => setModalOpen(true)}
+              text="Login/Signup"
+            />
           </Toolbar>
         </AppBar>
       </Box>

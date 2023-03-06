@@ -38,7 +38,12 @@ export default function LoginModal({
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal
+      className={LoginModalProps.className}
+      open={open}
+      onClose={handleClose}
+      style={LoginModalProps.style}
+    >
       <Box className="login-modal">
         <div className="login-modal-title heading-1">
           {LoginModalProps.modalTitle}
