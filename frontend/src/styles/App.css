@@ -12,14 +12,21 @@
 .cal-collapse-icon {
   float: left;
   cursor: pointer;
+  color: var(--primary-light);
 }
 
 .search-collapse-icon {
   float: right;
+  color: var(--primary-light);
 }
 
 .cal-collapse-icon:hover,
 .search-collapse-icon:hover {
   color: var(--main-purple-2);
   cursor: pointer;
+}
+
+
+.TextField-without-border-radius fieldset {
+  border-radius: 0;
 }
