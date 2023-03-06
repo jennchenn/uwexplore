@@ -27,7 +27,6 @@ export default function LoginModal({
     LoginModalProps.setOpen(false);
   };
 
-  const inputStyles = { width: "-webkit-fill-available", margin: "8px 72px" };
   const linkStyles = {
     color: "#6C63FF",
     opacity: "0.6",
@@ -50,12 +49,14 @@ export default function LoginModal({
           <div className="login-modal-alert heading-4">{alert}</div>
         )}
         <TextInput
+          className="modal-input-text"
           id="login-email"
           placeholder="Email"
           value={email}
           required
         />
         <TextInput
+          className="modal-input-text"
           id="login-password"
           placeholder="Password"
           type="password"
@@ -65,11 +66,12 @@ export default function LoginModal({
         <Link href="#" style={linkStyles}>
           Forgot Password?
         </Link>
-        <CustomButton text="login" type="CTA" style={inputStyles} />
+        <CustomButton className="modal-input-button" text="login" type="CTA" />
         <CustomButton
+          className="modal-input-button"
           text="create account"
           type="tertiary"
-          style={{ paddingBottom: "0", ...inputStyles }}
+          style={{ paddingBottom: "0" }}
         />
       </Box>
     </Modal>
