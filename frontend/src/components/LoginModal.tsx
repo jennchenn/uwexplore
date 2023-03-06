@@ -16,12 +16,12 @@ export default function LoginModal({
   open = true,
   ...LoginModalProps
 }: LoginModalProps) {
-  const [alert, setAlert] = useState("");
-  const [validate, setValidate] = useState(true);
+  const [alert] = useState("");
+  const [validate] = useState(true);
   const [modalOpen, setModalOpen] = useState(open);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email] = useState("");
+  const [password] = useState("");
 
   const handleClose = () => {
     setModalOpen(false);
