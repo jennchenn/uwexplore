@@ -15,7 +15,7 @@
 .container-styles {
   height: 20px;
   min-width: 75%;
-  background-color: var(--primary-lighter);
+  background-color: var(--main-purple-6);
   border-radius: 50px;
   position: relative;
   margin-left: auto;

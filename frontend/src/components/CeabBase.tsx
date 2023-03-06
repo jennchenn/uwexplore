@@ -67,7 +67,7 @@ export default function CeabBase() {
           <Card
             elevation={2}
             sx={{
-              backgroundColor: "var(--background-light)",
+              backgroundColor: "var(--bg-3)",
               height: "100%",
               display: "flex",
               flexDirection: "column",
@@ -109,7 +109,7 @@ export default function CeabBase() {
                 <Paper elevation={0} sx={{ padding: 2, width: "100%" }}>
                   <Paper
                     elevation={0}
-                    sx={{ backgroundColor: "var(--background-light)", p: 2 }}
+                    sx={{ backgroundColor: "var(--bg-3)", p: 2 }}
                   >
                     Added past courses will appear here
                   </Paper>

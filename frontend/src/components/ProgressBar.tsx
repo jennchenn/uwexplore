@@ -12,7 +12,9 @@ const ProgressBar = (props: any) => {
           style={{
             width: `${completed > total ? 100 : (completed / total) * 100}%`,
             backgroundColor: `${
-              completed > total ? "var(--ceab-completed)" : "var(--primary)"
+              completed > total
+                ? "var(--ceab-completed)"
+                : "var(--main-purple-2)"
             }`,
           }}
         ></div>
