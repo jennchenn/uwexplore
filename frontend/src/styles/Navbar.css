@@ -1,4 +1,6 @@
+@import "../styles/Constants.css";
+
 .customize-toolbar {
   min-height: 8vh !important;
-  background: var(--primary-dark);
+  background: var(--main-purple-1);
 }

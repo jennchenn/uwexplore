@@ -1,4 +1,4 @@
-import "./App.css";
+import "./styles/App.css";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -9,6 +9,13 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
+import Ceab from "./components/CeabBase";
+
+export interface Props {
+  className?: string;
+  style?: Object;
+  name?: string;
+}
 
 const sectionSizes = {
   default: { search: 5, calendar: 7 },
@@ -37,6 +44,7 @@ function App() {
   return (
     <Box>
       <Navbar></Navbar>
+
       <Grid container>
         <Grid xs={searchWidth} className="search-base">
           <Box
@@ -73,6 +81,7 @@ function App() {
                 onClick={expandSearch}
               ></KeyboardDoubleArrowRightIcon>
               <Calendar />
+              <Ceab />
             </Stack>
           </Box>
         </Grid>

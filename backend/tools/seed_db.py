@@ -5,7 +5,7 @@ import sys
 
 from app import create_app
 from app.models.course import ClassType, Course, CourseType, Section, Weekday
-from app.models.user import Schedule, ScheduleCourses, User
+from app.models.user import PastCourses, Schedule, ScheduleCourses, User
 
 
 def add_courses():
@@ -17,7 +17,6 @@ def add_courses():
             code="111",
             description="Functions: trigonometric, exponential, log, inverse functions. Differential calculus: limits, continuity, derivatives, differentials, applications. Sequences and series: convergence, power series, Taylor expansions. Simple numerical methods. [Offered: F]",
             ceab_math=42.0,
-            course_type=CourseType.REQUIRED,
             sections=[
                 Section(
                     day=[Weekday.M, Weekday.W],
@@ -72,7 +71,6 @@ def add_courses():
             code="112",
             description="Integration: Indefinite and definite integral; techniques of integration; improper integrals, numerical methods, applications. Vector differential calculus: Partial, total, and directional derivative; Gradient divergence and curl; Jacobian. Applications. [Offered: W, S]",
             ceab_math=42.0,
-            course_type=CourseType.REQUIRED,
             sections=[
                 Section(
                     day=[Weekday.M, Weekday.W],
@@ -127,7 +125,6 @@ def add_courses():
             code="114",
             description="Matrices and linear systems: determinants, eigenvalues and eigenvectors, LU decomposition, conditioning, numerical methods. First order ordinary differential equations: analytical techniques, applications, elementary numerical methods, convergence. [Offered: W, S]",
             ceab_math=36.0,
-            course_type=CourseType.REQUIRED,
             prerequisites=["SYDE 113"],
             tags=["matrices", "linear algebra"],
             sections=[
@@ -168,9 +165,8 @@ def add_courses():
             department="SYDE",
             code="121",
             description="Computer systems, problem solving, data and programs, structured programming, arrays, matrices and pointers, correct and efficient algorithms, data structures. [Offered: F]",
-            ceab_eng=27.0,
-            ceab_design=27.0,
-            course_type=CourseType.REQUIRED,
+            ceab_eng_sci=27.0,
+            ceab_eng_design=27.0,
             prerequisites=["SYDE 101L"],
             tags=["computer", "programming"],
             sections=[
@@ -226,9 +222,8 @@ def add_courses():
             department="SYDE",
             code="361",
             description="The methodology of design, situation of concern; needs analysis and problem definition, engineering analysis and generation of alternative solutions, design prototyping, and design documentation. The lecture material is supplemented by a term-long design project done in small groups that develops hands-on experience with electromechanical prototyping. [Offered: S]",
-            ceab_eng=14.3,
-            ceab_design=42.8,
-            course_type=CourseType.REQUIRED,
+            ceab_eng_sci=14.3,
+            ceab_eng_design=42.8,
             sections=[
                 Section(
                     day=[Weekday.M, Weekday.F],
@@ -283,8 +278,7 @@ def add_courses():
             code="381",
             description="An introductory course in engineering thermodynamics structured for students in Systems Design. Classical thermodynamics is presented as the systematic study of energy; its use, degradation, and waste. Introduction to heat transfer by conduction, convection, and radiation. Applications focus on problems of energy and environment. The concepts of statistical thermodynamics are introduced. [Offered: S]",
             ceab_sci=18.9,
-            ceab_eng=23.1,
-            course_type=CourseType.REQUIRED,
+            ceab_eng_sci=23.1,
             prerequisites=["SYDE 383"],
             tags=["thermodynamics", "physics"],
             sections=[
@@ -325,8 +319,8 @@ def add_courses():
             department="ECE",
             code="406",
             description="Design and analysis of efficient, correct algorithms. Advanced data structures, divide-and-conquer algorithms, recurrences, greedy algorithms, dynamic programming, graph algorithms, search and backtrack, inherently hard and unsolvable problems, approximation and randomized algorithms, and amortized analysis. [Offered: W]",
-            ceab_eng=34.17,
-            ceab_design=16.83,
+            ceab_eng_sci=34.17,
+            ceab_eng_design=16.83,
             course_type=CourseType.TE,
             sections=[
                 Section(
@@ -367,8 +361,8 @@ def add_courses():
             code="416",
             description="This course introduces advanced topics in networking with a focus on applications and wireless technologies. Topics include: Cellular networks (2G, 3G, 4G and beyond), applications (Domain Name System [DNS], Simple Mail Transfer Protocol[SMTP], Post Office Protocol [POP], Internet Message Access Protocol [ IMAP], Hypertext Transfer Protocol [HTTP]) and socket programming, Content-centric networks (content delivery networks, peer-to-peer protocols, data centers, etc.), protocols for multimedia applications (Session Initiation Protocol [SIP], Real-time Transport Protocol [RTP], RTP Control Protocol [RTCP]), emerging technologies (Internet of Things, sensors, software defined networks), policy issues (network neutrality, who controls the Internet?). [Offered W]",
             ceab_math=12.75,
-            ceab_eng=15.3,
-            ceab_design=22.95,
+            ceab_eng_sci=15.3,
+            ceab_eng_design=22.95,
             course_type=CourseType.TE,
             prerequisites=["ECE 358"],
             antirequisites=["ECE 461"],
@@ -409,10 +403,10 @@ def add_courses():
         Course(
             name="Introduction to Machine Learning",
             department="MSCI",
-            code="446",
+            code="546",
             description="This course covers algorithmic and statistical foundations of data mining: extracting previously unknown and useful information from data. Topics include exploratory data analysis, data cleaning, data transformations, association rule mining, and both supervised and unsupervised learning. Methods typically covered include, but are not limited to: the Apriori algorithm, Bayesian inference, decision trees, linear and logistic regression, nearest-neighbor classification, and k-means clustering. [Offered: W]",
-            ceab_eng=25.2,
-            ceab_design=16.8,
+            ceab_eng_sci=25.2,
+            ceab_eng_design=16.8,
             course_type=CourseType.TE,
             antirequisites=["SYDE 599"],
             tags=["algorithm", "statistics"],
@@ -662,7 +656,7 @@ def get_random_course_ids(courses, num_courses=3):
 
 
 def get_schedule_courses(courses, num_courses=3):
-    saved_courses = get_random_course_ids(courses, num_courses)
+    scheduled_courses = get_random_course_ids(courses, num_courses)
     course_colors = [
         "#ff6961",
         "#ffb480",
@@ -673,16 +667,16 @@ def get_schedule_courses(courses, num_courses=3):
         "#9d94ff",
         "#c780e8",
     ]
-    schedule_courses = []
-    for course_oid in saved_courses:
-        schedule_courses.append(
+    schedule = []
+    for course_oid in scheduled_courses:
+        schedule.append(
             ScheduleCourses(
                 course_id=course_oid,
                 section_id=Course.objects(_id=course_oid).first().sections[0]._id,
                 color=random.choice(course_colors),
             )
         )
-    return schedule_courses
+    return schedule
 
 
 def add_users():
@@ -706,6 +700,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_HOKKAIDO_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 3),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 3)),
+            past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
         User(
             name="Melon Bread",
@@ -715,6 +710,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_MELON_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 7),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 7)),
+            past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
         User(
             name="Egg Bread",
@@ -724,6 +720,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_EGG_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 4),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 4)),
+            past_courses=PastCourses(term_4a=get_random_course_ids(courses, 2)),
         ),
         User(
             name="Brioche Bread",
@@ -733,6 +730,7 @@ def add_users():
             auth_id=os.getenv("TEST_USER_BRIOCHE_AUTH_ID"),
             saved_courses=get_random_course_ids(courses, 2),
             schedule=Schedule(term="1229", courses=get_schedule_courses(courses, 2)),
+            past_courses=PastCourses(term_1a=get_random_course_ids(courses, 2)),
         ),
     ]
     for user in users:
