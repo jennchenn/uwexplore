@@ -1,4 +1,4 @@
-import "./App.css";
+import "./styles/App.css";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -9,6 +9,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
+import Ceab from "./components/CeabBase";
 
 export interface Props {
   className?: string;
@@ -80,6 +81,7 @@ function App() {
                 onClick={expandSearch}
               ></KeyboardDoubleArrowRightIcon>
               <Calendar />
+              <Ceab />
             </Stack>
           </Box>
         </Grid>

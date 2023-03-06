@@ -1,4 +1,4 @@
-@import "./styles/Constants.css";
+@import "//styles/Constants.css";
 
 .calendar-base {
   height: 100vh;
