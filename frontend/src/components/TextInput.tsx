@@ -70,6 +70,7 @@ export default function TextInput({
   return (
     <>
       <FormControl
+        className={TextInputProps.className}
         style={{
           margin: "8px 72px",
           backgroundColor: "#F7F7F7",

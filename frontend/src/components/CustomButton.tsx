@@ -14,7 +14,7 @@ export default function CustomButton({
 }: CustomButtonProps) {
   return (
     <button
-      className={`custom-button-${type} button-text`}
+      className={`custom-button-${type} button-text ${CustomButtonProps.className}`}
       style={CustomButtonProps.style}
     >
       {CustomButtonProps.text}
