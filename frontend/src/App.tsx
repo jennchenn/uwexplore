@@ -14,7 +14,6 @@ import Ceab from "./components/CeabBase";
 export interface Props {
   className?: string;
   style?: Object;
-  name?: string;
 }
 
 const sectionSizes = {
