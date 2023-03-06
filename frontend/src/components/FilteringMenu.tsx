@@ -8,11 +8,13 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-interface Props {
+interface FilteringMenuProps {
   setShowFilterMenu: (showFilterMenu: boolean) => void;
 }
 
-export default function FilteringMenu({ setShowFilterMenu }: Props) {
+export default function FilteringMenu({
+  setShowFilterMenu,
+}: FilteringMenuProps) {
   const checkboxStyle = {
     "& .MuiSvgIcon-root": { fontSize: 14 },
   };
@@ -93,7 +95,7 @@ export default function FilteringMenu({ setShowFilterMenu }: Props) {
                       control={
                         <Checkbox name="code" value="5" sx={checkboxStyle} />
                       }
-                      label="5XX"
+                      label="5XX+"
                     />
                   </Grid>
                 </Grid>
@@ -120,7 +122,7 @@ export default function FilteringMenu({ setShowFilterMenu }: Props) {
               </Grid>
               <Grid xs={6} md={4}>
                 {/* todo: change name/value of the checkboxes to match backend */}
-                <Typography variant="h6">Capactiy</Typography>
+                <Typography variant="h6">Capacity</Typography>
                 <FormControlLabel
                   control={
                     <Checkbox name="capacity" value="full" sx={checkboxStyle} />

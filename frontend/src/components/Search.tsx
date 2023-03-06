@@ -49,10 +49,8 @@ export default function Search() {
               Filter
             </Button>
           </Stack>
-          {showFilterMenu === true ? (
+          {showFilterMenu && (
             <FilteringMenu setShowFilterMenu={setShowFilterMenu} />
-          ) : (
-            false
           )}
           {/* todo: conditionally show welcome card */}
           <Card sx={{ minWidth: 100 }}>
