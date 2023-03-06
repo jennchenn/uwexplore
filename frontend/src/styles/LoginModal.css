@@ -18,10 +18,14 @@
 
 .login-modal-title {
   color: var(--black-1);
+  padding: 0 72px;
 }
 
 .login-modal-description {
   color: var(--black-3);
+  padding: 16px 72px;
+  text-align: center;
+
 }
 
 .email-field {
