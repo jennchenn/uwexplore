@@ -1,5 +1,6 @@
 // Calendar component requires a sass sheet for custom styles
 @import "react-big-calendar/lib/sass/styles";
+@import "../styles/Constants.css";
 
 .rbc-allday-cell {
   height: 0px !important;
@@ -24,7 +25,7 @@
 
 .rbc-time-view {
   border-radius: 10px;
-  box-shadow: 0 2px 4px 1px var(--black-light);
+  box-shadow: 0 2px 4px 1px var(--black-5);
 }
 
 .box-style {

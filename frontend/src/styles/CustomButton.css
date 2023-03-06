@@ -1,0 +1,72 @@
+@import "./Constants.css";
+
+button {
+    padding: 12px 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    text-transform: uppercase;
+}
+
+.custom-button-primary {
+    background-color: var(--main-purple-2);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: none;
+    color: var(--bg-1);
+}
+
+.custom-button-primary:hover {
+    background-color: var(--main-purple-1);
+}
+
+.custom-button-primary:disabled {
+    background-color: var(--main-purple-5);
+}
+
+.custom-button-secondary {
+    background-color: var(--bg-1);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: 1px solid var(--main-purple-2);
+    color: var(--main-purple-2);
+}
+
+.custom-button-secondary:hover {
+    border: var(--main-purple-1);
+    color: var(--main-purple-1);
+}
+
+.custom-button-secondary:disabled {
+    border: var(--main-purple-5);
+    color: var(--main-purple-5);
+}
+
+.custom-button-tertiary {
+    background-color: transparent;
+    border: none;
+    color: var(--main-purple-2);
+    text-decoration-line: underline;
+}
+
+.custom-button-tertiary:hover, .custom-button-tertiary:visited {
+    color: var(--main-purple-1);
+    text-decoration-line: none;
+}
+
+.custom-button-CTA {
+    background-color: var(--main-purple-2);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 50px;
+    border: none;
+    color: var(--bg-1);
+}
+
+.custom-button-CTA:hover {
+    background-color: var(--main-purple-1);
+}
+
+.custom-button-CTA:disabled {
+    background-color: var(--main-purple-5);
+}
