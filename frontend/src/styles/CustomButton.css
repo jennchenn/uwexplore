@@ -34,12 +34,12 @@ button {
 }
 
 .custom-button-secondary:hover {
-    border: var(--main-purple-1);
+    border: 1px solid var(--main-purple-1);
     color: var(--main-purple-1);
 }
 
 .custom-button-secondary:disabled {
-    border: var(--main-purple-5);
+    border: 1px solid var(--main-purple-5);
     color: var(--main-purple-5);
 }
 

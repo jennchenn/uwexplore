@@ -1,6 +1,10 @@
 @import "../styles/Constants.css";
 
 .customize-toolbar {
-  min-height: 8vh !important;
+  min-height: 64px !important;
   background: var(--main-purple-1);
+}
+
+.login-signup-nav-button {
+  border-radius: 50px !important;
 }
