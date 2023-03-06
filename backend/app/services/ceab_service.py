@@ -1,6 +1,7 @@
 from enum import Enum
 
 from ..models.course import Course
+from ..models.schedule import Schedule
 
 
 class CeabRequirements(Enum):
@@ -26,7 +27,7 @@ class CeabService:
     def __init__(self, logger):
         self.logger = logger
 
-    def get_ceab_numbers(self, user):
+    def get_ceab_numbers_by_user(self, user):
         """
         Calculate CEAB numbers based on user
         :param user: User object to fetch CEAB numbers for
@@ -34,44 +35,75 @@ class CeabService:
         :raise Exception: if error encountered when fetching CEAB numbers or adding them
         """
         try:
-            requirements_counts = {}
-            for r in CeabRequirements:
-                requirements_counts[r.value] = 0
-            current_schedule = user.get("schedule")
-            past_courses = []
-            # TODO: add ceab requirements from past courses once implemented
-            # past_courses = user.get("past_courses")
-            courses = current_schedule["courses"] + past_courses
+            courses = []
 
-            for course in courses:
-                course_id = course["course_id"]
-                course_info = Course.objects(_id=course_id).first()
-                requirements_counts[
-                    CeabRequirements.CSE_WEIGHT.value
-                ] += course_info.cse_weight
-                requirements_counts[
-                    CeabRequirements.MATH.value
-                ] += course_info.ceab_math
-                requirements_counts[CeabRequirements.SCI.value] += course_info.ceab_sci
-                requirements_counts[
-                    CeabRequirements.ENG_SCI.value
-                ] += course_info.ceab_eng_sci
-                requirements_counts[
-                    CeabRequirements.ENG_DES.value
-                ] += course_info.ceab_eng_design
-                if course_info.course_type:
-                    requirements_counts[course_info.course_type.value] += 1
+            if user.get("schedule"):
+                current_schedule_id = user.get("schedule")
+                current_schedule = Schedule.objects(id=current_schedule_id).first()
+                courses += [
+                    str(course["course_id"]) for course in current_schedule["courses"]
+                ]
 
-            # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
-            self._sum_requirements(requirements_counts)
-            self._round_requirements(requirements_counts)
-            return requirements_counts
+            if user.get("past_courses"):
+                for past_course_list in user.get("past_courses").values():
+                    print(past_course_list)
+                    courses += [str(id) for id in past_course_list]
+                    print(courses)
+
+            return self._calculate_requirements(courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to get CEAB numbers. Reason={reason if reason else str(e)}"
             )
             raise e
+
+    def get_ceab_numbers_by_schedule(self, schedule_id):
+        """
+        Calculate CEAB numbers based on provided schedule
+        :param schedule_id: ID of schedule to fetch CEAB numbers for
+        :type schedule_id: String
+        :raise Exception: if error encountered when fetching CEAB numbers or adding them
+        """
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            courses = [
+                str(course["course_id"]) for course in current_schedule["courses"]
+            ]
+            return self._calculate_requirements(courses)
+
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get CEAB numbers. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def _calculate_requirements(self, courses):
+        requirements_counts = {}
+        for r in CeabRequirements:
+            requirements_counts[r.value] = 0
+
+        for course_id in courses:
+            course_info = Course.objects(_id=course_id).first()
+            requirements_counts[
+                CeabRequirements.CSE_WEIGHT.value
+            ] += course_info.cse_weight
+            requirements_counts[CeabRequirements.MATH.value] += course_info.ceab_math
+            requirements_counts[CeabRequirements.SCI.value] += course_info.ceab_sci
+            requirements_counts[
+                CeabRequirements.ENG_SCI.value
+            ] += course_info.ceab_eng_sci
+            requirements_counts[
+                CeabRequirements.ENG_DES.value
+            ] += course_info.ceab_eng_design
+            if course_info.course_type:
+                requirements_counts[course_info.course_type.value] += 1
+
+        # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
+        self._sum_requirements(requirements_counts)
+        self._round_requirements(requirements_counts)
+        return requirements_counts
 
     def _sum_requirements(self, requirements_counts):
         requirements_counts[CeabRequirements.TE_CSE.value] = (
