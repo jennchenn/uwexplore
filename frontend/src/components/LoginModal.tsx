@@ -9,6 +9,7 @@ interface LoginModalProps extends Props {
   modalTitle?: string;
   modalInfo?: string;
   open?: boolean;
+  setOpen: (open: boolean) => any;
   buttonText?: string;
 }
 
@@ -18,13 +19,12 @@ export default function LoginModal({
 }: LoginModalProps) {
   const [alert] = useState("");
   const [validate] = useState(true);
-  const [modalOpen, setModalOpen] = useState(open);
 
   const [email] = useState("");
   const [password] = useState("");
 
   const handleClose = () => {
-    setModalOpen(false);
+    LoginModalProps.setOpen(false);
   };
 
   const inputStyles = { width: "-webkit-fill-available", margin: "8px 72px" };
@@ -38,7 +38,7 @@ export default function LoginModal({
   };
 
   return (
-    <Modal open={modalOpen} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose}>
       <Box className="login-modal">
         <div className="login-modal-title heading-1">
           {LoginModalProps.modalTitle}
