@@ -24,6 +24,7 @@ def get_course_reviews(course):
 
     driver = webdriver.Chrome("chromedriver", options=options)
     driver.get(url)
+
     WebDriverWait(driver, 20).until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, ".sc-qXRQq.hXXFXN"))
     )

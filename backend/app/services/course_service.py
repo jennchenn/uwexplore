@@ -1,4 +1,5 @@
 from ..models.course import Course
+from ..models.user import PastCourses
 
 
 class CourseService:
@@ -77,3 +78,25 @@ class CourseService:
                 f"Failed to get courses. Reason={reason if reason else str(e)}"
             )
             raise e
+
+    def get_past_courses_by_user(self, user):
+        try:
+            past_courses = user.get("past_courses")
+            if not past_courses:  # return an empty object with the expected keys
+                return PastCourses().to_serializable_dict()
+            for term, courses in past_courses.items():
+                course_names = [
+                    self._get_course_name_from_id(course_id) for course_id in courses
+                ]
+                past_courses[term] = course_names
+            return past_courses
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def _get_course_name_from_id(self, course_id):
+        course = Course.objects(_id=course_id).first()
+        return f"{course.department} {course.code}"
