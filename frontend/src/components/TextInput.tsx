@@ -75,8 +75,10 @@ export default function TextInput({
           width: "-webkit-fill-available",
           backgroundColor: "#F7F7F7",
           borderRadius: "10px",
+          ...TextInputProps.style,
         }}
         variant="outlined"
+        className={TextInputProps.className}
       >
         <InputLabel htmlFor={`input-${TextInputProps.id}`} style={labelStyle}>
           {TextInputProps.placeholder}

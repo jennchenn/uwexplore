@@ -6,6 +6,7 @@ type buttonTypes = "primary" | "secondary" | "tertiary" | "CTA";
 interface CustomButtonProps extends Props {
   text?: string;
   type?: buttonTypes;
+  onClick?: (event: any) => void;
 }
 
 export default function CustomButton({
@@ -14,8 +15,9 @@ export default function CustomButton({
 }: CustomButtonProps) {
   return (
     <button
-      className={`custom-button-${type} button-text`}
+      className={`custom-button-${type} button-text ${CustomButtonProps.className}`}
       style={CustomButtonProps.style}
+      onClick={CustomButtonProps.onClick}
     >
       {CustomButtonProps.text}
     </button>
