@@ -22,7 +22,6 @@ DEFAULT_COURSES = [
         code="111",
         description="Functions: trigonometric, exponential, log, inverse functions. Differential calculus: limits, continuity, derivatives, differentials, applications. Sequences and series: convergence, power series, Taylor expansions. Simple numerical methods. [Offered: F]",
         ceab_math=42.0,
-        course_type=CourseType.REQUIRED,
         sections=[
             Section(
                 day=[Weekday.M, Weekday.W],
@@ -74,7 +73,6 @@ DEFAULT_COURSES = [
         code="112",
         description="Integration: Indefinite and definite integral; techniques of integration; improper integrals, numerical methods, applications. Vector differential calculus: Partial, total, and directional derivative; Gradient divergence and curl; Jacobian. Applications. [Offered: W, S]",
         ceab_math=42.0,
-        course_type=CourseType.REQUIRED,
         sections=[
             Section(
                 day=[Weekday.M, Weekday.W],
@@ -124,11 +122,12 @@ DEFAULT_COURSES = [
 
 
 def seed_database():
+    Course.objects.delete()
     for course in DEFAULT_COURSES:
         course.save()
 
 
-def test_get_branch_id_success(course_service):
+def test_get_courses_success(course_service):
     res = course_service.get_courses()
     assert type(res) is list
     assert len(res) == len(DEFAULT_COURSES)

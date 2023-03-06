@@ -7,12 +7,10 @@ on:
     paths:
       - "frontend/**"
       - "backend/**"
+      - "data/**"
   pull_request:
     branches:
       - main
-    paths:
-      - "frontend/**"
-      - "backend/**"
 
 jobs:
   run-lint:
@@ -30,6 +28,8 @@ jobs:
               - "frontend/**"
             python-backend:
               - "backend/**"
+            data:
+              - "data/**"
       - name: Set up Node.js
         if: steps.changes.outputs.frontend == 'true'
         uses: actions/setup-node@v3
@@ -50,4 +50,9 @@ jobs:
       - name: Lint Python backend
         if: steps.changes.outputs.python-backend == 'true'
         working-directory: ./backend
+        run: pip install black isort && python -m black --check . && isort --profile black . -c
+
+      - name: Lint data code
+        if: steps.changes.outputs.data == 'true'
+        working-directory: ./data
         run: pip install black isort && python -m black --check . && isort --profile black . -c
