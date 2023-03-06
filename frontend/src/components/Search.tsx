@@ -1,4 +1,4 @@
-// import { useState, useEffect } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -11,20 +11,29 @@ import Typography from "@mui/material/Typography";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
+
+import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
 
 export default function Search() {
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+
+  const handleShowFilterMenu = () => {
+    setShowFilterMenu(!showFilterMenu);
+  };
+
   return (
     <div>
       <Box sx={{ m: 2 }}>
-        <Stack direction="column" spacing={2}>
-          <Stack direction="row" spacing={2}>
+        <Stack direction="column" spacing={1}>
+          <Stack direction="column" alignItems="flex-end" spacing={1}>
             <TextField
               fullWidth
               id="outlined-search"
-              label="Search field"
+              label="Search Courses"
               type="search"
-              style={{ background: "#ffffff" }}
+              style={{ background: "#f7f7f7", borderRadius: "4px" }}
+              sx={{ ":hover": { boxShadow: "0 4px 8px rgba(0, 0, 0, .20)" } }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -33,10 +42,18 @@ export default function Search() {
                 ),
               }}
             />
-            <Button variant="outlined" startIcon={<FilterAltIcon />}>
+            <Button
+              variant="text"
+              size="small"
+              startIcon={<FilterAltIcon />}
+              onClick={handleShowFilterMenu}
+            >
               Filter
             </Button>
           </Stack>
+          {showFilterMenu && (
+            <FilteringMenu setShowFilterMenu={setShowFilterMenu} />
+          )}
           {/* todo: conditionally show welcome card */}
           <Card sx={{ minWidth: 100 }}>
             <CardContent>
