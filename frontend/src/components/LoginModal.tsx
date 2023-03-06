@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { Box, Link, Modal } from "@mui/material";
 import { Props } from "../App";
-import "../styles/LoginModal.css";
+import "../styles/LoginSignUpModal.css";
 import CustomButton from "./CustomButton";
 import TextInput from "./TextInput";
 
 interface LoginModalProps extends Props {
-  modalTitle?: string;
-  modalInfo?: string;
-  open?: boolean;
-  setOpen: (open: boolean) => any;
-  buttonText?: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  linkOpen: () => void;
 }
 
 export default function LoginModal({
@@ -35,6 +33,7 @@ export default function LoginModal({
     margin: "8px 104px",
     fontSize: "12px",
     fontWeight: "700",
+    cursor: "pointer",
   };
 
   return (
@@ -45,11 +44,11 @@ export default function LoginModal({
       style={LoginModalProps.style}
     >
       <Box className="login-modal">
-        <div className="login-modal-title heading-1">
-          {LoginModalProps.modalTitle}
-        </div>
+        <div className="login-modal-title heading-1">LOGIN</div>
         <div className="login-modal-description heading-6">
-          {LoginModalProps.modalInfo}
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+          sollicitudin dapibus nisi, quis eleifend felis pharetra vel. Mauris ac
+          iaculis mauris.
         </div>
         {!validate && alert !== "" && (
           <div className="login-modal-alert heading-4">{alert}</div>
@@ -57,6 +56,7 @@ export default function LoginModal({
         <TextInput
           id="login-email"
           placeholder="Email"
+          type="email"
           value={email}
           required
         />
@@ -75,6 +75,7 @@ export default function LoginModal({
           text="create account"
           type="tertiary"
           style={{ paddingBottom: "0", ...inputStyles }}
+          onClick={LoginModalProps.linkOpen}
         />
       </Box>
     </Modal>
