@@ -1,38 +1,75 @@
-import { Box, Modal } from "@mui/material";
+import { useState } from "react";
+import { Box, Link, Modal } from "@mui/material";
+import { Props } from "../App";
 import "../styles/LoginModal.css";
+import CustomButton from "./CustomButton";
 import TextInput from "./TextInput";
 
-type LoginModalProps = {
-  modalTitle: string;
-  modalInfo: string;
-  modalOpen: boolean;
-  setModalOpen: (modalOpen: boolean) => any;
-  courseColors: any;
-  availableBackgroundColors: string[];
-};
+interface LoginModalProps extends Props {
+  modalTitle?: string;
+  modalInfo?: string;
+  open?: boolean;
+  buttonText?: string;
+}
 
-export default function LoginModal({ modalOpen = true, ...LoginModalProps }) {
+export default function LoginModal({
+  open = true,
+  ...LoginModalProps
+}: LoginModalProps) {
+  const [alert, setAlert] = useState("");
+  const [validate, setValidate] = useState(true);
+  const [modalOpen, setModalOpen] = useState(open);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
   const inputStyles = { width: "-webkit-fill-available", margin: "8px 72px" };
+  const linkStyles = {
+    color: "#6C63FF",
+    opacity: "0.6",
+    alignSelf: "flex-start",
+    margin: "8px 104px",
+    fontSize: "12px",
+    fontWeight: "700",
+  };
 
   return (
-    <Modal
-      open={modalOpen}
-      onClose={LoginModalProps.handleClose}
-      aria-labelledby="login-modal-title"
-      aria-describedby="login-modal-description"
-    >
-      <Box className="login-modal">
+    <Modal open={modalOpen} onClose={handleClose}>
+      <Box className="login-modal" id="sdfsd">
         <div className="login-modal-title heading-1">
-          {LoginModalProps.modalTitle} THIS
+          {LoginModalProps.modalTitle}
         </div>
         <div className="login-modal-description heading-6">
-          {LoginModalProps.modalInfo} lorel
+          {LoginModalProps.modalInfo}
         </div>
-        <TextInput placeholder="Email" styles={inputStyles} type="email" />
+        {!validate && alert !== "" && (
+          <div className="login-modal-alert heading-4">{alert}</div>
+        )}
         <TextInput
+          id="login-email"
+          placeholder="Email"
+          value={email}
+          required
+        />
+        <TextInput
+          id="login-password"
           placeholder="Password"
-          styles={inputStyles}
           type="password"
+          value={password}
+          required
+        />
+        <Link href="#" style={linkStyles}>
+          Forgot Password?
+        </Link>
+        <CustomButton text="login" type="CTA" style={inputStyles} />
+        <CustomButton
+          text="create account"
+          type="tertiary"
+          style={{ paddingBottom: "0", ...inputStyles }}
         />
       </Box>
     </Modal>

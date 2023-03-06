@@ -34,9 +34,7 @@ export default function TextInput({
     setShowPassword((showPassword) => !showPassword);
 
   const handleOnChange = (event: any) => {
-    event.preventDefault();
     setInputValue(event.target.value);
-    event.preventDefault();
   };
 
   const StyledTextInput = styled(OutlinedInput)({
