@@ -39,7 +39,7 @@ export default function LoginModal({
 
   return (
     <Modal open={modalOpen} onClose={handleClose}>
-      <Box className="login-modal" id="sdfsd">
+      <Box className="login-modal">
         <div className="login-modal-title heading-1">
           {LoginModalProps.modalTitle}
         </div>
