@@ -23,8 +23,6 @@ export default function SignUp({
   const [password] = useState("");
   const [confirmPassword] = useState("");
 
-  const inputStyles = { width: "-webkit-fill-available", margin: "8px 72px" };
-
   return (
     <Modal
       className={SignUpModalProps.className}
@@ -40,6 +38,7 @@ export default function SignUp({
           iaculis mauris.
         </div>
         <TextInput
+          className="modal-input-text"
           id="sign-up-email"
           placeholder="Email"
           type="email"
@@ -47,6 +46,7 @@ export default function SignUp({
           required
         />
         <TextInput
+          className="modal-input-text"
           id="sign-up-password"
           placeholder="Password"
           type="password"
@@ -54,17 +54,23 @@ export default function SignUp({
           required
         />
         <TextInput
+          className="modal-input-text"
           id="sign-up-password-confirm"
           placeholder="Confirm Password"
           type="password"
           value={confirmPassword}
           required
         />
-        <CustomButton text="create account" type="CTA" style={inputStyles} />
         <CustomButton
+          className="modal-input-button"
+          text="create account"
+          type="CTA"
+        />
+        <CustomButton
+          className="modal-input-button"
           text="already have an account? login"
           type="tertiary"
-          style={{ paddingBottom: "0", ...inputStyles }}
+          style={{ paddingBottom: "0" }}
           onClick={SignUpModalProps.linkOpen}
         />
       </Box>
