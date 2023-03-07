@@ -1,6 +1,16 @@
 @import "../styles/Constants.css";
 
 .customize-toolbar {
-  min-height: 8vh !important;
+  min-height: 7vh !important;
   background: var(--main-purple-1);
+}
+
+.logo-styles {
+  height: 36px;
+  padding-right: 5px;
+}
+
+.title-styles {
+  flex-grow: 1;
+  font-weight: var(--font-weight-regular);
 }

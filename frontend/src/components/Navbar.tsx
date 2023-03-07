@@ -3,29 +3,17 @@ import "../styles/Navbar.css";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-// import IconButton from "@mui/material/IconButton";
-// import MenuIcon from "@mui/icons-material/Menu";
+import logo from "../images/logo.png";
 
 // todo: customize menu
 export default function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" elevation={0}>
-        <Toolbar className="customize-toolbar" sx={{ height: "3vh" }}>
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton> */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            UWChoose
-          </Typography>
+        <Toolbar className="customize-toolbar">
+          <img src={logo} alt="uwexplore logo" className="logo-styles" />
+          <h2 className="title-styles">uwexplore</h2>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
