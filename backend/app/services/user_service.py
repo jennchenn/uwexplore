@@ -2,8 +2,10 @@ import os
 
 import firebase_admin.auth
 import requests
+from flask_mail import Mail, Message
 
 from ..models.user import User
+from flask import current_app as app
 
 
 class UserService:
@@ -151,6 +153,13 @@ class UserService:
 
     def reset_password(self, email):
         link = firebase_admin.auth.generate_password_reset_link(email)
+        mail = Mail(app)
+        mail.send_message(
+            "Reset your password for CalendUWU!",
+            sender="breadfydp@gmail.com",
+            recipients=[email],
+            body=f"Click here to reset: {link}",
+        )
         return {"resetLink": link}
 
     # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
