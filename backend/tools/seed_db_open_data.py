@@ -1,7 +1,6 @@
 import datetime
 import os
 import sys
-from enum import Enum
 
 import requests
 
@@ -11,12 +10,6 @@ from app.models.course import Course, Section, Weekday
 API_KEY = os.getenv("OPENDATA_API_KEY")
 API_PATH = os.getenv("OPENDATA_API_PATH", "https://openapi.data.uwaterloo.ca/v3/")
 HEADER = {"x-api-key": API_KEY, "accept": "application/json"}
-
-
-class Season(Enum):
-    FALL = "F"
-    WINTER = "W"
-    SPRING = "S"
 
 
 def _make_request(path):
@@ -201,12 +194,6 @@ def _get_current_term():
     return _make_request("Terms/current")
 
 
-def clear_database():
-    print("Clearing database...")
-    Course.objects().delete()
-    print("Database cleared 🗑")
-
-
 # Helper function to remove all the sections from courses
 def _clear_sections():
     for c in Course.objects.order_by("-sections"):
@@ -249,6 +236,12 @@ def update_database(update_current=True):
         print("Adding data from past two academic years...")
         res = update_six_terms_data()
         print(res)
+
+
+def clear_database():
+    print("Clearing database...")
+    Course.objects().delete()
+    print("Database cleared 🗑")
 
 
 if __name__ == "__main__":
