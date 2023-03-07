@@ -19,7 +19,7 @@ export type CourseObject = {
   tags: string[];
 };
 
-export const getCourses = async (
+const getCourses = async (
   queryParams: string | null,
 ): Promise<CourseObject[]> => {
   // FIXME: this should be thrown into a try catch
