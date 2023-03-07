@@ -16,33 +16,29 @@ from mongoengine import (
 
 
 class Weekday(Enum):
-    M = "MONDAY"
-    T = "TUESDAY"
-    W = "WEDNESDAY"
-    TH = "THURSDAY"
-    F = "FRIDAY"
-    S = "SATURDAY"
-    SU = "SUNDAY"
-
-
-class ClassType(Enum):
-    LEC = "LEC"
-    TUT = "TUT"
-    LAB = "LAB"
-    SEM = "SEM"
+    MONDAY = "M"
+    TUESDAY = "T"
+    WEDNESDAY = "W"
+    THURSDAY = "R"
+    FRIDAY = "F"
+    SATURDAY = "S"
+    SUNDAY = "U"
+    ONLINE = "E"
 
 
 class Section(EmbeddedDocument):
     _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
-    day = ListField(EnumField(Weekday), required=True)
+    # mongo saves this as a String; when we update a section, it'll throw an error if it's Enum
+    # we are keeping the Weekday enum to ensure we're consistent here
+    day = ListField(StringField(), required=True)
     term_code = StringField(required=True)
     term_name = StringField(required=True)  # Winter 2023
     instructor = StringField()
-    start_time = FloatField(required=True)
-    end_time = FloatField(required=True)
+    start_time = FloatField()
+    end_time = FloatField()
     class_number = IntField(required=True)  # 4178
     location = StringField(required=True)  # E5 6008
-    type = EnumField(ClassType, required=True)  # LEC
+    type = StringField(required=True)  # LEC
     number = StringField(required=True)  # 001
     start_date = DateTimeField(required=True)
     end_date = DateTimeField(required=True)
