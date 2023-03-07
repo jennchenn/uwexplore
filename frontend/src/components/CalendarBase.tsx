@@ -48,9 +48,7 @@ export default function CalendarBase() {
           // add in the parent course ID for colour assignment
           courseId: course.id,
           // create a unique id for this specific class section
-          uniqueClassId: `${courseTitle} ${day} ${new Date(
-            unixWeekdays[day] + section.start_time,
-          )}`,
+          uniqueClassId: `${day} ${section.id}`,
           day,
           title: courseTitle,
           // times are created from the UNIX weekday + section time, both in ms)
