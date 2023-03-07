@@ -93,13 +93,14 @@ class Course(Document):
         ObjectId must be converted to a string.
         """
         dict = self.to_mongo().to_dict()
+        id = dict.pop("_id", None)
+        dict["id"] = str(id)
         for section in dict.get("sections", []):
             id = section.pop("_id", None)
             section["id"] = str(id)
             course_id = section.pop("course_id", None)
-            dict["course_id"] = str(course_id)
-        id = dict.pop("_id", None)
-        dict["id"] = str(id)
+            section["course_id"] = str(course_id)
+
         return dict
 
     meta = {"collection": "courses"}
