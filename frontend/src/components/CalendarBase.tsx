@@ -39,9 +39,7 @@ export default function CalendarBase() {
     return allCourses.flatMap((course: any) => {
       return course.sections.flatMap((section: any) => {
         // new title property that appears on the event (ex. "SYDE 411 - LEC")
-        const courseTitle = `${course.department} ${
-          course.code
-        } - ${section.type.slice(0, 3)}`;
+        const courseTitle = `${course.department} ${course.code} - ${section.type}`;
         // this mapping splits up the day array to make individual entries
         return section.day.map((day: any) => ({
           ...section,
