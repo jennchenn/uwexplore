@@ -27,4 +27,7 @@ const getCourses = async (
   return data;
 };
 
-export default { getCourses };
+const clients = {
+    getCourses
+};
+export default clients;
