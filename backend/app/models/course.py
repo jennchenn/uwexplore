@@ -96,6 +96,8 @@ class Course(Document):
         for section in dict.get("sections", []):
             id = section.pop("_id", None)
             section["id"] = str(id)
+            course_id = section.pop("course_id", None)
+            dict["course_id"] = str(course_id)
         id = dict.pop("_id", None)
         dict["id"] = str(id)
         return dict
