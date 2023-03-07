@@ -29,6 +29,9 @@ function App() {
   );
   const [sectionInView, setSectionInView] = useState("both");
 
+  // state to see a ghost course time on cal when hovering on search card
+  const [courseHovered, setCourseHovered] = useState({});
+
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
     setCalendarWidth(sectionSizes.allCal.calendar);
@@ -60,7 +63,11 @@ function App() {
               onClick={collapseSearch}
             ></KeyboardDoubleArrowLeftIcon>
             {/* todo: will this keep results? something better than empty tag? optimized? */}
-            {sectionInView === "calendar" ? <></> : <Search />}
+            {sectionInView === "calendar" ? (
+              <></>
+            ) : (
+              <Search setCourseHovered={setCourseHovered} />
+            )}
           </Box>
         </Grid>
         <Grid xs={calendarWidth} className="calendar-base">
@@ -80,7 +87,7 @@ function App() {
                 className="cal-collapse-icon"
                 onClick={expandSearch}
               ></KeyboardDoubleArrowRightIcon>
-              <Calendar />
+              <Calendar courseHovered={courseHovered} />
               <Ceab />
             </Stack>
           </Box>

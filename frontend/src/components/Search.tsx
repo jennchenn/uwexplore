@@ -15,7 +15,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
 
-export default function Search() {
+interface courseHoverProps {
+  setCourseHovered: any;
+}
+
+export default function Search({ setCourseHovered }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
 
   const handleShowFilterMenu = () => {
@@ -70,7 +74,7 @@ export default function Search() {
               </Typography>
             </CardContent>
           </Card>
-          <SearchCards />
+          <SearchCards setCourseHovered={setCourseHovered} />
         </Stack>
       </Box>
     </div>
