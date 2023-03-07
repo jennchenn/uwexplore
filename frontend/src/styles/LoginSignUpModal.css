@@ -32,3 +32,9 @@
   padding: 0 72px 16px;
   text-align: center;
 }
+
+.modal-input-text, .modal-input-button {
+  width: -webkit-fill-available;
+  width: -moz-available;
+  margin: 8px 72px;
+}

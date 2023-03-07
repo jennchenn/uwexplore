@@ -72,7 +72,6 @@ export default function TextInput({
       <FormControl
         style={{
           margin: "8px 72px",
-          width: "-webkit-fill-available",
           backgroundColor: "#F7F7F7",
           borderRadius: "10px",
           ...TextInputProps.style,
