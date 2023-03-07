@@ -149,6 +149,10 @@ class UserService:
             "refresh_token": response_json["refreshToken"],
         }
 
+    def reset_password(self, email):
+        link = firebase_admin.auth.generate_password_reset_link(email)
+        return {"resetLink": link}
+
     # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
     def refresh_token(self, refresh_token):
         """
