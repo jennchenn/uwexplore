@@ -178,7 +178,9 @@ def insert_schedules(terms, skip_update=False):
                                 )
                             )
                 except Exception as e:
-                    print(e)
+                    print(
+                        f"Error for {course_object['department']} {course_object['code']}: {e}"
+                    )
                     exceptions.append(
                         f"Error for {course_object['department']} {course_object['code']}: {e}"
                     )
@@ -209,7 +211,7 @@ def clear_database():
 def _clear_sections():
     for c in Course.objects.order_by("-sections"):
         if c.sections:
-            print(c.name)
+            print(f"Deleting schedule for {c.name}")
             del c.sections
             c.save()
 
@@ -238,10 +240,15 @@ def update_six_terms_data():
     }
 
 
-def update_database():
-    res = update_six_terms_data()
-    print(res)
-    update_current_term_data()
+def update_database(update_current=True):
+    if update_current:
+        print("Updating data for current term...")
+        res = update_current_term_data()
+        print(res)
+    else:
+        print("Adding data from past two academic years...")
+        res = update_six_terms_data()
+        print(res)
 
 
 if __name__ == "__main__":
