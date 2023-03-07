@@ -28,6 +28,6 @@ const getCourses = async (
 };
 
 const clients = {
-    getCourses
+  getCourses,
 };
 export default clients;
