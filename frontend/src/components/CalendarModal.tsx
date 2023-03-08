@@ -7,17 +7,21 @@ import Typography from "@mui/material/Typography";
 
 type Props = {
   modalTitle: string;
+  modalId: string;
   modalInfo: string;
   modalOpen: boolean;
+  modalConflicts: string[];
   setModalOpen: (modalOpen: boolean) => any;
   courseColors: any;
   availableBackgroundColors: string[];
 };
 
 export default function CalendarModal({
+  modalId,
   modalInfo,
   modalTitle,
   modalOpen,
+  modalConflicts,
   setModalOpen,
   courseColors,
   availableBackgroundColors,
@@ -42,7 +46,7 @@ export default function CalendarModal({
     setModalOpen(false);
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    courseColors[modalTitle] = event.target.value;
+    courseColors[modalId] = event.currentTarget.value;
     setSelectedValue(event.target.value);
     // todo: add feedback that colour did change?
   };
@@ -52,7 +56,7 @@ export default function CalendarModal({
       <RadioGroup
         row
         onChange={handleChange}
-        value={courseColors[modalTitle] || selectedValue}
+        value={courseColors[modalId] || selectedValue}
       >
         {availableBackgroundColors.map((color, i) => (
           <Radio
@@ -89,6 +93,15 @@ export default function CalendarModal({
           {modalInfo}
         </Typography>
         {modalRadioButtons()}
+        <Typography color="FireBrick" fontSize="0.8em">
+          {modalConflicts === undefined ? (
+            <></>
+          ) : (
+            `This course conflicts with: ${modalConflicts
+              .toString()
+              .replace(",", ", ")}`
+          )}
+        </Typography>
       </Box>
     </Modal>
   );

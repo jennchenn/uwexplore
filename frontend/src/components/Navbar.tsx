@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import LoginModal from "./LoginModal";
 import CustomButton from "./CustomButton";
 import SignUp from "./SignUpModal";
+
 // import IconButton from "@mui/material/IconButton";
 // import MenuIcon from "@mui/icons-material/Menu";
 
@@ -42,6 +43,7 @@ export default function Navbar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               UWChoose
             </Typography>
+
             <CustomButton
               type="secondary"
               className="login-signup-nav-button"

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Box, Link, Modal } from "@mui/material";
 import { Props } from "../App";
+
 import "../styles/LoginSignUpModal.css";
+
 import CustomButton from "./CustomButton";
 import TextInput from "./TextInput";
 
@@ -32,6 +34,7 @@ export default function LoginModal({
     margin: "8px 104px",
     fontSize: "12px",
     fontWeight: "700",
+
     cursor: "pointer",
   };
 
