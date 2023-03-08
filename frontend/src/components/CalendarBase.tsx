@@ -32,7 +32,7 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
       ex: a SYDE TUT on both T and TH will have an entry for each */
   const getEachClass = useCallback((allCourses: any) => {
     /* weekdays in milliseconds corresponding to default dates set on cal
-     Calendar is currently set to the week of Jan 02(Mon)-06(Fri) */
+     Calendar is currently set to the week of Jan 02(Mon)-06(Fri), 2023 */
     const unixWeekdays: any = {
       MONDAY: 1672635600000,
       TUESDAY: 1672722000000,
@@ -122,10 +122,12 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
       }
 
       // assemble course details with checks for empty fields
-      let eventDetails = `${eventTime === ("" || undefined) ? "" : eventTime} ${
-        event.location === ("" || undefined) ? "" : "\n" + event.location
+      let eventDetails = `${
+        eventTime === ("" || undefined) ? "N/A" : eventTime
       } ${
-        event.instructor === ("" || undefined) ? "" : "\n" + event.instructor
+        event.location === ("" || undefined) ? "N/A" : "\n" + event.location
+      } ${
+        event.instructor === ("" || undefined) ? "N/A" : "\n" + event.instructor
       }`;
 
       setModalTitle(event.title);
