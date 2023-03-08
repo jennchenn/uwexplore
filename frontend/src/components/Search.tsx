@@ -25,10 +25,14 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
           <Stack direction="column" alignItems="flex-end" spacing={1}>
             <TextInput
               fullWidth
+              size="small"
               placeholder="Search Courses"
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  "& input": { borderRadius: "50px" },
+                  "& input": {
+                    borderRadius: "50px",
+                    padding: "12px 24px",
+                  },
                 },
                 margin: "0px;",
               }}

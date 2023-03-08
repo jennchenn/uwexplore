@@ -3,14 +3,14 @@
 
 // ------ FULL CALENDAR STYLES ------
 .box-style {
-  padding: 30px;
+  padding: 16px 30px 30px;
 }
 
 // custom height is required
 .calendar-height {
   min-height: 600px;
   height: 60vh;
-  max-height: 800px;
+  max-height: 700px;
 }
 
 .rbc-allday-cell {
@@ -33,6 +33,10 @@
   border-radius: var(--border-radius);
   border: none;
   box-shadow: 0 2px 4px 1px var(--black-5);
+}
+
+.rbc-timeslot-group {
+  min-height: 30px;
 }
 
 // ------ HEADER STYLES ------
@@ -110,4 +114,21 @@
 
 .rbc-day-slot .rbc-event-content {
   flex: 0;
+}
+
+// for smaller screens
+// todo: define more styles here?
+@media screen and (max-height: 608px) {
+  .calendar-height {
+    min-height: 510px;
+    height: 510px;
+  }
+
+  .rbc-event-content {
+    font-size: var(--font-size-small);
+  }
+
+  .rbc-event-label {
+    margin-bottom: 0px;
+  }
 }
