@@ -39,8 +39,6 @@ export default function TextInput({
 
   const StyledTextInput = styled(OutlinedInput)({
     "& input": {
-      // fontFamily: "'Inter'",
-      // fontStyle: "sans-serif",
       fontWeight: "400",
       fontSize: "16px",
       lineHeight: "19px",
@@ -57,8 +55,6 @@ export default function TextInput({
   const labelStyle = {
     fontSize: "16px",
     lineHeight: "19px",
-    // fontFamily: "'Inter'",
-    // fontStyle: "sans-serif",
     letterSpacing: "-0.03em",
     padding: "0",
     left: "17px",
