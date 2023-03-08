@@ -52,10 +52,10 @@ function App() {
         <Grid xs={searchWidth} className="search-base">
           <Box
             style={{
-              maxHeight: "93vh",
+              maxHeight: "calc(100% - 72px)",
               overflow: "auto",
               position: "sticky",
-              top: "7vh",
+              top: "72px",
             }}
           >
             <KeyboardDoubleArrowLeftIcon
@@ -73,10 +73,10 @@ function App() {
         <Grid xs={calendarWidth} className="calendar-base">
           <Box
             style={{
-              maxHeight: "93vh",
+              maxHeight: "calc(100% - 72px)",
               overflow: "auto",
               position: "sticky",
-              top: "7vh",
+              top: "72px",
             }}
           >
             <Stack direction="column">
