@@ -1,38 +1,112 @@
 // Calendar component requires a sass sheet for custom styles
 @import "react-big-calendar/lib/sass/styles";
-@import "../styles/Constants.css";
 
-.rbc-allday-cell {
-  height: 0px !important;
-}
-
-.rbc-day-slot .rbc-events-container {
-  margin-right: 0px;
-}
-
-.rbc-event {
-  text-align: center;
-}
-
-.rbc-day-slot .rbc-event-label {
-  align-self: center;
-  padding-right: 0px;
-}
-
-.rbc-header {
-  border-bottom: none;
-}
-
-.rbc-time-view {
-  border-radius: 10px;
-  box-shadow: 0 2px 4px 1px var(--black-5);
-}
-
+// ------ FULL CALENDAR STYLES ------
 .box-style {
   padding: 30px;
 }
 
 // custom height is required
 .calendar-height {
-  height: 600px;
+  min-height: 600px;
+  height: 60vh;
+}
+
+.rbc-allday-cell {
+  height: 0px !important;
+}
+
+.rbc-calendar {
+  font-family: var(--font-family);
+}
+
+.rbc-day-slot .rbc-events-container {
+  margin-right: 0px;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  border-top: none;
+}
+
+.rbc-time-view {
+  border-radius: var(--border-radius);
+  border: none;
+  box-shadow: 0 2px 4px 1px var(--black-5);
+}
+
+// ------ HEADER STYLES ------
+.rbc-button-link {
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-family);
+  color: var(--black-3);
+}
+
+.rbc-header {
+  border-bottom: none;
+  display: flex;
+  justify-content: center;
+  min-height: 30px;
+}
+
+.rbc-header + .rbc-header {
+  border-left: none;
+}
+
+.rbc-time-content {
+  border-top: 1px solid #ddd;
+}
+
+.rbc-time-header {
+  height: 30px !important;
+  display: flex;
+  justify-content: center;
+  // background-color: var(--bg-3);
+}
+
+.rbc-time-header-content {
+  border-left: none;
+}
+
+// ------ LEFT GUTTER STYLES ------
+.rbc-time-slot {
+  font-size: var(--font-size-h6);
+  color: var(--black-3);
+}
+
+// ------ EVENT STYLES ------
+.rbc-background-event {
+  width: calc(100% - 0px) !important;
+}
+
+.rbc-event {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.rbc-event-content {
+  font-size: var(--font-size-h6);
+  font-weight: var(--font-weight-regular);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rbc-event-label {
+  margin-top: -2px;
+  font-size: var(--font-size-small);
+  margin-bottom: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rbc-day-slot .rbc-event-label {
+  align-self: center;
+  padding-right: 0px;
+  width: calc(100% - 0px);
+}
+
+.rbc-day-slot .rbc-event-content {
+  flex: 0;
 }

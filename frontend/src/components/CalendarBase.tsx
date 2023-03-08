@@ -4,14 +4,11 @@ import moment from "moment";
 import "../styles/CalendarBase.scss";
 import backgroundColors from "../styles/calendarCourseBackgroundColors";
 import courses from "../APIClients/courses";
+import warningImg from "../images/vecteezy_warning-sign-icon.png";
 import CalendarModal from "./CalendarModal";
 
 const ReactBigCalendar = require("react-big-calendar");
 const { Calendar, momentLocalizer } = ReactBigCalendar;
-
-// todo: remove once we have a more permanent solution
-const warningImg =
-  "https://static.vecteezy.com/system/resources/previews/012/042/292/original/warning-sign-icon-transparent-background-free-png.png";
 
 interface courseHoverProps {
   courseHovered: any;
@@ -187,7 +184,7 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
       // arbitrary starting date set to Jan, 1, 2023 - has an effect on dates used to set events
       defaultDate: new Date(2023, 0, 1),
       formats: {
-        dayFormat: (date: Date) => localizer.format(date, "ddd"),
+        dayFormat: (date: Date) => localizer.format(date, "ddd").toUpperCase(),
       },
       views: ["work_week"],
     }),
@@ -199,6 +196,7 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
       <div className="calendar-height">
         <Calendar
           backgroundEvents={hoverEvents(courseHovered)}
+          dayLayoutAlgorithm={"no-overlap"}
           defaultDate={defaultDate}
           defaultView={views}
           events={classes}

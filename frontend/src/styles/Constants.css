@@ -1,7 +1,7 @@
 :root {
   /*********** Typography. *************/
   /* Font families. */
-  --font-family: "Inter", normal;
+  --font-family: "Inter", sans-serif;
 
   /* Font sizes. */
   --font-size-h1: 24px;
@@ -11,6 +11,7 @@
   --font-size-h5: 14px;
   --font-size-h6: 13px;
   --font-size-text: 12px;
+  --font-size-small: 11px;
 
   /* Font weights. */
   --font-weight-bold: 700;
@@ -75,4 +76,7 @@
 
   /* CEAB */
   --ceab-completed: #89bf83;
+
+  /************* Misc. *************/
+  --border-radius: 8px;
 }
