@@ -1,16 +1,6 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-// import Card from "@mui/material/Card";
-// import CardContent from "@mui/material/CardContent";
-import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-// import Typography from "@mui/material/Typography";
-
-// import FilterAltIcon from "@mui/icons-material/FilterAlt";
-// import InfoIcon from "@mui/icons-material/Info";
-import SearchIcon from "@mui/icons-material/Search";
 
 import CustomButton from "./CustomButton";
 import FilteringMenu from "./FilteringMenu";
@@ -47,7 +37,7 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
               text="Filters"
               type="tertiary"
               onClick={handleShowFilterMenu}
-              style={{ padding: "0px" }}
+              style={{ padding: "0px", margin: "12px 0px" }}
             ></CustomButton>
           </Stack>
           {showFilterMenu && (

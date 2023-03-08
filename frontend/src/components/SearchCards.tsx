@@ -115,7 +115,7 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
           borderRadius: "var(--border-radius)",
           backgroundColor: "var(--bg-3)",
           "& :last-child": {
-            padding: "0px",
+            padding: "0px !important",
           },
         }}
       >

@@ -65,6 +65,7 @@ button {
   border-radius: 50px;
   border: none;
   color: var(--bg-1);
+  font-weight: var(--font-weight-regular);
 }
 
 .custom-button-CTA:hover {

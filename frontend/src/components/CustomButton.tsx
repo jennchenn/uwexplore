@@ -1,7 +1,7 @@
 import { Props } from "../App";
 import "../styles/CustomButton.css";
 
-type buttonTypes = "primary" | "secondary" | "tertiary" | "CTA";
+type buttonTypes = "primary" | "secondary" | "tertiary" | "CTA" | "submit";
 
 interface CustomButtonProps extends Props {
   text?: string;
