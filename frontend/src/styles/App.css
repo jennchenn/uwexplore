@@ -1,4 +1,5 @@
 @import "//styles/Constants.css";
+@import "../styles/Typography.css";
 
 .calendar-base {
   height: 100vh;
@@ -25,7 +26,6 @@
   color: var(--main-purple-2);
   cursor: pointer;
 }
-
 
 .TextField-without-border-radius fieldset {
   border-radius: 0;

@@ -10,6 +10,7 @@
 .calendar-height {
   min-height: 600px;
   height: 60vh;
+  max-height: 800px;
 }
 
 .rbc-allday-cell {
@@ -36,9 +37,9 @@
 
 // ------ HEADER STYLES ------
 .rbc-button-link {
-  font-weight: var(--font-weight-regular);
-  font-family: var(--font-family);
   color: var(--black-3);
+  font-weight: var(--font-weight-regular);
+  display: inline-block;
 }
 
 .rbc-header {
