@@ -1,10 +1,12 @@
+import { Props } from "../App";
 import "../styles/CustomButton.css";
 
 type buttonTypes = "primary" | "secondary" | "tertiary" | "CTA";
 
-interface CustomButtonProps {
+interface CustomButtonProps extends Props {
   text?: string;
   type?: buttonTypes;
+  [key: string]: unknown;
 }
 
 export default function CustomButton({
@@ -12,7 +14,10 @@ export default function CustomButton({
   ...CustomButtonProps
 }: CustomButtonProps) {
   return (
-    <button className={`custom-button-${type} button-text`}>
+    <button
+      className={`custom-button-${type} button-text`}
+      {...CustomButtonProps}
+    >
       {CustomButtonProps.text}
     </button>
   );

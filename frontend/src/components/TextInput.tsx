@@ -6,6 +6,7 @@ interface TextInputProps extends Props {
   value?: string;
   required?: boolean;
   focused?: boolean;
+  [key: string]: unknown;
 }
 
 export default function TextInput({
@@ -21,7 +22,6 @@ export default function TextInput({
         backgroundColor: "none",
       },
       "& input": {
-        fontFamily: "'Inter'",
         fontStyle: "normal",
         fontWeight: "400",
         fontSize: "16px",
@@ -37,7 +37,6 @@ export default function TextInput({
     "& .MuiFormLabel-root": {
       fontSize: "16px",
       lineHeight: "19px",
-      fontFamily: "'Inter'",
       fontStyle: "normal",
       letterSpacing: "-0.03em",
       padding: "0",
@@ -55,6 +54,7 @@ export default function TextInput({
       className="styled-text-input heading-4"
       label={TextInputProps.placeholder}
       defaultValue={TextInputProps.value}
+      {...TextInputProps}
     />
   );
 }
