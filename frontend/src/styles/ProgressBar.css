@@ -29,5 +29,9 @@
 }
 
 .label-styles {
-  font-size: 0.9em;
+  margin: 3px 0px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--black-2);
 }

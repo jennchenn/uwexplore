@@ -40,7 +40,7 @@ const StyledTableCell = styled(TableCell)(() => ({
     fontSize: "0.8rem",
     padding: "6px",
     overflow: "hidden",
-    fontOverflow: "ellipses",
+    textOverflow: "ellipses",
     whiteSpace: "nowrap",
   },
 }));
