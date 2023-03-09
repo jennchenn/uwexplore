@@ -116,8 +116,7 @@
   flex: 0;
 }
 
-// for smaller screens
-// todo: define more styles here?
+// for smaller screens (<=620px)
 @media screen and (max-height: 620px) {
   .calendar-height {
     min-height: 510px;

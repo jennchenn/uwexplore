@@ -2,10 +2,11 @@ import { useState } from "react";
 import "./styles/App.css";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Stack from "@mui/material/Stack";
+
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import PerfectScrollbar from "react-perfect-scrollbar";
 
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
@@ -51,6 +52,7 @@ function App() {
 
       <Grid container>
         <Grid xs={searchWidth} className="search-base">
+          {/* styles: define these in var somewhere? since same thing is used in both boxes */}
           <Box
             style={{
               height: "calc(100% - 64px)",

@@ -1,11 +1,13 @@
 import { useMemo, useCallback, useState } from "react";
-import Box from "@mui/material/Box";
-import moment from "moment";
 import "../styles/CalendarBase.scss";
 import backgroundColors from "../styles/calendarCourseBackgroundColors";
+import moment from "moment";
+
+import Box from "@mui/material/Box";
+
+import CalendarModal from "./CalendarModal";
 import courses from "../APIClients/courses";
 import warningImg from "../images/vecteezy_warning-sign-icon.png";
-import CalendarModal from "./CalendarModal";
 
 const ReactBigCalendar = require("react-big-calendar");
 const { Calendar, momentLocalizer } = ReactBigCalendar;
