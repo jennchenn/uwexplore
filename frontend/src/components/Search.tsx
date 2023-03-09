@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import CustomButton from "./CustomButton";
 import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
-import TextInput from "./TextInput";
 
 interface courseHoverProps {
   setCourseHovered: any;
