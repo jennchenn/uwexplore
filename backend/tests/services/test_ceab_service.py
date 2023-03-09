@@ -5,7 +5,8 @@ from bson.objectid import ObjectId
 from flask import current_app
 
 from app.models.course import ClassType, Course, CourseType, Section, Weekday
-from app.models.user import Schedule, ScheduleCourses, User
+from app.models.schedule import Schedule, ScheduleCourses
+from app.models.user import PastCourses, User
 from app.services.ceab_service import CeabService
 
 
@@ -15,6 +16,7 @@ def ceab_service():
     seed_database()
     yield ceab_service
     User.objects.delete()
+    Schedule.objects.delete()
     Course.objects.delete()
 
 
@@ -98,14 +100,15 @@ DEFAULT_COURSES = [
 
 def seed_database():
     User.objects.delete()
+    Schedule.objects.delete()
     Course.objects.delete()
     course_ids = []
     for course in DEFAULT_COURSES:
         course.save()
         course_ids.append(str(course._id))
-    schedule = []
+    schedule_courses = []
     for course_oid in course_ids:
-        schedule.append(
+        schedule_courses.append(
             ScheduleCourses(
                 course_id=course_oid,
                 section_id=Course.objects(_id=course_oid).first().sections[0]._id,
@@ -113,19 +116,46 @@ def seed_database():
             )
         )
 
-    User(
+    schedule = Schedule(term="1229", courses=schedule_courses).save()
+    user = User(
         name="Test Bread",
         email="breadfydp+test@gmail.com",
         grad_year="2023",
         program="SYDE",
         auth_id="auth",
-        schedule=Schedule(term="1229", courses=schedule),
-    ).save()
+        schedule=schedule,
+        past_courses=PastCourses(term_1a=course_ids),
+    )
+    user.save()
 
 
-def test_calculate_ceab_numbers_success(ceab_service):
+def test_calculate_ceab_numbers_for_user_success(ceab_service):
     user = User.objects().first().to_serializable_dict()
-    res = ceab_service.get_ceab_numbers(user)
+    res = ceab_service.get_ceab_numbers_by_user(user)
+    # TODO: shouldn't hardcode these
+    assert res == {
+        "CSE ALL": 0,
+        "CSE WEIGHT": 0.0,
+        "ENG DES": 33.6,
+        "ENG SCI": 50.4,
+        "LIST A": 0,
+        "LIST B": 0,
+        "LIST C": 0,
+        "LIST D": 0,
+        "MATH": 168.0,
+        "PD COMP": 0,
+        "PD ELEC": 0,
+        "SCI": 0.0,
+        "TE": 2,
+        "TE & CSE": 2,
+        "MATH & SCI": 168.0,
+        "ENG SCI & ENG DES": 84.0,
+    }
+
+
+def test_calculate_ceab_numbers_by_schedule_success(ceab_service):
+    schedule = Schedule.objects().first().to_serializable_dict()
+    res = ceab_service.get_ceab_numbers_by_schedule(schedule["id"])
     # TODO: shouldn't hardcode these
     assert res == {
         "CSE ALL": 0,

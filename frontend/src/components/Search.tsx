@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 
 import CustomButton from "./CustomButton";
 import FilteringMenu from "./FilteringMenu";
@@ -23,20 +24,24 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
       <Box sx={{ m: 2 }}>
         <Stack direction="column" spacing={1}>
           <Stack direction="column" alignItems="flex-end" spacing={1}>
-            <TextInput
+            <TextField
               fullWidth
               size="small"
               placeholder="Search Courses"
               sx={{
-                "& .MuiOutlinedInput-root": {
+                "& .MuiInputBase-root": {
+                  borderRadius: "50px",
+                  backgroundColor: "var(--bg-2)",
+                  border: "none",
                   "& input": {
-                    borderRadius: "50px",
                     padding: "12px 24px",
                   },
+                  "& fieldset": {
+                    border: "none",
+                  },
                 },
-                margin: "0px;",
               }}
-            ></TextInput>
+            ></TextField>
             <CustomButton
               text="Filters"
               type="tertiary"

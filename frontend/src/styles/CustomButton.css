@@ -4,8 +4,7 @@ button {
   padding: 12px 24px;
   display: flex;
   flex-direction: row;
-  font-family: var(--font-family);
-  align-items: flex-start;
+  justify-content: center;
   gap: 10px;
   text-transform: uppercase;
   cursor: pointer;
