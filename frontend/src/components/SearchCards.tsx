@@ -11,7 +11,6 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 
 // MUI table imports
 import Paper from "@mui/material/Paper";
@@ -203,13 +202,13 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
           >
             <h5
               style={{
-                margin: "0px",
+                margin: "0px 6px",
                 fontWeight: "var(--font-weight-regular)",
               }}
             >
               <em>{course.name}</em>
             </h5>
-            <h5 style={{ margin: "10px 0px 16px" }}>{course.description}</h5>
+            <h5 style={{ margin: "10px 6px 16px" }}>{course.description}</h5>
             {/* COURSE INFO TABLE */}
             <TableContainer
               component={Paper}
