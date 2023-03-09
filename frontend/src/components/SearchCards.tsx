@@ -1,6 +1,7 @@
 import { useState } from "react";
 import courses from "../APIClients/courses.js";
 import moment from "moment";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 // MUI component imports
 import Box from "@mui/material/Box";
@@ -209,8 +210,6 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
               <em>{course.name}</em>
             </h5>
             <h5 style={{ margin: "10px 0px 16px" }}>{course.description}</h5>
-            {/* <Typography variant="body2">{course.description}</Typography> */}
-            {/* <br /> */}
             {/* COURSE INFO TABLE */}
             <TableContainer
               component={Paper}
@@ -219,68 +218,82 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
                 borderRadius: "var(--border-radius)",
               }}
             >
-              <Table aria-label="simple table" size="small">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>Section</StyledTableCell>
-                    <StyledTableCell>Class</StyledTableCell>
-                    <StyledTableCell>Enrolled</StyledTableCell>
-                    <StyledTableCell>Time</StyledTableCell>
-                    <StyledTableCell>Date</StyledTableCell>
-                    <StyledTableCell>Location</StyledTableCell>
-                    <StyledTableCell>Instructor</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {course.sections.map((section: any) => {
-                    // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
-                    let days = "";
-                    for (let i = 0; i < section.day.length; i++) {
-                      if (section.day[i].slice(0, 2) === "TH") {
-                        days = days.concat(section.day[i].slice(0, 2));
-                      } else {
-                        days = days.concat(section.day[i].slice(0, 1));
-                      }
-                      if (i < section.day.length - 1) {
-                        days = days.concat(", ");
-                      }
-                    }
-                    return (
-                      <TableRow
-                        key={section.class_number}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <StyledTableCell component="th" scope="row">
-                          {section.type.slice(0, 3)} {section.number}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {section.class_number}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {section.enrolled_number}/{section.capacity}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {moment()
-                            .startOf("day")
-                            .add(section.start_time, "milliseconds")
-                            .format("hh:mm A")}
-                          {" - "}
-                          {moment()
-                            .startOf("day")
-                            .add(section.end_time, "milliseconds")
-                            .format("hh:mm A")}
-                        </StyledTableCell>
-                        <StyledTableCell>{days}</StyledTableCell>
-                        <StyledTableCell>{section.location}</StyledTableCell>
-                        <StyledTableCell>{section.instructor}</StyledTableCell>
+              <div
+                style={{
+                  width: "100%",
+                  overflow: "hidden",
+                }}
+              >
+                <PerfectScrollbar onScroll={() => console.log("hi")}>
+                  <Table aria-label="simple table" size="small">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell>Section</StyledTableCell>
+                        <StyledTableCell>Class</StyledTableCell>
+                        <StyledTableCell>Enrolled</StyledTableCell>
+                        <StyledTableCell>Time</StyledTableCell>
+                        <StyledTableCell>Date</StyledTableCell>
+                        <StyledTableCell>Location</StyledTableCell>
+                        <StyledTableCell>Instructor</StyledTableCell>
                       </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                    </TableHead>
+                    <TableBody>
+                      {course.sections.map((section: any) => {
+                        // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
+                        let days = "";
+                        for (let i = 0; i < section.day.length; i++) {
+                          if (section.day[i].slice(0, 2) === "TH") {
+                            days = days.concat(section.day[i].slice(0, 2));
+                          } else {
+                            days = days.concat(section.day[i].slice(0, 1));
+                          }
+                          if (i < section.day.length - 1) {
+                            days = days.concat(", ");
+                          }
+                        }
+                        return (
+                          <TableRow
+                            key={section.class_number}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <StyledTableCell component="th" scope="row">
+                              {section.type.slice(0, 3)} {section.number}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.class_number}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.enrolled_number}/{section.capacity}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {moment()
+                                .startOf("day")
+                                .add(section.start_time, "milliseconds")
+                                .format("hh:mm A")}
+                              {" - "}
+                              {moment()
+                                .startOf("day")
+                                .add(section.end_time, "milliseconds")
+                                .format("hh:mm A")}
+                            </StyledTableCell>
+                            <StyledTableCell>{days}</StyledTableCell>
+                            <StyledTableCell>
+                              {section.location}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.instructor}
+                            </StyledTableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </PerfectScrollbar>
+              </div>
             </TableContainer>
+
             {/* todo: add prereq and antireq info */}
           </Collapse>
         </CardContent>
