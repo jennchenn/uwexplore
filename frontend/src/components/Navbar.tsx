@@ -16,7 +16,10 @@ export default function Navbar() {
         <AppBar position="fixed" elevation={0}>
           <Toolbar className="customize-toolbar" sx={{ height: "3vh" }}>
             <img src={logo} alt="uwexplore logo" className="logo-styles" />
-            <h2 className="title-styles">uwexplore</h2>
+            <div className="title-container">
+              <h2 className="title">uw</h2>
+              <h2 className="title font-light">explore</h2>
+            </div>
             <Button color="inherit" onClick={() => setModalOpen(true)}>
               Login
             </Button>

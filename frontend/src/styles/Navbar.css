@@ -10,7 +10,15 @@
   padding-right: 5px;
 }
 
-.title-styles {
+.title-container {
   flex-grow: 1;
   font-weight: var(--font-weight-regular);
+}
+
+.title {
+  display: inline-block;
+}
+
+.font-light {
+  font-weight: var(--font-weight-thin);
 }

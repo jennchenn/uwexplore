@@ -30,7 +30,7 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
               sx={{
                 "& .MuiInputBase-root": {
                   borderRadius: "50px",
-                  backgroundColor: "var(--bg-2)",
+                  backgroundColor: "var(--bg-3)",
                   border: "none",
                   "& input": {
                     padding: "12px 24px",
@@ -38,6 +38,7 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
                   "& fieldset": {
                     border: "none",
                   },
+                  ":hover": { boxShadow: "0 4px 8px rgba(0, 0, 0, .20)" },
                 },
               }}
             ></TextField>
