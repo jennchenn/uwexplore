@@ -97,9 +97,7 @@ export default function CalendarModal({
           {modalConflicts === undefined ? (
             <></>
           ) : (
-            `This course conflicts with: ${modalConflicts
-              .toString()
-              .replace(",", ", ")}`
+            `This course conflicts with: ${modalConflicts.join(", ")}`
           )}
         </Typography>
       </Box>

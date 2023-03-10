@@ -13,7 +13,11 @@ const { Calendar, momentLocalizer } = ReactBigCalendar;
 const warningImg =
   "https://static.vecteezy.com/system/resources/previews/012/042/292/original/warning-sign-icon-transparent-background-free-png.png";
 
-export default function CalendarBase() {
+interface courseHoverProps {
+  courseHovered: any;
+}
+
+export default function CalendarBase({ courseHovered }: courseHoverProps) {
   // localizer is required
   const localizer = momentLocalizer(moment);
 
@@ -88,6 +92,19 @@ export default function CalendarBase() {
   const classes = getEachClass(courses);
   const overlaps = findOverlappingClasses(classes);
 
+  let hoverEvents = (hovered: any) => {
+    let course = [hovered];
+    if ("sections" in hovered) {
+      let hoverSections = getEachClass(course);
+      return hoverSections.map((section: any) => ({
+        ...section,
+        background: true,
+      }));
+    } else {
+      return course;
+    }
+  };
+
   const handleCourseSelectEvent = useCallback(
     (event: any) => {
       // assemble course time from start and end times
@@ -117,11 +134,18 @@ export default function CalendarBase() {
 
   const eventStyleGetter = (event: any) => {
     let style = {
-      backgroundColor: courseColors[event.courseId],
+      // some checks to see if the course is being hovered
+      backgroundColor: event.background
+        ? "var(--main-purple-4)"
+        : courseColors[event.courseId],
+      zIndex: event.background ? "10" : "",
+      opacity: event.background ? 0.9 : 1,
       border: "0px",
       // styles below are for course conflicts
       backgroundImage:
-        event.uniqueClassId in overlaps ? `url(${warningImg})` : "",
+        event.uniqueClassId in overlaps && event.background !== true
+          ? `url(${warningImg})`
+          : "",
       backgroundPosition: "left bottom",
       backgroundRepeat: "no-repeat",
       backgroundSize: "1em",
@@ -167,6 +191,7 @@ export default function CalendarBase() {
     <Box className="box-style">
       <div className="calendar-height">
         <Calendar
+          backgroundEvents={hoverEvents(courseHovered)}
           defaultDate={defaultDate}
           defaultView={views}
           events={classes}

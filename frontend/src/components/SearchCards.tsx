@@ -42,7 +42,11 @@ const StyledTableCell = styled(TableCell)(() => ({
   },
 }));
 
-export default function SearchCards() {
+interface courseHoverProps {
+  setCourseHovered: any;
+}
+
+export default function SearchCards({ setCourseHovered }: courseHoverProps) {
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
@@ -131,7 +135,16 @@ export default function SearchCards() {
             </Typography>
             <div style={{ marginLeft: "auto", marginRight: "0px" }}>
               <Tooltip title="Add Course to Calendar" arrow>
-                <IconButton aria-label="add course">
+                <IconButton
+                  aria-label="add course"
+                  // show ghost course on cal on hover
+                  onMouseOver={() => {
+                    setCourseHovered(course);
+                  }}
+                  onMouseLeave={() => {
+                    setCourseHovered({});
+                  }}
+                >
                   <AddCircleIcon />
                 </IconButton>
               </Tooltip>
