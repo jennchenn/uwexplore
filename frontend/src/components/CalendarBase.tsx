@@ -40,22 +40,17 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
       THURSDAY: 1672894800000,
       FRIDAY: 1672981200000,
     };
-
     return allCourses.flatMap((course: any) => {
       return course.sections.flatMap((section: any) => {
         // new title property that appears on the event (ex. "SYDE 411 - LEC")
-        const courseTitle = `${course.department} ${
-          course.code
-        } - ${section.type.slice(0, 3)}`;
+        const courseTitle = `${course.department} ${course.code} - ${section.type}`;
         // this mapping splits up the day array to make individual entries
         return section.day.map((day: any) => ({
           ...section,
           // add in the parent course ID for colour assignment
           courseId: course.id,
           // create a unique id for this specific class section
-          uniqueClassId: `${courseTitle} ${day} ${new Date(
-            unixWeekdays[day] + section.start_time,
-          )}`,
+          uniqueClassId: `${day} ${section.id}`,
           day,
           title: courseTitle,
           // times are created from the UNIX weekday + section time, both in ms)
