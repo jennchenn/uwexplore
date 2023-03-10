@@ -16,6 +16,10 @@ interface courseHoverProps {
   courseHovered: any;
 }
 
+interface courseHoverProps {
+  courseHovered: any;
+}
+
 export default function CalendarBase({ courseHovered }: courseHoverProps) {
   // localizer is required
   const localizer = momentLocalizer(moment);
