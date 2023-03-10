@@ -4,7 +4,7 @@ import pytest
 from bson.objectid import ObjectId
 from flask import current_app
 
-from app.models.course import ClassType, Course, CourseType, Section, Weekday
+from app.models.course import Course, Section
 from app.models.schedule import Schedule, ScheduleCourses
 from app.models.user import PastCourses, User
 from app.services.ceab_service import CeabService
@@ -23,6 +23,7 @@ def ceab_service():
 DEFAULT_COURSES = [
     Course(
         _id=ObjectId(),
+        course_id="1234",
         name="Fundamental Engineering Math 1",
         department="SYDE",
         code="111",
@@ -30,13 +31,15 @@ DEFAULT_COURSES = [
         ceab_math=42.0,
         sections=[
             Section(
-                day=[Weekday.M, Weekday.W],
+                day=["MONDAY", "WEDNESDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
+                course_id=ObjectId(),
                 start_time=510,
                 end_time=590,
                 class_number=4877,
                 location="E5 6008",
-                type=ClassType.LEC,
+                type="LEC",
                 number="001",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
@@ -47,6 +50,7 @@ DEFAULT_COURSES = [
     ),
     Course(
         _id=ObjectId(),
+        course_id="23456",
         name="Fundamental Engineering Math 2",
         department="SYDE",
         code="112",
@@ -54,13 +58,15 @@ DEFAULT_COURSES = [
         ceab_math=42.0,
         sections=[
             Section(
-                day=[Weekday.M, Weekday.W],
+                day=["MONDAY", "WEDNESDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
+                course_id=ObjectId(),
                 start_time=600,
                 end_time=680,
                 class_number=4977,
                 location="E5 6008",
-                type=ClassType.LEC,
+                type="LEC",
                 number="001",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
@@ -71,22 +77,25 @@ DEFAULT_COURSES = [
     ),
     Course(
         _id=ObjectId(),
+        course_id="56789",
         name="Introduction to Machine Learning",
         department="MSCI",
         code="446",
         description="This course covers algorithmic and statistical foundations of data mining: extracting previously unknown and useful information from data. Topics include exploratory data analysis, data cleaning, data transformations, association rule mining, and both supervised and unsupervised learning. Methods typically covered include, but are not limited to: the Apriori algorithm, Bayesian inference, decision trees, linear and logistic regression, nearest-neighbor classification, and k-means clustering. [Offered: W]",
         ceab_eng_sci=25.2,
         ceab_eng_design=16.8,
-        course_type=CourseType.TE,
+        course_type="TE",
         sections=[
             Section(
-                day=[Weekday.T, Weekday.F],
+                day=["TUESDAY", "FRIDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
+                course_id=ObjectId(),
                 start_time=900,
                 end_time=980,
                 class_number=4900,
                 location="E7 4757",
-                type=ClassType.LEC,
+                type="LEC",
                 number="001",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
@@ -105,7 +114,8 @@ def seed_database():
     course_ids = []
     for course in DEFAULT_COURSES:
         course.save()
-        course_ids.append(str(course._id))
+        course_ids.append(course._id)
+
     schedule_courses = []
     for course_oid in course_ids:
         schedule_courses.append(

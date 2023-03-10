@@ -46,9 +46,7 @@ class CeabService:
 
             if user.get("past_courses"):
                 for past_course_list in user.get("past_courses").values():
-                    print(past_course_list)
                     courses += [str(id) for id in past_course_list]
-                    print(courses)
 
             return self._calculate_requirements(courses)
         except Exception as e:

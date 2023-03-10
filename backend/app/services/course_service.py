@@ -1,6 +1,8 @@
 from ..models.course import Course
 from ..models.user import PastCourses
 
+MAX_QUERY_SIZE = 30
+
 
 class CourseService:
     def __init__(self, logger):
@@ -38,7 +40,12 @@ class CourseService:
                     {
                         "$or": [
                             {"name": {"$regex": f"{keyword}", "$options": "i"}},
-                            {"description": {"$regex": f"{keyword}", "$options": "i"}},
+                            {
+                                "description": {
+                                    "$regex": f"{keyword}",
+                                    "$options": "i",
+                                }
+                            },
                             {"department": {"$regex": f"{keyword}", "$options": "i"}},
                         ]
                     }
@@ -46,11 +53,16 @@ class CourseService:
 
             courses = []
             if filters:
-                query_results = Course.objects(__raw__={"$and": filters}).order_by(
-                    "department", "course_code"
+                query_results = (
+                    Course.objects(__raw__={"$and": filters})
+                    .order_by("department", "course_code")
+                    .limit(MAX_QUERY_SIZE)
                 )
             else:
-                query_results = Course.objects.order_by("department")
+                query_results = Course.objects.order_by(
+                    "department", "course_code"
+                ).limit(MAX_QUERY_SIZE)
+
             for result in query_results:
                 result_dict = result.to_serializable_dict()
                 courses.append(result_dict)
