@@ -19,25 +19,7 @@ export type CourseObject = {
   tags: string[];
 };
 
-export type CalendarCourseObject = {
-  id: string;
-  antirequisites: string[];
-  ceab_eng_design: number;
-  ceab_eng_sci: number;
-  ceab_math: number;
-  ceab_sci: number;
-  code: string;
-  course_id: string;
-  cse_weight: number;
-  department: string;
-  description_abbreviated: string;
-  description: string;
-  name: string;
-  prerequisites: string[];
-  sections: object[];
-  tags: string[];
-  color: string;
-};
+export type CalendarCourseObject = CourseObject & { color: string };
 
 const getCourses = async (
   queryParams: string | null,
