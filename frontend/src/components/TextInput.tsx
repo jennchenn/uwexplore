@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, Check } from "@mui/icons-material";
 import {
   FormControl,
   IconButton,
@@ -8,6 +8,7 @@ import {
   OutlinedInput,
   styled,
 } from "@mui/material";
+import "../styles/TextInput.css";
 import { Props } from "../App";
 
 interface TextInputProps extends Props {
@@ -29,12 +30,14 @@ export default function TextInput({
 }: TextInputProps) {
   const [showPassword, setShowPassword] = useState(show);
   const [inputValue, setInputValue] = useState(value);
+  const [verified, setverified] = useState(false);
 
   const handleClickShow = () =>
     setShowPassword((showPassword) => !showPassword);
 
   const handleOnChange = (event: any) => {
     setInputValue(event.target.value);
+    if (type === "password") setverified(true);
   };
 
   const StyledTextInput = styled(OutlinedInput)({
@@ -52,36 +55,25 @@ export default function TextInput({
     },
   });
 
-  const labelStyle = {
-    fontSize: "16px",
-    lineHeight: "19px",
-    letterSpacing: "-0.03em",
-    padding: "0",
-    left: "17px",
-    top: "2px",
-    color: "#000000",
-    opacity: "0.6",
-  };
-
   return (
     <>
       <FormControl
-        style={{
-          margin: "8px 72px",
-          backgroundColor: "#F7F7F7",
-          borderRadius: "10px",
-          ...TextInputProps.style,
-        }}
+        style={{ margin: "8px 72px", ...TextInputProps.style }}
         variant="outlined"
-        className={TextInputProps.className}
+        className={`form-control-text-input ${TextInputProps.className}`}
       >
-        <InputLabel htmlFor={`input-${TextInputProps.id}`} style={labelStyle}>
+        <InputLabel
+          htmlFor={`input-${TextInputProps.id}`}
+          className="input-label-text-input"
+        >
           {TextInputProps.placeholder}
         </InputLabel>
         <StyledTextInput
           id={`input-${TextInputProps.id}`}
           required={required}
-          type={showPassword ? "text" : "password"}
+          type={
+            type === "password" ? (showPassword ? "text" : "password") : type
+          }
           className="styled-text-input heading-4"
           placeholder={TextInputProps.placeholder}
           label={TextInputProps.placeholder}
@@ -89,8 +81,8 @@ export default function TextInput({
           onChange={handleOnChange}
           autoFocus
           endAdornment={
-            type === "password" && (
-              <InputAdornment position="end">
+            <InputAdornment position="end">
+              {type === "password" && (
                 <IconButton
                   aria-label="toggle visibility"
                   onClick={handleClickShow}
@@ -98,8 +90,9 @@ export default function TextInput({
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
-              </InputAdornment>
-            )
+              )}
+              {verified && <Check className="verify-check" />}
+            </InputAdornment>
           }
         />
       </FormControl>
