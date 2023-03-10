@@ -1,7 +1,7 @@
 :root {
   /*********** Typography. *************/
   /* Font families. */
-  --font-family: "Inter", normal;
+  --font-family: "Inter", sans-serif;
 
   /* Font sizes. */
   --font-size-h1: 24px;
