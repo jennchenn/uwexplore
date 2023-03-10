@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Modal } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Link, Modal } from "@mui/material";
 import { Props } from "../App";
 import TextInput from "./TextInput";
 import "../styles/LoginSignUpModal.css";
@@ -60,6 +60,17 @@ export default function SignUp({
           type="password"
           value={confirmPassword}
           required
+        />
+        <FormControlLabel
+          control={<Checkbox />}
+          label={
+            <div className="modal-checkbox-text">
+              I agree with the{" "}
+              <Link href="#" color="inherit">
+                Terms and Conditions
+              </Link>
+            </div>
+          }
         />
         <CustomButton
           className="modal-input-button"

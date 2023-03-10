@@ -38,3 +38,7 @@
   width: -moz-available;
   margin: 8px 72px;
 }
+
+.modal-checkbox-text, Checkbox {
+  opacity: 0.6;
+}
