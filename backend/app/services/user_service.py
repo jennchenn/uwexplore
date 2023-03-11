@@ -2,10 +2,10 @@ import os
 
 import firebase_admin.auth
 import requests
+from flask import current_app as app
 from flask_mail import Mail
 
 from ..models.user import User
-from flask import current_app as app
 
 
 class UserService:
