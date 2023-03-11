@@ -1,6 +1,6 @@
 from ..models.course import Course
 from ..models.schedule import Schedule, ScheduleCourses
-from ..models.user import PastCourses
+from ..models.user import PastCourses, User
 
 MAX_QUERY_SIZE = 30
 
@@ -123,18 +123,22 @@ class CourseService:
 
     def add_course_to_schedule_by_user(self, user, course_id, section_id, color):
         try:
-            schedule_id = user.get("schedule")
-            current_schedule = Schedule.objects(id=schedule_id).first()
             course = Course.objects(_id=course_id).first()
             if not course:
                 raise KeyError(f"No course with id={course_id}")
             schedule_obj = ScheduleCourses(
                 course_id=course_id, section_id=section_id, color=color
             )
-            if not current_schedule:  # make new schedule
-                user.current_schedule = Schedule(courses=[schedule_obj])
-                user.save()
+            schedule_id = user.get("schedule")
+
+            if not schedule_id:  # make new schedule
+                current_schedule = Schedule(courses=[schedule_obj])
+                current_schedule.save()
+                user_obj = User.objects(id=user["id"]).first()
+                user_obj.schedule = current_schedule.id
+                user_obj.save()
             else:
+                current_schedule = Schedule.objects(id=schedule_id).first()
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
             return current_schedule.to_serializable_dict()
