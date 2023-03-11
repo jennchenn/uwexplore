@@ -52,7 +52,6 @@ function App() {
 
       <Grid container>
         <Grid xs={searchWidth} className="search-base">
-          {/* styles: define these in var somewhere? since same thing is used in both boxes */}
           <Box
             style={{
               height: "calc(100% - 64px)",

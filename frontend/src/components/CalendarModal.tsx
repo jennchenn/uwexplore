@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/CalendarModal.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Radio from "@mui/material/Radio";
@@ -26,19 +27,6 @@ export default function CalendarModal({
   courseColors,
   availableBackgroundColors,
 }: Props) {
-  // todo: change default styles from MUI
-  const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    borderRadius: "12px",
-    boxShadow: 24,
-    p: 4,
-  };
-
   const [selectedValue, setSelectedValue] = useState(" ");
   const handleClose = () => {
     setSelectedValue(" ");
@@ -81,26 +69,17 @@ export default function CalendarModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={modalStyle}>
-        <h1 style={{ margin: "0px", color: "var(--black-3)" }}>{modalTitle}</h1>
-        <h4
-          style={{
-            margin: "10px 0px",
-            whiteSpace: "pre-line",
-            color: "var(--black-3)",
-            lineHeight: "1.5em",
-          }}
-        >
-          {modalInfo}
-        </h4>
+      <Box className="modal-style">
+        <h1 className="modal-title">{modalTitle}</h1>
+        <h4 className="modal-info">{modalInfo}</h4>
         {modalRadioButtons()}
-        <Typography color="FireBrick" fontSize="0.8em">
+        <h5 className="conflict-info">
           {modalConflicts === undefined ? (
             <></>
           ) : (
             `This course conflicts with: ${modalConflicts.join(", ")}`
           )}
-        </Typography>
+        </h5>
       </Box>
     </Modal>
   );
