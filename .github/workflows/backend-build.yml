@@ -35,6 +35,13 @@ jobs:
       FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}
       FIREBASE_REFRESH_TOKEN_URL: ${{ secrets.FIREBASE_REFRESH_TOKEN_URL }}
       FIREBASE_SIGN_IN_URL: ${{ secrets.FIREBASE_SIGN_IN_URL }}
+
+      MAIL_SERVER: ${{ secrets.MAIL_SERVER }}
+      MAIL_PORT: ${{ secrets.MAIL_PORT }}
+      MAIL_USE_SSL: ${{ secrets.MAIL_USE_SSL }}
+      MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+
     steps:
       - uses: actions/checkout@v3
 
