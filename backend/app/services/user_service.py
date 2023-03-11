@@ -164,12 +164,13 @@ class UserService:
             return {"success": True}
         except Exception as e:
             reason = getattr(e, "message", None)
+            reason = reason if reason else str(e)
             self.logger.error(
                 "Failed to generate reset link for user with password {email}. Reason = {reason}".format(
-                    email=email, reason=(reason if reason else str(e))
+                    email=email, reason=reason
                 )
             )
-            return {"success": False}
+            return {"success": False, "reason": reason}
 
     # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
     def refresh_token(self, refresh_token):
