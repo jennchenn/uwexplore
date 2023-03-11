@@ -149,6 +149,19 @@ class CourseService:
             )
             raise e
 
+    def delete_course_from_schedule_by_user(self, user, schedule_object_id):
+        try:
+            schedule_id = user.get("schedule")
+            return self.delete_course_from_schedule_by_id(
+                schedule_id, schedule_object_id
+            )
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def get_courses_by_schedule_id(self, schedule_id):
         try:
             current_schedule = Schedule.objects(id=schedule_id).first()
