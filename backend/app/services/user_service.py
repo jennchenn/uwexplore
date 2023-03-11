@@ -161,7 +161,7 @@ class UserService:
                 recipients=[email],
                 body=f"Click here to reset: {link}",
             )
-            raise Exception
+            return {"success": True}
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
