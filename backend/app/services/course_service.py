@@ -165,6 +165,30 @@ class CourseService:
             )
             raise e
 
+    def add_course_to_schedule_by_id(self, schedule_id, course_id, section_id, color):
+        try:
+            course = Course.objects(_id=course_id).first()
+            if not course:
+                raise KeyError(f"No course with id={course_id}")
+            schedule_obj = ScheduleCourses(
+                course_id=course_id, section_id=section_id, color=color
+            )
+            current_schedule = Schedule.objects(id=schedule_id).first()
+
+            if not schedule_id:  # make new schedule
+                current_schedule = Schedule(courses=[schedule_obj])
+                current_schedule.save()
+            else:
+                current_schedule.courses.append(schedule_obj)
+                current_schedule.save()
+            return current_schedule.to_serializable_dict()
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def _format_schedule_courses(self, scheduled_courses):
         courses = []
         for course_info in scheduled_courses:
