@@ -67,12 +67,14 @@ def schedule_courses_by_user(curr_user):
         return jsonify({"error": (error_message if error_message else str(e))}), 500
 
 
-@blueprint.route("/schedules/<id>", methods=["GET", "POST"], strict_slashes=False)
+@blueprint.route(
+    "/schedules/<id>", methods=["GET", "POST", "DELETE"], strict_slashes=False
+)
 def schedule_courses_by_id(id):
     try:
         if request.method == "GET":
             result = course_service.get_courses_by_schedule_id(id)
-        else:
+        elif request.method == "POST":
             request_data = request.get_json()
             course_id = request_data["course_id"]
             section_id = request_data["section_id"]
@@ -80,6 +82,14 @@ def schedule_courses_by_id(id):
             result = course_service.add_course_to_schedule_by_id(
                 id, course_id, section_id, color
             )
+        elif request.method == "DELETE":
+            request_data = request.get_json()
+            schedule_object_id = request_data["id"]
+            result = course_service.delete_course_from_schedule_by_id(
+                id, schedule_object_id
+            )
+        else:
+            raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200
     except Exception as e:
         error_message = getattr(e, "message", None)
