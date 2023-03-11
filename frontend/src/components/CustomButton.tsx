@@ -6,7 +6,8 @@ type buttonTypes = "primary" | "secondary" | "tertiary" | "CTA" | "submit";
 interface CustomButtonProps extends Props {
   text?: string;
   type?: buttonTypes;
-  [key: string]: unknown;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onSubmit?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function CustomButton({
@@ -17,7 +18,8 @@ export default function CustomButton({
     <button
       className={`custom-button-${type} button-text ${CustomButtonProps.className}`}
       style={CustomButtonProps.style}
-      {...CustomButtonProps}
+      onClick={CustomButtonProps.onClick}
+      onSubmit={CustomButtonProps.onSubmit}
     >
       {CustomButtonProps.text}
     </button>

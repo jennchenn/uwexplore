@@ -219,11 +219,11 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
             >
               <div
                 style={{
-                  width: "100%",
+                  width: "inherit",
                   overflow: "hidden",
                 }}
               >
-                <PerfectScrollbar onScroll={() => console.log("hi")}>
+                <PerfectScrollbar>
                   <Table aria-label="simple table" size="small">
                     <TableHead>
                       <TableRow>
