@@ -1,4 +1,6 @@
 @import "//styles/Constants.css";
+@import "../styles/Typography.css";
+@import "react-perfect-scrollbar/dist/css/styles.css";
 
 .calendar-base {
   height: 100vh;
@@ -10,13 +12,16 @@
 }
 
 .cal-collapse-icon {
-  float: left;
-  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  left: 4px;
   color: var(--main-purple-5);
 }
 
 .search-collapse-icon {
-  float: right;
+  position: absolute;
+  top: 0px;
+  right: 4px;
   color: var(--main-purple-5);
 }
 
@@ -25,7 +30,6 @@
   color: var(--main-purple-2);
   cursor: pointer;
 }
-
 
 .TextField-without-border-radius fieldset {
   border-radius: 0;
