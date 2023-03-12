@@ -149,6 +149,19 @@ class CourseService:
             )
             raise e
 
+    def delete_course_from_schedule_by_user(self, user, schedule_object_id):
+        try:
+            schedule_id = user.get("schedule")
+            return self.delete_course_from_schedule_by_id(
+                schedule_id, schedule_object_id
+            )
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def get_courses_by_schedule_id(self, schedule_id):
         try:
             current_schedule = Schedule.objects(id=schedule_id).first()
@@ -181,6 +194,25 @@ class CourseService:
             else:
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
+            return current_schedule.to_serializable_dict()
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def delete_course_from_schedule_by_id(self, schedule_id, schedule_object_id):
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            if not current_schedule:
+                raise KeyError(f"No schedule with id={schedule_id}")
+            current_schedule.courses = list(
+                filter(
+                    lambda x: str(x._id) != schedule_object_id, current_schedule.courses
+                )
+            )
+            current_schedule.save()
             return current_schedule.to_serializable_dict()
         except Exception as e:
             reason = getattr(e, "message", None)
