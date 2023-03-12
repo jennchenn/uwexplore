@@ -1,8 +1,10 @@
-import "./styles/App.css";
 import { useState } from "react";
+import "./styles/App.css";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Stack from "@mui/material/Stack";
+
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 
@@ -52,44 +54,48 @@ function App() {
         <Grid xs={searchWidth} className="search-base">
           <Box
             style={{
-              maxHeight: "92vh",
+              height: "calc(100% - 64px)",
               overflow: "auto",
               position: "sticky",
-              top: "8vh",
+              top: "64px",
             }}
           >
-            <KeyboardDoubleArrowLeftIcon
-              className="search-collapse-icon"
-              onClick={collapseSearch}
-            ></KeyboardDoubleArrowLeftIcon>
-            {/* todo: will this keep results? something better than empty tag? optimized? */}
-            {sectionInView === "calendar" ? (
-              <></>
-            ) : (
-              <Search setCourseHovered={setCourseHovered} />
-            )}
+            <PerfectScrollbar>
+              <KeyboardDoubleArrowLeftIcon
+                className="search-collapse-icon"
+                onClick={collapseSearch}
+              ></KeyboardDoubleArrowLeftIcon>
+              {/* todo: will this keep results? something better than empty tag? optimized? */}
+              {sectionInView === "calendar" ? (
+                <></>
+              ) : (
+                <Search setCourseHovered={setCourseHovered} />
+              )}
+            </PerfectScrollbar>
           </Box>
         </Grid>
         <Grid xs={calendarWidth} className="calendar-base">
           <Box
             style={{
-              maxHeight: "92vh",
+              height: "calc(100% - 64px)",
               overflow: "auto",
               position: "sticky",
-              top: "8vh",
+              top: "64px",
             }}
           >
-            <Stack direction="column">
-              <KeyboardDoubleArrowRightIcon
-                style={{
-                  display: sectionInView === "both" ? "none" : "inline-block",
-                }}
-                className="cal-collapse-icon"
-                onClick={expandSearch}
-              ></KeyboardDoubleArrowRightIcon>
-              <Calendar courseHovered={courseHovered} />
-              <Ceab />
-            </Stack>
+            <PerfectScrollbar>
+              <Stack direction="column">
+                <KeyboardDoubleArrowRightIcon
+                  style={{
+                    display: sectionInView === "both" ? "none" : "inline-block",
+                  }}
+                  className="cal-collapse-icon"
+                  onClick={expandSearch}
+                ></KeyboardDoubleArrowRightIcon>
+                <Calendar courseHovered={courseHovered} />
+                <Ceab />
+              </Stack>
+            </PerfectScrollbar>
           </Box>
         </Grid>
       </Grid>

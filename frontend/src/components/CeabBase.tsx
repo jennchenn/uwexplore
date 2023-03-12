@@ -9,9 +9,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 
 import ProgressBar from "./ProgressBar";
+import "../styles/CustomButton.css";
 
 const CeabRequirements = [
   { label: "LIST A", requirement: 1 },
@@ -43,12 +43,22 @@ export default function CeabBase() {
       <Stack direction="row" spacing={2}>
         {/* LHS: CEAB REQUIREMENTS */}
         <Grid xs={6}>
-          <Card elevation={2}>
+          <Card
+            elevation={2}
+            sx={{
+              borderRadius: "var(--border-radius)",
+            }}
+          >
             <CardContent>
-              <Typography sx={{ display: "inline" }} variant="h6">
+              <h3
+                style={{
+                  display: "inline",
+                  color: "var(--black-3)",
+                }}
+              >
                 CEAB Requirements
-              </Typography>
-              <Stack direction="column" spacing={1}>
+              </h3>
+              <Stack direction="column" spacing={1} sx={{ marginTop: "12px" }}>
                 {CeabRequirements.map((requirement, i) => (
                   <ProgressBar
                     label={requirement.label}
@@ -71,23 +81,58 @@ export default function CeabBase() {
               height: "100%",
               display: "flex",
               flexDirection: "column",
+
+              "& .MuiCardContent-root": {
+                padding: "0px 16px 24px",
+              },
+              borderRadius: "var(--border-radius)",
             }}
           >
             <CardContent
               sx={{ height: "100%", display: "flex", flexDirection: "column" }}
             >
-              <Stack direction="row">
-                <Typography sx={{ display: "inline" }} variant="h6">
+              <Stack
+                direction="row"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                }}
+              >
+                <h3 style={{ flexGrow: "1", color: "var(--black-3)" }}>
                   Past Courses
-                </Typography>
-                <FormControl sx={{ m: 1, minWidth: 80 }} size="small">
+                </h3>
+                <FormControl
+                  sx={{
+                    m: 1,
+                    minWidth: 80,
+
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "0px",
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "white",
+                    },
+                    "& .MuiSvgIcon-root": {
+                      color: "var(--main-purple-5)",
+                    },
+
+                    boxShadow: "none",
+                  }}
+                  size="small"
+                  className="custom-button-primary"
+                >
                   <InputLabel id="demo-select-small">Term</InputLabel>
                   <Select
                     labelId="demo-select-small"
                     id="demo-select-small"
                     value={term}
-                    label="Term"
                     onChange={handleChange}
+                    sx={{
+                      "& .MuiSelect-select": {
+                        color: "white",
+                      },
+                    }}
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -106,12 +151,26 @@ export default function CeabBase() {
                 </FormControl>
               </Stack>
               <Box sx={{ display: "flex", height: "100%", flex: 1 }}>
-                <Paper elevation={0} sx={{ padding: 2, width: "100%" }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    padding: 2,
+                    width: "100%",
+                    borderRadius: "var(--border-radius)",
+                  }}
+                >
                   <Paper
                     elevation={0}
-                    sx={{ backgroundColor: "var(--bg-3)", p: 2 }}
+                    sx={{
+                      backgroundColor: "var(--bg-3)",
+                      p: 2,
+                      borderRadius: "var(--border-radius)",
+                      textAlign: "center",
+                    }}
                   >
-                    Added past courses will appear here
+                    <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
+                      <em>Added past courses will appear here</em>
+                    </h5>
                   </Paper>
                 </Paper>
               </Box>

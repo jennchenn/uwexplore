@@ -1,6 +1,7 @@
 import { useState } from "react";
 import courses from "../APIClients/courses.js";
 import moment from "moment";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 // MUI component imports
 import Box from "@mui/material/Box";
@@ -10,7 +11,6 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 
 // MUI table imports
 import Paper from "@mui/material/Paper";
@@ -32,13 +32,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // styles for table cells, format taken from MUI docs
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    fontSize: 12,
-    padding: "2px",
+    fontSize: "0.8rem",
+    padding: "6px",
     fontWeight: "bold",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: "0.8rem",
-    padding: "2px",
+    padding: "6px",
+    overflow: "hidden",
+    textOverflow: "ellipses",
+    whiteSpace: "nowrap",
   },
 }));
 
@@ -77,14 +80,22 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
   const renderBookmarkedCourses = () => {
     if (Object.keys(bookmarkedCourses).length !== 0) {
       return (
-        <div>
-          <Typography>Saved Courses</Typography>
+        <>
+          <h4
+            style={{
+              color: "var(--black-3)",
+              margin: "0px",
+            }}
+          >
+            Saved Courses
+          </h4>
           <>
             {Object.values(bookmarkedCourses).map((course, i) => {
               return createCourseCard(course, i);
             })}
           </>
-        </div>
+          <br />
+        </>
       );
     } else {
       return false;
@@ -93,7 +104,21 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
 
   const createCourseCard = (course: any, i: number) => {
     return (
-      <Card style={{ marginTop: "20px" }} elevation={2} key={i}>
+      <Card
+        style={{ marginTop: "16px" }}
+        elevation={2}
+        key={i}
+        sx={{
+          "& .MuiCardContent-root": {
+            padding: "2px",
+          },
+          borderRadius: "var(--border-radius)",
+          backgroundColor: "var(--bg-3)",
+          "& :last-child": {
+            padding: "0px !important",
+          },
+        }}
+      >
         <CardContent>
           {/* TOP BAR (CONDENSED INFO) */}
           <Stack
@@ -101,7 +126,6 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
             style={{
               display: "flex",
               alignItems: "center",
-              flexWrap: "wrap",
             }}
           >
             <Tooltip
@@ -117,118 +141,158 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
                 aria-label="expand more"
                 style={{
                   padding: "0px",
-                  margin: "0px 8px 0px 0px",
+                  margin: "0px 6px",
                 }}
                 onClick={() => handleBookmarkClick(course)}
               >
                 {course.id in bookmarkedCourses ? (
-                  <BookmarkIcon />
+                  <BookmarkIcon sx={{ color: "var(--main-purple-1)" }} />
                 ) : (
-                  <BookmarkBorderIcon />
+                  <BookmarkBorderIcon sx={{ color: "var(--main-purple-4)" }} />
                 )}
               </IconButton>
             </Tooltip>
-            {/* todo: conditional styling for very long course names ex. CS 146*/}
-            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              {course.department}
+            <h3
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {course.department}&nbsp;
               {course.code} - {course.name}
-            </Typography>
-            <div style={{ marginLeft: "auto", marginRight: "0px" }}>
-              <Tooltip title="Add Course to Calendar" arrow>
-                <IconButton
-                  aria-label="add course"
-                  // show ghost course on cal on hover
-                  onMouseOver={() => {
-                    setCourseHovered(course);
-                  }}
-                  onMouseLeave={() => {
-                    setCourseHovered({});
-                  }}
-                >
-                  <AddCircleIcon />
-                </IconButton>
-              </Tooltip>
+            </h3>
+            <Tooltip title="Add Course to Calendar" arrow>
               <IconButton
-                aria-label="expand more"
-                onClick={() => handleExpandClick(course)}
+                aria-label="add course"
+                // show ghost course on cal on hover
+                onMouseOver={() => {
+                  setCourseHovered(course);
+                }}
+                onMouseLeave={() => {
+                  setCourseHovered({});
+                }}
+                sx={{ marginLeft: "auto", marginRight: "0px", padding: "4px" }}
               >
-                {expandedCard === course.id ? (
-                  <ExpandLessIcon />
-                ) : (
-                  <ExpandMoreIcon />
-                )}
+                <AddCircleIcon
+                  sx={{
+                    color: "var(--main-purple-1)",
+                    fontSize: "28px",
+                  }}
+                />
               </IconButton>
-            </div>
+            </Tooltip>
+            <IconButton
+              aria-label="expand more"
+              onClick={() => handleExpandClick(course)}
+              sx={{ padding: "6px", marginRight: "6px" }}
+            >
+              {expandedCard === course.id ? (
+                <ExpandLessIcon sx={{ color: "var(--main-purple-1)" }} />
+              ) : (
+                <ExpandMoreIcon sx={{ color: "var(--main-purple-1)" }} />
+              )}
+            </IconButton>
+            {/* </div> */}
           </Stack>
           {/* BODY CONTENT (EXPANDED INFO) */}
-          <Collapse in={expandedCard === course.id ? true : false}>
-            <Typography variant="body2">{course.description}</Typography>
-            <br />
+          <Collapse
+            in={expandedCard === course.id ? true : false}
+            sx={{ margin: "0px 10px" }}
+          >
+            <h5
+              style={{
+                margin: "0px 6px",
+                fontWeight: "var(--font-weight-regular)",
+              }}
+            >
+              <em>{course.name}</em>
+            </h5>
+            <h5 style={{ margin: "10px 6px 16px" }}>{course.description}</h5>
             {/* COURSE INFO TABLE */}
-            <TableContainer component={Paper}>
-              <Table aria-label="simple table" size="small">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>Section</StyledTableCell>
-                    <StyledTableCell>Class</StyledTableCell>
-                    <StyledTableCell>Enrolled</StyledTableCell>
-                    <StyledTableCell>Time</StyledTableCell>
-                    <StyledTableCell>Date</StyledTableCell>
-                    <StyledTableCell>Location</StyledTableCell>
-                    <StyledTableCell>Instructor</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {course.sections.map((section: any) => {
-                    // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
-                    let days = "";
-                    for (let i = 0; i < section.day.length; i++) {
-                      if (section.day[i].slice(0, 2) === "TH") {
-                        days = days.concat(section.day[i].slice(0, 2));
-                      } else {
-                        days = days.concat(section.day[i].slice(0, 1));
-                      }
-                      if (i < section.day.length - 1) {
-                        days = days.concat(", ");
-                      }
-                    }
-                    return (
-                      <TableRow
-                        key={section.class_number}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <StyledTableCell component="th" scope="row">
-                          {section.type.slice(0, 3)} {section.number}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {section.class_number}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {section.enrolled_number}/{section.capacity}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          {moment()
-                            .startOf("day")
-                            .add(section.start_time, "milliseconds")
-                            .format("hh:mm A")}
-                          {" - "}
-                          {moment()
-                            .startOf("day")
-                            .add(section.end_time, "milliseconds")
-                            .format("hh:mm A")}
-                        </StyledTableCell>
-                        <StyledTableCell>{days}</StyledTableCell>
-                        <StyledTableCell>{section.location}</StyledTableCell>
-                        {/* todo: add instructor info */}
-                        <StyledTableCell>N/A</StyledTableCell>
+            <TableContainer
+              component={Paper}
+              sx={{
+                marginBottom: "10px",
+                borderRadius: "var(--border-radius)",
+              }}
+            >
+              <div
+                style={{
+                  width: "inherit",
+                  overflow: "hidden",
+                }}
+              >
+                <PerfectScrollbar>
+                  <Table aria-label="simple table" size="small">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell>Section</StyledTableCell>
+                        <StyledTableCell>Class</StyledTableCell>
+                        <StyledTableCell>Enrolled</StyledTableCell>
+                        <StyledTableCell>Time</StyledTableCell>
+                        <StyledTableCell>Date</StyledTableCell>
+                        <StyledTableCell>Location</StyledTableCell>
+                        <StyledTableCell>Instructor</StyledTableCell>
                       </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                    </TableHead>
+                    <TableBody>
+                      {course.sections.map((section: any) => {
+                        // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
+                        let days = "";
+                        for (let i = 0; i < section.day.length; i++) {
+                          if (section.day[i].slice(0, 2) === "TH") {
+                            days = days.concat(section.day[i].slice(0, 2));
+                          } else {
+                            days = days.concat(section.day[i].slice(0, 1));
+                          }
+                          if (i < section.day.length - 1) {
+                            days = days.concat(", ");
+                          }
+                        }
+                        return (
+                          <TableRow
+                            key={section.class_number}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <StyledTableCell component="th" scope="row">
+                              {section.type.slice(0, 3)} {section.number}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.class_number}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.enrolled_number}/{section.capacity}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {moment()
+                                .startOf("day")
+                                .add(section.start_time, "milliseconds")
+                                .format("hh:mm A")}
+                              {" - "}
+                              {moment()
+                                .startOf("day")
+                                .add(section.end_time, "milliseconds")
+                                .format("hh:mm A")}
+                            </StyledTableCell>
+                            <StyledTableCell>{days}</StyledTableCell>
+                            <StyledTableCell>
+                              {section.location}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.instructor}
+                            </StyledTableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </PerfectScrollbar>
+              </div>
             </TableContainer>
+
             {/* todo: add prereq and antireq info */}
           </Collapse>
         </CardContent>
@@ -241,7 +305,14 @@ export default function SearchCards({ setCourseHovered }: courseHoverProps) {
       {/* todo: clean up styles */}
       {/* todo: proper call to get courses */}
       {renderBookmarkedCourses()}
-      <Typography>Search Results</Typography>
+      <h4
+        style={{
+          color: "var(--black-3)",
+          margin: "0px",
+        }}
+      >
+        Search Results
+      </h4>
       {courses
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
         .map((course, i) => createCourseCard(course, i))}

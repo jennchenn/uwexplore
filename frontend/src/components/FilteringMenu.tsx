@@ -1,12 +1,13 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Unstable_Grid2";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+
+import CustomButton from "./CustomButton";
+import "../styles/FilteringMenu.css";
 
 interface FilteringMenuProps {
   setShowFilterMenu: (showFilterMenu: boolean) => void;
@@ -16,7 +17,12 @@ export default function FilteringMenu({
   setShowFilterMenu,
 }: FilteringMenuProps) {
   const checkboxStyle = {
-    "& .MuiSvgIcon-root": { fontSize: 14 },
+    "& .MuiSvgIcon-root": { fontSize: 16 },
+    "& .MuiFormControlLabel-label": {
+      fontSize: "0.9rem",
+    },
+    height: "24px",
+    boxSizing: "border-box",
   };
 
   const handleSubmit = async (event: any) => {
@@ -35,120 +41,114 @@ export default function FilteringMenu({
 
   return (
     <Box>
-      <Card>
+      <Card
+        sx={{
+          "& .MuiCardContent-root": {
+            padding: "0px 24px 24px",
+          },
+          borderRadius: "var(--border-radius)",
+          backgroundColor: "var(--bg-3)",
+          marginBottom: "24px",
+        }}
+        elevation={2}
+      >
         <CardContent>
           <form onSubmit={handleSubmit}>
             <Grid container>
               <Grid xs={6} md={4}>
                 {/* todo: change name/value of the checkboxes to match backend */}
-                <Typography variant="h6">Offered In</Typography>
+                <h3 className="filter-headings">Offered In</h3>
                 <FormControlLabel
-                  control={
-                    <Checkbox name="term" value="F" sx={checkboxStyle} />
-                  }
+                  sx={checkboxStyle}
+                  control={<Checkbox name="term" value="F" />}
                   label="Fall 2022"
                 />
                 <FormControlLabel
-                  control={
-                    <Checkbox name="term" value="W" sx={checkboxStyle} />
-                  }
+                  sx={checkboxStyle}
+                  control={<Checkbox name="term" value="W" />}
                   label="Winter 2023"
                 />
                 <FormControlLabel
-                  control={
-                    <Checkbox name="term" value="S" sx={checkboxStyle} />
-                  }
+                  sx={checkboxStyle}
+                  control={<Checkbox name="term" value="S" />}
                   label="Spring 2023"
                 />
               </Grid>
-              <Grid xs={6} md={4}>
-                <Typography variant="h6">Course Code</Typography>
+              <Grid xs={6} md={5}>
+                <h3 className="filter-headings">Course Code</h3>
                 <Grid container>
                   <Grid xs={6}>
                     <FormControlLabel
-                      control={
-                        <Checkbox name="code" value="1" sx={checkboxStyle} />
-                      }
+                      sx={checkboxStyle}
+                      control={<Checkbox name="code" value="1" />}
                       label="1XX"
                     />
                     <FormControlLabel
-                      control={
-                        <Checkbox name="code" value="2" sx={checkboxStyle} />
-                      }
+                      sx={checkboxStyle}
+                      control={<Checkbox name="code" value="2" />}
                       label="2XX"
                     />
                     <FormControlLabel
-                      control={
-                        <Checkbox name="code" value="3" sx={checkboxStyle} />
-                      }
+                      sx={checkboxStyle}
+                      control={<Checkbox name="code" value="3" />}
                       label="3XX"
                     />
                   </Grid>
                   <Grid xs={6}>
                     <FormControlLabel
-                      control={
-                        <Checkbox name="code" value="4" sx={checkboxStyle} />
-                      }
+                      sx={checkboxStyle}
+                      control={<Checkbox name="code" value="4" />}
                       label="4XX"
                     />
                     <FormControlLabel
-                      control={
-                        <Checkbox name="code" value="5" sx={checkboxStyle} />
-                      }
+                      sx={checkboxStyle}
+                      control={<Checkbox name="code" value="5" />}
                       label="5XX+"
                     />
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid xs={6} md={4}>
+              <Grid xs={6} md={3}>
                 {/* todo: change name/value of the checkboxes to match backend */}
-                <Typography variant="h6">Prerequisites</Typography>
+                <h3 className="filter-headings">Prerequisites</h3>
                 <FormControlLabel
-                  control={
-                    <Checkbox name="prereq" value="none" sx={checkboxStyle} />
-                  }
+                  sx={checkboxStyle}
+                  control={<Checkbox name="prereq" value="none" />}
                   label="None"
                 />
                 <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="prereq"
-                      value="required"
-                      sx={checkboxStyle}
-                    />
-                  }
+                  sx={checkboxStyle}
+                  control={<Checkbox name="prereq" value="required" />}
                   label="Required"
                 />
               </Grid>
               <Grid xs={6} md={4}>
                 {/* todo: change name/value of the checkboxes to match backend */}
-                <Typography variant="h6">Capacity</Typography>
-                <FormControlLabel
-                  control={
-                    <Checkbox name="capacity" value="full" sx={checkboxStyle} />
-                  }
-                  label="Full"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox name="capacity" value="free" sx={checkboxStyle} />
-                  }
-                  label="Not Full"
-                />
+                <h3 className="filter-headings">Capacity</h3>
+                <Stack direction="column">
+                  <FormControlLabel
+                    sx={checkboxStyle}
+                    control={<Checkbox name="capacity" value="full" />}
+                    label="Full"
+                  />
+                  <FormControlLabel
+                    sx={checkboxStyle}
+                    control={<Checkbox name="capacity" value="free" />}
+                    label="Not Full"
+                  />
+                </Stack>
               </Grid>
-              <Grid xs={6} md={8}>
+              <Grid xs={12} md={8}>
                 {/* todo: change name/value of the checkboxes to match backend */}
-                <Typography variant="h6">Time</Typography>
+                <h3 className="filter-headings">Time</h3>
                 <FormControlLabel
-                  control={
-                    <Checkbox name="time" value="day" sx={checkboxStyle} />
-                  }
+                  sx={checkboxStyle}
+                  control={<Checkbox name="time" value="day" />}
                   label="Day (Starts before 5PM)"
                 />
                 <FormControlLabel
-                  control={
-                    <Checkbox name="time" value="night" sx={checkboxStyle} />
-                  }
+                  sx={checkboxStyle}
+                  control={<Checkbox name="time" value="night" />}
                   label="Night (Starts after 5PM)"
                 />
               </Grid>
@@ -168,13 +168,18 @@ export default function FilteringMenu({
               display={"flex"}
               justifyContent={"center"}
               spacing={4}
+              marginTop={"24px"}
             >
-              <Button type="submit" variant="contained">
-                Apply
-              </Button>
-              <Button variant="text" onClick={() => setShowFilterMenu(false)}>
-                Cancel
-              </Button>
+              <CustomButton
+                type="submit"
+                text="Apply"
+                className="custom-button-CTA"
+              ></CustomButton>
+              <CustomButton
+                type="tertiary"
+                text="Cancel"
+                onClick={() => setShowFilterMenu(false)}
+              ></CustomButton>
             </Stack>
           </form>
         </CardContent>
