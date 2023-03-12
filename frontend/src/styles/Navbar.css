@@ -1,10 +1,28 @@
 @import "../styles/Constants.css";
 
+.login-signup-nav-button {
+  border-radius: 50px !important;
+}
+
 .customize-toolbar {
-  min-height: 64px !important;
+  /* min-height: 7vh !important; */
   background: var(--main-purple-1);
 }
 
-.login-signup-nav-button {
-  border-radius: 50px !important;
+.logo-styles {
+  height: 36px;
+  padding-right: 5px;
+}
+
+.title-container {
+  flex-grow: 1;
+  font-weight: var(--font-weight-regular);
+}
+
+.title {
+  display: inline-block;
+}
+
+.font-light {
+  font-weight: var(--font-weight-thin);
 }

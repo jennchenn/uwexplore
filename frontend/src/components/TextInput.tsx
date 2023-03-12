@@ -19,6 +19,7 @@ interface TextInputProps extends Props {
   focused?: boolean;
   type?: React.HTMLInputTypeAttribute;
   show?: boolean;
+  [key: string]: unknown;
 }
 
 export default function TextInput({
@@ -33,7 +34,7 @@ export default function TextInput({
   const [verified, setverified] = useState(false);
 
   const handleClickShow = () =>
-    setShowPassword((showPassword) => !showPassword);
+    setShowPassword((showPassword: any) => !showPassword);
 
   const handleOnChange = (event: any) => {
     setInputValue(event.target.value);

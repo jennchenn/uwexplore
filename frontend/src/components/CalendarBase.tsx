@@ -1,19 +1,26 @@
 import { useMemo, useCallback, useState } from "react";
-import Box from "@mui/material/Box";
-import moment from "moment";
 import "../styles/CalendarBase.scss";
 import backgroundColors from "../styles/calendarCourseBackgroundColors";
-import courses from "../APIClients/courses";
+import moment from "moment";
+
+import Box from "@mui/material/Box";
+
 import CalendarModal from "./CalendarModal";
+import courses from "../APIClients/courses";
+import warningImg from "../images/warning.png";
 
 const ReactBigCalendar = require("react-big-calendar");
 const { Calendar, momentLocalizer } = ReactBigCalendar;
 
-// todo: remove once we have a more permanent solution
-const warningImg =
-  "https://static.vecteezy.com/system/resources/previews/012/042/292/original/warning-sign-icon-transparent-background-free-png.png";
+interface courseHoverProps {
+  courseHovered: any;
+}
 
-export default function CalendarBase() {
+interface courseHoverProps {
+  courseHovered: any;
+}
+
+export default function CalendarBase({ courseHovered }: courseHoverProps) {
   // localizer is required
   const localizer = momentLocalizer(moment);
 
@@ -28,7 +35,7 @@ export default function CalendarBase() {
       ex: a SYDE TUT on both T and TH will have an entry for each */
   const getEachClass = useCallback((allCourses: any) => {
     /* weekdays in milliseconds corresponding to default dates set on cal
-     Calendar is currently set to the week of Jan 02(Mon)-06(Fri) */
+     Calendar is currently set to the week of Jan 02(Mon)-06(Fri), 2023 */
     const unixWeekdays: any = {
       MONDAY: 1672635600000,
       TUESDAY: 1672722000000,
@@ -88,6 +95,19 @@ export default function CalendarBase() {
   const classes = getEachClass(courses);
   const overlaps = findOverlappingClasses(classes);
 
+  let hoverEvents = (hovered: any) => {
+    let course = [hovered];
+    if ("sections" in hovered) {
+      let hoverSections = getEachClass(course);
+      return hoverSections.map((section: any) => ({
+        ...section,
+        background: true,
+      }));
+    } else {
+      return course;
+    }
+  };
+
   const handleCourseSelectEvent = useCallback(
     (event: any) => {
       // assemble course time from start and end times
@@ -100,10 +120,12 @@ export default function CalendarBase() {
       }
 
       // assemble course details with checks for empty fields
-      let eventDetails = `${eventTime === ("" || undefined) ? "" : eventTime} ${
-        event.location === ("" || undefined) ? "" : "\n" + event.location
+      let eventDetails = `${
+        eventTime === ("" || undefined) ? "N/A" : eventTime
       } ${
-        event.instructor === ("" || undefined) ? "" : "\n" + event.instructor
+        event.location === ("" || undefined) ? "N/A" : "\n" + event.location
+      } ${
+        event.instructor === ("" || undefined) ? "N/A" : "\n" + event.instructor
       }`;
 
       setModalTitle(event.title);
@@ -117,11 +139,18 @@ export default function CalendarBase() {
 
   const eventStyleGetter = (event: any) => {
     let style = {
-      backgroundColor: courseColors[event.courseId],
+      // some checks to see if the course is being hovered
+      backgroundColor: event.background
+        ? "var(--main-purple-4)"
+        : courseColors[event.courseId],
+      zIndex: event.background ? "10" : "",
+      opacity: event.background ? 0.9 : 1,
       border: "0px",
       // styles below are for course conflicts
       backgroundImage:
-        event.uniqueClassId in overlaps ? `url(${warningImg})` : "",
+        event.uniqueClassId in overlaps && event.background !== true
+          ? `url(${warningImg})`
+          : "",
       backgroundPosition: "left bottom",
       backgroundRepeat: "no-repeat",
       backgroundSize: "1em",
@@ -156,7 +185,7 @@ export default function CalendarBase() {
       // arbitrary starting date set to Jan, 1, 2023 - has an effect on dates used to set events
       defaultDate: new Date(2023, 0, 1),
       formats: {
-        dayFormat: (date: Date) => localizer.format(date, "ddd"),
+        dayFormat: (date: Date) => localizer.format(date, "ddd").toUpperCase(),
       },
       views: ["work_week"],
     }),
@@ -167,6 +196,8 @@ export default function CalendarBase() {
     <Box className="box-style">
       <div className="calendar-height">
         <Calendar
+          backgroundEvents={hoverEvents(courseHovered)}
+          dayLayoutAlgorithm={"no-overlap"}
           defaultDate={defaultDate}
           defaultView={views}
           events={classes}
