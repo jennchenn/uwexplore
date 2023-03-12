@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 
 import CalendarModal from "./CalendarModal";
 import courses from "../APIClients/courses";
-import warningImg from "../images/vecteezy_warning-sign-icon.png";
+import warningImg from "../images/warning.png";
 
 const ReactBigCalendar = require("react-big-calendar");
 const { Calendar, momentLocalizer } = ReactBigCalendar;
