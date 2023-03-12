@@ -45,3 +45,24 @@ def get_past_courses(curr_user):
     except Exception as e:
         error_message = getattr(e, "message", None)
         return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
+@blueprint.route("/schedule", methods=["GET"], strict_slashes=False)
+@require_login
+def get_schedule_courses(curr_user):
+    try:
+        result = course_service.get_schedule_courses_by_user(curr_user)
+        return jsonify(result), 200
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
+@blueprint.route("/schedules/<id>", methods=["GET"], strict_slashes=False)
+def get_scheduled_courses_by_id(id):
+    try:
+        result = course_service.get_courses_by_schedule_id(id)
+        return jsonify(result), 200
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500

@@ -19,6 +19,8 @@ export type CourseObject = {
   tags: string[];
 };
 
+export type CalendarCourseObject = CourseObject & { color: string };
+
 const getCourses = async (
   queryParams: string | null,
 ): Promise<CourseObject[]> => {
@@ -27,7 +29,27 @@ const getCourses = async (
   return data;
 };
 
+const getCoursesOnCalendar = async (): Promise<CalendarCourseObject[]> => {
+  // FIXME: this should be thrown into a try catch
+  // FIXME: add authorization header! "Authorization: Bearer <>"
+  const bearerToken = "";
+  const { data } = await APIClient.get("/courses/schedule", {
+    headers: { Authorization: bearerToken },
+  });
+  return data;
+};
+
+const getCoursesByCalendarId = async (
+  id: string,
+): Promise<CalendarCourseObject[]> => {
+  // FIXME: this should be thrown into a try catch
+  const { data } = await APIClient.get(`/courses/schedules/${id}`);
+  return data;
+};
+
 const clients = {
   getCourses,
+  getCoursesOnCalendar,
+  getCoursesByCalendarId,
 };
 export default clients;

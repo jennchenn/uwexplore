@@ -1,4 +1,5 @@
 from ..models.course import Course
+from ..models.schedule import Schedule
 from ..models.user import PastCourses
 
 MAX_QUERY_SIZE = 30
@@ -108,6 +109,49 @@ class CourseService:
                 f"Failed to get courses. Reason={reason if reason else str(e)}"
             )
             raise e
+
+    def get_schedule_courses_by_user(self, user):
+        try:
+            schedule_id = user.get("schedule")
+            return self.get_courses_by_schedule_id(schedule_id)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def get_courses_by_schedule_id(self, schedule_id):
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            if not current_schedule:
+                raise KeyError(f"No saved schedule with id={schedule_id}")
+            courses = [
+                course.to_serializable_dict() for course in current_schedule["courses"]
+            ]
+            return self._format_schedule_courses(courses)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def _format_schedule_courses(self, scheduled_courses):
+        courses = []
+        for course_info in scheduled_courses:
+            course_obj = Course.objects(_id=course_info["course_id"]).first()
+            sections = course_obj.sections
+            course = dict(course_obj.to_serializable_dict())
+            course["sections"] = self._find_section(sections, course_info["section_id"])
+            course["color"] = course_info["color"]
+            courses.append(course)
+        return courses
+
+    def _find_section(self, sections, section_id):
+        for section in sections:
+            if section._id == section_id:
+                return section.to_serializable_dict()
 
     def _get_course_name_from_id(self, course_id):
         course = Course.objects(_id=course_id).first()
