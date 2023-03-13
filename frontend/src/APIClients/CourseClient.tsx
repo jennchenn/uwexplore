@@ -1,4 +1,5 @@
 import APIClient from "./APIClient";
+import axios, { AxiosError } from "axios";
 
 export type CourseObject = {
   id: string;
@@ -24,9 +25,19 @@ export type CalendarCourseObject = CourseObject & { color: string };
 const getCourses = async (
   queryParams: string | null,
 ): Promise<CourseObject[]> => {
-  // FIXME: this should be thrown into a try catch
-  const { data } = await APIClient.get(`/courses${queryParams}`);
-  return data;
+  try {
+    const { data } = await APIClient.get(`/courses${queryParams}`);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
 };
 
 const getCoursesOnCalendar = async (): Promise<CalendarCourseObject[]> => {
