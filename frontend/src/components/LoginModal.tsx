@@ -17,14 +17,19 @@ export default function LoginModal({
   open = true,
   ...LoginModalProps
 }: LoginModalProps) {
-  const [alert] = useState("");
-  const [validate] = useState(true);
+  const [alert, setAlert] = useState("");
+  const [validate, setValidate] = useState(true);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const emailRef = React.createRef<HTMLElement>();
   const passwordRef = React.createRef<HTMLElement>();
+
+  const regEmail = new RegExp(
+    // eslint-disable-next-line
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  );
 
   useEffect(() => {
     if (emailRef.current && emailRef.current.firstChild)
@@ -41,7 +46,29 @@ export default function LoginModal({
   const handleClose = () => {
     setEmail("");
     setPassword("");
+    setAlert("");
+    setValidate(true);
     LoginModalProps.setOpen(false);
+  };
+
+  const handleSubmit = () => {
+    if (!email || !regEmail.test(email) || !password) {
+      setValidate(false);
+      setAlert("Please input a valid email/password.");
+    } else if (email && regEmail.test(email) && password) {
+      setValidate(true);
+      setAlert("");
+    } else {
+      /* to do: make the call the sign in 
+      // on error:
+      setValidate(false);
+      setAlert("Your email or password is incorrect. Please try again.");
+      // on success:
+      setValidate(true);
+      setAlert("");
+      // save returned to var to be included in all other api calls
+      */
+    }
   };
 
   const linkStyles = {
@@ -96,7 +123,12 @@ export default function LoginModal({
         <Link href="#" style={linkStyles}>
           Forgot Password?
         </Link>
-        <CustomButton className="modal-input-button" text="login" type="CTA" />
+        <CustomButton
+          className="modal-input-button"
+          text="login"
+          type="CTA"
+          onClick={handleSubmit}
+        />
         <CustomButton
           className="modal-input-button"
           text="create account"

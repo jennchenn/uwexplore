@@ -40,6 +40,7 @@ export const TextInput = React.forwardRef(
       error = false,
       success = false,
       checkReg = false,
+      onBlur = () => {},
       ...TextInputProps
     }: TextInputProps,
     ref,
@@ -117,7 +118,10 @@ export const TextInput = React.forwardRef(
             label={TextInputProps.placeholder}
             value={inputValue}
             onChange={handleOnChange}
-            onBlur={TextInputProps.onBlur}
+            onBlur={(event: any) => {
+              onBlur(event);
+              handleOnChange(event);
+            }}
             endAdornment={
               <InputAdornment position="end">
                 {type === "password" && (
