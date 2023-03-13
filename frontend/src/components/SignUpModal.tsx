@@ -38,11 +38,13 @@ export default function SignUp({
   useEffect(() => {
     if (emailRef.current && emailRef.current.firstChild)
       (emailRef.current.firstChild as HTMLElement).focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email]);
 
   useEffect(() => {
     if (passwordRef.current && passwordRef.current.firstChild)
       (passwordRef.current.firstChild as HTMLElement).focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [password]);
 
   return (

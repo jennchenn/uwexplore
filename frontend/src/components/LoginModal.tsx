@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Link, Modal } from "@mui/material";
 import { Props } from "../App";
 
@@ -22,6 +22,14 @@ export default function LoginModal({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const emailRef = React.createRef<HTMLElement>();
+
+  useEffect(() => {
+    if (emailRef.current && emailRef.current.firstChild)
+      (emailRef.current.firstChild as HTMLElement).focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [email]);
 
   const handleClose = () => {
     LoginModalProps.setOpen(false);
@@ -63,6 +71,7 @@ export default function LoginModal({
           type="email"
           value={email}
           setValue={setEmail}
+          ref={emailRef}
           required
         />
         <TextInput
