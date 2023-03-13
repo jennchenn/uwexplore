@@ -73,6 +73,7 @@ def insert_courses(courses):
                 name=course["title"],
                 department=course["subjectCode"],
                 code=course["catalogNumber"],
+                full_code=course["subjectCode"] + course["catalogNumber"],
                 course_id=course["courseId"],
                 description=course["description"],
                 description_abbreviated=course["descriptionAbbreviated"],

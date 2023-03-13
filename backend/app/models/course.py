@@ -75,6 +75,7 @@ class Course(Document):
     name = StringField(required=True)
     department = StringField(required=True)
     code = StringField(required=True)
+    full_code = StringField(required=True)
     course_id = StringField(required=True, unique=True)
     description = StringField(required=True)
     description_abbreviated = StringField()
