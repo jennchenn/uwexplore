@@ -48,8 +48,8 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
               onKeyDown={(e) => {
                 if (
                   e.key === "Enter" &&
-                  // todo: can make this even more robust by changing string to all upper or smtn
-                  searchQuery !== (e.target as HTMLTextAreaElement).value
+                  searchQuery.toUpperCase() !==
+                    (e.target as HTMLTextAreaElement).value.toUpperCase()
                 ) {
                   setResultsLoading(true);
                   setSearchQuery((e.target as HTMLTextAreaElement).value);
