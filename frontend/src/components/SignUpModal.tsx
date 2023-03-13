@@ -109,6 +109,7 @@ export default function SignUp({
           onBlur={handleConfirmPassword}
         />
         <FormControlLabel
+          className="terms-conditions-check"
           control={<Checkbox />}
           label={
             <div className="modal-checkbox-text">

@@ -21,3 +21,18 @@
     padding-left: 12px;
     color: var(--alerts-success-2);
 }
+
+.success-helper-text, .error-helper-text {
+    align-self: normal;
+    margin-left: 72px !important;
+    font-style: italic;
+    padding-left: 32px;
+}
+
+.success-helper-text {
+    color: var(--alerts-success-1);
+}
+
+.error-helper-text {
+    color: var(--alerts-warning-1) !important;
+}

@@ -42,3 +42,8 @@
 .modal-checkbox-text, Checkbox {
   opacity: 0.6;
 }
+
+.terms-conditions-check {
+  align-self: normal;
+  margin-left: 72px !important;
+}

@@ -43,9 +43,9 @@ h5,
 h6,
 .heading-6,
 .subject {
-  font-size: var(--font-size-h6);
-  font-weight: var(--font-weight-thin);
-  line-height: var(--line-height-xs);
+  font-size: var(--font-size-h6) !important;
+  font-weight: var(--font-weight-thin) !important;
+  line-height: var(--line-height-xs) !important;
 }
 
 .text {

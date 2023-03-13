@@ -10,6 +10,7 @@ import {
   styled,
 } from "@mui/material";
 import "../styles/TextInput.css";
+import "../styles/Typography.css";
 import { Props } from "../App";
 
 interface TextInputProps extends Props {
@@ -114,12 +115,12 @@ export const TextInput = React.forwardRef(
           />
         </FormControl>
         {error && (
-          <FormHelperText error className="error-helper-text">
+          <FormHelperText error className="error-helper-text heading-6">
             {TextInputProps.errorText}
           </FormHelperText>
         )}
         {success && (
-          <FormHelperText className="success-helper-text">
+          <FormHelperText className="success-helper-text heading-6">
             {TextInputProps.successText}
           </FormHelperText>
         )}
