@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Checkbox, FormControlLabel, Link, Modal } from "@mui/material";
 import { Props } from "../App";
-import TextInput from "./TextInput";
+import { TextInput } from "./TextInput";
 import "../styles/LoginSignUpModal.css";
 import CustomButton from "./CustomButton";
 
@@ -19,12 +19,35 @@ export default function SignUp({
     SignUpModalProps.setOpen(false);
   };
 
-  const [email] = useState("");
-  const [password] = useState("");
-  const [confirmPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(false);
+
+  const emailRef = React.createRef<HTMLElement>();
+  const passwordRef = React.createRef<HTMLElement>();
+
+  const handleConfirmPassword = () => {
+    if (password === repeatPassword) {
+      setConfirmPassword(true);
+    } else {
+      setConfirmPassword(false);
+    }
+  };
+
+  useEffect(() => {
+    if (emailRef.current && emailRef.current.firstChild)
+      (emailRef.current.firstChild as HTMLElement).focus();
+  }, [email]);
+
+  useEffect(() => {
+    if (passwordRef.current && passwordRef.current.firstChild)
+      (passwordRef.current.firstChild as HTMLElement).focus();
+  }, [password]);
 
   return (
     <Modal
+      id={SignUpModalProps.id}
       className={SignUpModalProps.className}
       open={open}
       onClose={handleClose}
@@ -38,19 +61,23 @@ export default function SignUp({
           iaculis mauris.
         </div>
         <TextInput
+          ref={emailRef}
           className="modal-input-text"
           id="sign-up-email"
           placeholder="Email"
           type="email"
           value={email}
+          setValue={setEmail}
           required
         />
         <TextInput
+          ref={passwordRef}
           className="modal-input-text"
           id="sign-up-password"
           placeholder="Password"
           type="password"
           value={password}
+          setValue={setPassword}
           required
         />
         <TextInput
@@ -58,8 +85,14 @@ export default function SignUp({
           id="sign-up-password-confirm"
           placeholder="Confirm Password"
           type="password"
-          value={confirmPassword}
+          value={repeatPassword}
+          setValue={setRepeatPassword}
           required
+          error={!confirmPassword}
+          errorText="Your password does not match"
+          success={repeatPassword !== "" && confirmPassword}
+          successText="Thanks for confirming your password!"
+          onBlur={handleConfirmPassword}
         />
         <FormControlLabel
           control={<Checkbox />}

@@ -5,7 +5,7 @@ import { Props } from "../App";
 import "../styles/LoginSignUpModal.css";
 
 import CustomButton from "./CustomButton";
-import TextInput from "./TextInput";
+import { TextInput } from "./TextInput";
 
 interface LoginModalProps extends Props {
   open: boolean;
@@ -20,8 +20,8 @@ export default function LoginModal({
   const [alert] = useState("");
   const [validate] = useState(true);
 
-  const [email] = useState("");
-  const [password] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleClose = () => {
     LoginModalProps.setOpen(false);
@@ -40,6 +40,7 @@ export default function LoginModal({
 
   return (
     <Modal
+      id={LoginModalProps.id}
       className={LoginModalProps.className}
       open={open}
       onClose={handleClose}
@@ -61,6 +62,7 @@ export default function LoginModal({
           placeholder="Email"
           type="email"
           value={email}
+          setValue={setEmail}
           required
         />
         <TextInput
@@ -69,6 +71,7 @@ export default function LoginModal({
           placeholder="Password"
           type="password"
           value={password}
+          setValue={setPassword}
           required
         />
         <Link href="#" style={linkStyles}>
