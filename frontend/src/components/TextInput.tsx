@@ -95,7 +95,6 @@ export const TextInput = React.forwardRef(
             placeholder={TextInputProps.placeholder}
             label={TextInputProps.placeholder}
             value={inputValue}
-            autoFocus
             onChange={handleOnChange}
             onBlur={TextInputProps.onBlur}
             endAdornment={

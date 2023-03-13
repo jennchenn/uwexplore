@@ -15,10 +15,6 @@ export default function SignUp({
   open = false,
   ...SignUpModalProps
 }: SignUpModalProps) {
-  const handleClose = () => {
-    SignUpModalProps.setOpen(false);
-  };
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -26,6 +22,7 @@ export default function SignUp({
 
   const emailRef = React.createRef<HTMLElement>();
   const passwordRef = React.createRef<HTMLElement>();
+  const repeatRef = React.createRef<HTMLElement>();
 
   const handleConfirmPassword = () => {
     if (password === repeatPassword) {
@@ -33,6 +30,14 @@ export default function SignUp({
     } else {
       setConfirmPassword(false);
     }
+  };
+
+  const handleClose = () => {
+    setEmail("");
+    setPassword("");
+    setRepeatPassword("");
+    setConfirmPassword(false);
+    SignUpModalProps.setOpen(false);
   };
 
   useEffect(() => {
@@ -46,6 +51,12 @@ export default function SignUp({
       (passwordRef.current.firstChild as HTMLElement).focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [password]);
+
+  useEffect(() => {
+    if (repeatRef.current && repeatRef.current.firstChild)
+      (repeatRef.current.firstChild as HTMLElement).focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repeatPassword]);
 
   return (
     <Modal
@@ -83,6 +94,7 @@ export default function SignUp({
           required
         />
         <TextInput
+          ref={repeatRef}
           className="modal-input-text"
           id="sign-up-password-confirm"
           placeholder="Confirm Password"

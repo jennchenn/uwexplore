@@ -24,6 +24,7 @@ export default function LoginModal({
   const [password, setPassword] = useState("");
 
   const emailRef = React.createRef<HTMLElement>();
+  const passwordRef = React.createRef<HTMLElement>();
 
   useEffect(() => {
     if (emailRef.current && emailRef.current.firstChild)
@@ -31,7 +32,15 @@ export default function LoginModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email]);
 
+  useEffect(() => {
+    if (passwordRef.current && passwordRef.current.firstChild)
+      (passwordRef.current.firstChild as HTMLElement).focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [password]);
+
   const handleClose = () => {
+    setEmail("");
+    setPassword("");
     LoginModalProps.setOpen(false);
   };
 
@@ -81,6 +90,7 @@ export default function LoginModal({
           type="password"
           value={password}
           setValue={setPassword}
+          ref={passwordRef}
           required
         />
         <Link href="#" style={linkStyles}>
