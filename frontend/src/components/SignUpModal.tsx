@@ -81,6 +81,7 @@ export default function SignUp({
           type="email"
           value={email}
           setValue={setEmail}
+          checkReg
           required
         />
         <TextInput
@@ -91,6 +92,7 @@ export default function SignUp({
           type="password"
           value={password}
           setValue={setPassword}
+          checkReg
           required
         />
         <TextInput
@@ -101,6 +103,7 @@ export default function SignUp({
           type="password"
           value={repeatPassword}
           setValue={setRepeatPassword}
+          checkReg
           required
           error={!confirmPassword}
           errorText="Your password does not match"

@@ -25,6 +25,7 @@ interface TextInputProps extends Props {
   errorText?: string;
   success?: boolean;
   successText?: string;
+  checkReg?: boolean;
   setValue: (value: string) => void;
   onBlur?: (event: any) => void;
 }
@@ -38,13 +39,24 @@ export const TextInput = React.forwardRef(
       show = type === "password" ? false : true,
       error = false,
       success = false,
+      checkReg = false,
       ...TextInputProps
     }: TextInputProps,
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(show);
     const [inputValue, setInputValue] = useState(value);
-    const [verified, setverified] = useState(false);
+    const [verified, setVerified] = useState(false);
+
+    const regEmail = new RegExp(
+      // eslint-disable-next-line
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+
+    const regPassword = new RegExp(
+      // eslint-disable-next-line
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    );
 
     const handleClickShow = () =>
       setShowPassword((showPassword: any) => !showPassword);
@@ -52,7 +64,15 @@ export const TextInput = React.forwardRef(
     const handleOnChange = (event: any) => {
       TextInputProps.setValue(event.target.value);
       setInputValue(event.target.value);
-      if (type === "password") setverified(true);
+      if (!checkReg) {
+        setVerified(false);
+      } else if (type === "password" && regPassword.test(inputValue)) {
+        setVerified(true);
+      } else if (type === "email" && regEmail.test(inputValue)) {
+        setVerified(true);
+      } else {
+        setVerified(false);
+      }
     };
 
     const StyledTextInput = styled(OutlinedInput)({
