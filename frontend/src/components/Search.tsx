@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import CustomButton from "./CustomButton";
 import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
+import clients from "../APIClients/CourseClient";
 
 interface courseHoverProps {
   setCourseHovered: any;
@@ -13,10 +14,27 @@ interface courseHoverProps {
 
 export default function Search({ setCourseHovered }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [resultsLoading, setResultsLoading] = useState(false);
 
   const handleShowFilterMenu = () => {
     setShowFilterMenu(!showFilterMenu);
   };
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      setSearchResults([]);
+      setResultsLoading(false);
+    } else {
+      const results = clients.getCourses(`?query=${searchQuery}`);
+
+      results.then((value) => {
+        setResultsLoading(false);
+        setSearchResults(value as any);
+      });
+    }
+  }, [searchQuery]);
 
   return (
     <div>
@@ -27,6 +45,17 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
               fullWidth
               size="small"
               placeholder="Search Courses"
+              onKeyDown={(e) => {
+                if (
+                  e.key === "Enter" &&
+                  // todo: can make this even more robust by changing string to all upper or smtn
+                  searchQuery !== (e.target as HTMLTextAreaElement).value
+                ) {
+                  setResultsLoading(true);
+                  setSearchQuery((e.target as HTMLTextAreaElement).value);
+                  e.preventDefault();
+                }
+              }}
               sx={{
                 "& .MuiInputBase-root": {
                   borderRadius: "50px",
@@ -52,23 +81,12 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
           {showFilterMenu && (
             <FilteringMenu setShowFilterMenu={setShowFilterMenu} />
           )}
-          {/* todo: conditionally show welcome card */}
-          {/* <Card sx={{ minWidth: 100 }}>
-            <CardContent>
-              <InfoIcon sx={{ display: "inline" }} />
-              <Typography sx={{ display: "inline" }} variant="h5">
-                Hello!
-              </Typography>
-              <Typography variant="body2">
-                UW Cal will help you through your course selection process
-                through our interactive scheduler.
-                <br />
-                <br />
-                {"Create a new schedule now to start!"}
-              </Typography>
-            </CardContent>
-          </Card> */}
-          <SearchCards setCourseHovered={setCourseHovered} />
+          <SearchCards
+            resultsLoading={resultsLoading}
+            searchResults={searchResults}
+            searchQuery={searchQuery}
+            setCourseHovered={setCourseHovered}
+          />
         </Stack>
       </Box>
     </div>
