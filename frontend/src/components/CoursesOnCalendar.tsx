@@ -10,12 +10,33 @@ import Box from "@mui/material/Box";
 
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CourseCard from "./CourseCard";
+import { CourseObject } from "../APIClients/CourseClient";
 
 export default function CoursesOnCalendar() {
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const course: CourseObject = {
+    id: "id",
+    antirequisites: ["1", "2"],
+    ceab_eng_design: 3,
+    ceab_eng_sci: 4,
+    ceab_math: 5,
+    ceab_sci: 6,
+    code: "code",
+    course_id: "course id",
+    cse_weight: 7,
+    department: "department",
+    description_abbreviated: "description abbreviated",
+    description: "description",
+    name: "name",
+    prerequisites: ["8", "9"],
+    sections: [{ day: ["THURSDAY", "MONDAY"], sddfds: 2 }],
+    tags: ["10", "11"],
   };
 
   return (
@@ -42,7 +63,7 @@ export default function CoursesOnCalendar() {
           >
             <Typography
               variant="h6"
-              style={{ fontWeight: "bold", color: "white" }}
+              style={{ fontWeight: "bold", color: "purple" }}
             >
               Added Courses
             </Typography>
@@ -58,27 +79,14 @@ export default function CoursesOnCalendar() {
           </Stack>
           <Collapse in={expanded}>
             <Stack spacing={1}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                    SYDE 123
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                    SYDE 123
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                    SYDE 123
-                  </Typography>
-                </CardContent>
-              </Card>
+              <CourseCard
+                course={course}
+                expandedCard=""
+                bookmarkedCourses={{ key: course, l: course }}
+                setExpandedCard={() => {}}
+                setBookmarkedCourses={() => {}}
+                type="added"
+              />
             </Stack>
           </Collapse>
         </CardContent>
