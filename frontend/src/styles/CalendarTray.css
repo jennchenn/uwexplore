@@ -1,0 +1,35 @@
+@import "//styles/Constants.css";
+
+.retractable-tray {
+    background-color: var(--main-purple-1) !important;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: inherit;
+    border-radius: 18px 18px 0 0 !important;
+}
+
+.retractable-tray .MuiCardContent-root{
+    padding: 0;
+}
+
+.heading-background {
+    cursor: pointer;
+    padding: 16px 16px 0;
+    justify-content: space-between;
+}
+
+.calendar-tray-heading {
+    color: var(--bg-1);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.expand-more-icon, .expand-less-icon {
+    color: var(--bg-1);
+    opacity: 0.4;
+}
+
+.tray-contents {
+    padding: 0 16px;
+}
