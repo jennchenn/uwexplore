@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Checkbox, FormControlLabel, Link, Modal } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  Link,
+  Modal,
+} from "@mui/material";
 import { Props } from "../App";
 import { TextInput } from "./TextInput";
 import "../styles/LoginSignUpModal.css";
@@ -15,14 +22,16 @@ export default function SignUp({
   open = false,
   ...SignUpModalProps
 }: SignUpModalProps) {
-  const [alert, setAlert] = useState("");
-  const [validate, setValidate] = useState(true);
-
   const [email, setEmail] = useState("");
+  const [emailUsed, setEmailUsed] = useState(false);
+
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState<boolean>();
+
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(false);
-  const [checkbox, setCheckbox] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState<boolean>();
+
+  const [checkbox, setCheckbox] = useState<boolean>();
 
   const emailRef = React.createRef<HTMLElement>();
   const passwordRef = React.createRef<HTMLElement>();
@@ -34,10 +43,7 @@ export default function SignUp({
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   );
 
-  const regPassword = new RegExp(
-    // eslint-disable-next-line
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-  );
+  const regPassword = new RegExp(/^.{6,8}$/);
 
   const handleConfirmPassword = () => {
     if (password === repeatPassword) {
@@ -47,39 +53,36 @@ export default function SignUp({
     }
   };
 
-  const handleSubmit = () => {
-    if (
-      !email ||
-      !regEmail.test(email) ||
-      !password ||
-      !regPassword.test(password) ||
-      !checkbox ||
-      !confirmPassword
-    ) {
-      setValidate(false);
-      setAlert("Please input a valid email/password or agree to terms.");
-    } else {
-      /* to do: make the call the sign up
-      // on error:
-      setValidate(false);
-      setAlert("Network error. Try again later.");
-      // on success:
-      setValidate(true);
-      setAlert("");
-      // save returned to var to be included in all other api calls
-      */
-    }
-  };
-
   const handleClose = () => {
     setEmail("");
     setPassword("");
     setRepeatPassword("");
     setConfirmPassword(false);
     setCheckbox(false);
-    setAlert("");
-    setValidate(true);
+    setEmailUsed(false);
+    setPasswordError(false);
     SignUpModalProps.setOpen(false);
+  };
+
+  const handleSubmit = (event: any) => {
+    if (
+      !email ||
+      !regEmail.test(email) ||
+      !password ||
+      !regPassword.test(password) ||
+      !confirmPassword ||
+      !checkbox
+    ) {
+      event.preventDefault();
+    } else {
+      /* to do: make the call the sign up
+      // on error:
+      setEmailUsed(true);
+      // on success:
+      handleClose();
+      // save returned to var to be included in all other api calls
+      */
+    }
   };
 
   useEffect(() => {
@@ -115,9 +118,6 @@ export default function SignUp({
           sollicitudin dapibus nisi, quis eleifend felis pharetra vel. Mauris ac
           iaculis mauris.
         </div>
-        {!validate && alert !== "" && (
-          <div className="sign-up-modal-alert heading-4">{alert}</div>
-        )}
         <TextInput
           ref={emailRef}
           className="modal-input-text"
@@ -128,6 +128,8 @@ export default function SignUp({
           setValue={setEmail}
           checkReg
           required
+          error={email && emailUsed}
+          errorText="Email is already in use."
         />
         <TextInput
           ref={passwordRef}
@@ -139,6 +141,14 @@ export default function SignUp({
           setValue={setPassword}
           checkReg
           required
+          error={password && passwordError}
+          errorText="Password must be between 6-8 characters."
+          success={password && !passwordError && regPassword.test(password)}
+          successText="Your password is good!"
+          onBlur={() => {
+            setPasswordError(!regPassword.test(password));
+            handleConfirmPassword();
+          }}
         />
         <TextInput
           ref={repeatRef}
@@ -151,8 +161,10 @@ export default function SignUp({
           checkReg
           required
           error={password && repeatPassword && !confirmPassword}
-          errorText="Your password does not match"
-          success={repeatPassword !== "" && confirmPassword}
+          errorText="Your password does not match."
+          success={
+            password && repeatPassword && confirmPassword && !passwordError
+          }
           successText="Thanks for confirming your password!"
           onBlur={handleConfirmPassword}
         />
@@ -175,11 +187,19 @@ export default function SignUp({
             </div>
           }
         />
+        {checkbox === false && (
+          <FormHelperText error className="error-helper-text heading-6">
+            **Please read and agree with the Terms and Conditions.
+          </FormHelperText>
+        )}
         <CustomButton
           className="modal-input-button"
           text="create account"
           type="CTA"
-          onClick={handleSubmit}
+          onClick={(event: any) => {
+            handleSubmit(event);
+            handleConfirmPassword();
+          }}
         />
         <CustomButton
           className="modal-input-button"

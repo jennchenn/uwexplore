@@ -27,10 +27,11 @@
     margin-left: 72px !important;
     font-style: italic;
     padding-left: 32px;
+    padding-bottom: 11px;
 }
 
 .success-helper-text {
-    color: var(--alerts-success-1);
+    color: var(--alerts-success-1) !important;
 }
 
 .error-helper-text {

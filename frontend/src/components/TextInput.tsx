@@ -54,10 +54,7 @@ export const TextInput = React.forwardRef(
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     );
 
-    const regPassword = new RegExp(
-      // eslint-disable-next-line
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    );
+    const regPassword = new RegExp(/^.{6,8}$/);
 
     const handleClickShow = () =>
       setShowPassword((showPassword: any) => !showPassword);
