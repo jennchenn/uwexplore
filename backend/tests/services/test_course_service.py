@@ -1,9 +1,10 @@
 import datetime
 
 import pytest
+from bson.objectid import ObjectId
 from flask import current_app
 
-from app.models.course import ClassType, Course, CourseType, Section, Weekday
+from app.models.course import Course, Section
 from app.services.course_service import CourseService
 
 
@@ -22,49 +23,55 @@ DEFAULT_COURSES = [
         code="111",
         description="Functions: trigonometric, exponential, log, inverse functions. Differential calculus: limits, continuity, derivatives, differentials, applications. Sequences and series: convergence, power series, Taylor expansions. Simple numerical methods. [Offered: F]",
         ceab_math=42.0,
-        course_type=CourseType.REQUIRED,
+        course_id="5678",
         sections=[
             Section(
-                day=[Weekday.M, Weekday.W],
+                day=["MONDAY", "WEDNESDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
                 start_time=510,
                 end_time=590,
                 class_number=4877,
                 location="E5 6008",
-                type=ClassType.LEC,
+                type="LEC",
                 number="001",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
                 enrolled_number=102,
                 capacity=102,
+                course_id=ObjectId(),
             ),
             Section(
-                day=[Weekday.T, Weekday.TH],
+                day=["TUESDAY", "THURSDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
                 start_time=510,
                 end_time=590,
                 class_number=4878,
                 location="E5 6008",
-                type=ClassType.LEC,
+                type="LEC",
                 number="002",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
                 enrolled_number=102,
                 capacity=102,
+                course_id=ObjectId(),
             ),
             Section(
-                day=[Weekday.F],
+                day=["FRIDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
                 start_time=510,
                 end_time=560,
                 class_number=4879,
                 location="E5 6008",
-                type=ClassType.TUT,
+                type="TUT",
                 number="001",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
                 enrolled_number=102,
                 capacity=102,
+                course_id=ObjectId(),
             ),
         ],
     ),
@@ -74,49 +81,55 @@ DEFAULT_COURSES = [
         code="112",
         description="Integration: Indefinite and definite integral; techniques of integration; improper integrals, numerical methods, applications. Vector differential calculus: Partial, total, and directional derivative; Gradient divergence and curl; Jacobian. Applications. [Offered: W, S]",
         ceab_math=42.0,
-        course_type=CourseType.REQUIRED,
+        course_id="1234",
         sections=[
             Section(
-                day=[Weekday.M, Weekday.W],
+                day=["MONDAY", "WEDNESDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
                 start_time=600,
                 end_time=680,
                 class_number=4977,
                 location="E5 6008",
-                type=ClassType.LEC,
+                type="LEC",
                 number="001",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
                 enrolled_number=102,
                 capacity=102,
+                course_id=ObjectId(),
             ),
             Section(
-                day=[Weekday.T, Weekday.TH],
+                day=["TUESDAY", "TUESDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
                 start_time=600,
                 end_time=680,
                 class_number=4978,
                 location="E5 6008",
-                type=ClassType.LEC,
+                type="LEC",
                 number="002",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
                 enrolled_number=102,
                 capacity=102,
+                course_id=ObjectId(),
             ),
             Section(
-                day=[Weekday.F],
+                day=["FRIDAY"],
                 term_code="1229",
+                term_name="Spring 2022",
                 start_time=600,
                 end_time=650,
                 class_number=4979,
                 location="E5 6008",
-                type=ClassType.TUT,
+                type="TUT",
                 number="001",
                 start_date=datetime.datetime(2023, 9, 7),
                 end_date=datetime.datetime(2023, 12, 17),
                 enrolled_number=102,
                 capacity=102,
+                course_id=ObjectId(),
             ),
         ],
     ),
@@ -124,11 +137,12 @@ DEFAULT_COURSES = [
 
 
 def seed_database():
+    Course.objects.delete()
     for course in DEFAULT_COURSES:
         course.save()
 
 
-def test_get_branch_id_success(course_service):
+def test_get_courses_success(course_service):
     res = course_service.get_courses()
     assert type(res) is list
     assert len(res) == len(DEFAULT_COURSES)

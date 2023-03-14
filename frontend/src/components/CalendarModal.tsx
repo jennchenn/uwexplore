@@ -1,48 +1,38 @@
 import { useState } from "react";
+import "../styles/CalendarModal.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import Typography from "@mui/material/Typography";
 
 type Props = {
   modalTitle: string;
+  modalId: string;
   modalInfo: string;
   modalOpen: boolean;
+  modalConflicts: string[];
   setModalOpen: (modalOpen: boolean) => any;
   courseColors: any;
   availableBackgroundColors: string[];
 };
 
 export default function CalendarModal({
+  modalId,
   modalInfo,
   modalTitle,
   modalOpen,
+  modalConflicts,
   setModalOpen,
   courseColors,
   availableBackgroundColors,
 }: Props) {
-  // todo: change default styles from MUI
-  const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    borderRadius: "12px",
-    boxShadow: 24,
-    p: 4,
-  };
-
   const [selectedValue, setSelectedValue] = useState(" ");
   const handleClose = () => {
     setSelectedValue(" ");
     setModalOpen(false);
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    courseColors[modalTitle] = event.target.value;
+    courseColors[modalId] = event.currentTarget.value;
     setSelectedValue(event.target.value);
     // todo: add feedback that colour did change?
   };
@@ -52,7 +42,8 @@ export default function CalendarModal({
       <RadioGroup
         row
         onChange={handleChange}
-        value={courseColors[modalTitle] || selectedValue}
+        value={courseColors[modalId] || selectedValue}
+        style={{ marginLeft: "-12px" }}
       >
         {availableBackgroundColors.map((color, i) => (
           <Radio
@@ -77,18 +68,17 @@ export default function CalendarModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={modalStyle}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {modalTitle}
-        </Typography>
-        <Typography
-          style={{ whiteSpace: "pre-line" }}
-          id="modal-modal-description"
-          sx={{ mt: 2 }}
-        >
-          {modalInfo}
-        </Typography>
+      <Box className="modal-style">
+        <h1 className="modal-title">{modalTitle}</h1>
+        <h4 className="modal-info">{modalInfo}</h4>
         {modalRadioButtons()}
+        <h5 className="conflict-info">
+          {modalConflicts === undefined ? (
+            <></>
+          ) : (
+            `This course conflicts with: ${modalConflicts.join(", ")}`
+          )}
+        </h5>
       </Box>
     </Modal>
   );

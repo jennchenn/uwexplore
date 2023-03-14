@@ -1,0 +1,82 @@
+:root {
+  /*********** Typography. *************/
+  /* Font families. */
+  --font-family: "Inter", sans-serif;
+
+  /* Font sizes. */
+  --font-size-h1: 24px;
+  --font-size-h2: 20px;
+  --font-size-h3: 18px;
+  --font-size-h4: 16px;
+  --font-size-h5: 14px;
+  --font-size-h6: 13px;
+  --font-size-text: 12px;
+  --font-size-small: 11px;
+
+  /* Font weights. */
+  --font-weight-bold: 700;
+  --font-weight-regular: 600;
+  --font-weight-thin: 400;
+
+  /* Line heights. */
+  --line-height-xxs: 15px;
+  --line-height-xs: 16px;
+  --line-height-s: 17px;
+  --line-height-m: 19px;
+  --line-height-l: 22px;
+  --line-height-xl: 24px;
+  --line-height-xxl: 29px;
+
+  /* Letter spacings. */
+  --letter-spacing: -0.03em;
+
+  /************* Colors. *************/
+  /* Main. */
+  --main-purple-1: #564fcc;
+  --main-purple-2: #6c63ff;
+  --main-purple-3: #8982ff;
+  --main-purple-4: #a7a1ff;
+  --main-purple-5: #c4c1ff;
+  --main-purple-6: #e2e0ff;
+
+  /* Black. */
+  --black-1: #000000;
+  --black-2: #333333;
+  --black-3: #666666;
+  --black-4: #999999;
+  --black-5: #cccccc;
+
+  /* BG. */
+  --bg-1: #ffffff;
+  --bg-2: #ebebeb;
+  --bg-3: #f7f7f7;
+
+  /* Alerts - conflict. */
+  --alerts-conflict-1: #c7a63b;
+  --alerts-conflict-2: #f9d04a;
+  --alerts-conflict-3: #fad96e;
+  --alerts-conflict-4: #fbe392;
+  --alerts-conflict-5: #fdecb7;
+
+  /* Alerts - warning. */
+  --alerts-warning-1: #cc4e4e;
+  --alerts-warning-2: #ff6161;
+  --alerts-warning-3: #ff8181;
+  --alerts-warning-4: #ffa0a0;
+  --alerts-warning-5: #ffc0c0;
+
+  /* Alerts - success. */
+  --alerts-success-1: #5e8e36;
+  --alerts-success-2: #7dbd48;
+  --alerts-success-3: #9cec5a;
+  --alerts-success-4: #b0f07b;
+  --alerts-success-5: #c4f49c;
+  --alerts-success-6: #d7f7bd;
+  --alerts-success-7: #ebfbde;
+
+  /* CEAB */
+  --ceab-completed: #89bf83;
+
+  /************* Misc. *************/
+  --border-radius: 8px;
+}

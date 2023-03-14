@@ -1,6 +1,5 @@
 from enum import Enum
 
-from bson.objectid import ObjectId
 from mongoengine import (
     Document,
     EmbeddedDocument,
@@ -8,32 +7,23 @@ from mongoengine import (
     EnumField,
     ListField,
     ObjectIdField,
+    ReferenceField,
     StringField,
 )
 
-
-class ScheduleCourses(EmbeddedDocument):
-    _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
-    course_id = ObjectIdField(required=True)
-    section_id = ObjectIdField(required=True)
-    color = StringField(required=True)
-
-    def to_serializable_dict(self):
-        """
-        Returns a dict representation of the document that is JSON serializable
-        ObjectId must be converted to a string.
-        """
-        dict = self.to_mongo().to_dict()
-        id = dict.pop("_id", None)
-        dict["id"] = str(id)
-        return dict
+from .schedule import Schedule
 
 
-class Schedule(EmbeddedDocument):
-    _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
-    term = StringField(required=True)
-    name = StringField()
-    courses = ListField(EmbeddedDocumentField(ScheduleCourses), required=True)
+class PastCourses(EmbeddedDocument):
+    term_1a = ListField(ObjectIdField())
+    term_1b = ListField(ObjectIdField())
+    term_2a = ListField(ObjectIdField())
+    term_2b = ListField(ObjectIdField())
+    term_3a = ListField(ObjectIdField())
+    term_3b = ListField(ObjectIdField())
+    term_4a = ListField(ObjectIdField())
+    term_4b = ListField(ObjectIdField())
+    term_other = ListField(ObjectIdField())
 
     def to_serializable_dict(self):
         """
@@ -41,8 +31,6 @@ class Schedule(EmbeddedDocument):
         ObjectId must be converted to a string.
         """
         dict = self.to_mongo().to_dict()
-        id = dict.pop("_id", None)
-        dict["id"] = str(id)
         return dict
 
 
@@ -57,9 +45,10 @@ class User(Document):
     email = StringField(required=True, unique=True)
     grad_year = StringField()
     program = StringField()
-    schedule = EmbeddedDocumentField(Schedule)
+    schedule = ReferenceField(Schedule)
     role = EnumField(Role, default=Role.STUDENT, required=True)
     saved_courses = ListField(ObjectIdField())
+    past_courses = EmbeddedDocumentField(PastCourses)
 
     def to_serializable_dict(self):
         """

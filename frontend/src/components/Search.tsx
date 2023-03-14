@@ -1,59 +1,92 @@
-// import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import InfoIcon from "@mui/icons-material/Info";
-import SearchIcon from "@mui/icons-material/Search";
+import CustomButton from "./CustomButton";
+import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
+import clients from "../APIClients/CourseClient";
 
-export default function Search() {
+interface courseHoverProps {
+  setCourseHovered: any;
+}
+
+export default function Search({ setCourseHovered }: courseHoverProps) {
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [resultsLoading, setResultsLoading] = useState(false);
+
+  const handleShowFilterMenu = () => {
+    setShowFilterMenu(!showFilterMenu);
+  };
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      setSearchResults([]);
+      setResultsLoading(false);
+    } else {
+      const results = clients.getCourses(`?query=${searchQuery}`);
+
+      results.then((value) => {
+        setResultsLoading(false);
+        setSearchResults(value as any);
+      });
+    }
+  }, [searchQuery]);
+
   return (
     <div>
-      <Box sx={{ m: 2, paddingBottom: "60px" }}>
-        <Stack direction="column" spacing={2}>
-          <Stack direction="row" spacing={2}>
+      <Box sx={{ m: 2 }}>
+        <Stack direction="column" spacing={1}>
+          <Stack direction="column" alignItems="flex-end" spacing={1}>
             <TextField
               fullWidth
-              id="outlined-search"
-              label="Search field"
-              type="search"
-              style={{ background: "#ffffff" }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
+              size="small"
+              placeholder="Search Courses"
+              onKeyDown={(e) => {
+                if (
+                  e.key === "Enter" &&
+                  searchQuery.toUpperCase() !==
+                    (e.target as HTMLTextAreaElement).value.toUpperCase()
+                ) {
+                  setResultsLoading(true);
+                  setSearchQuery((e.target as HTMLTextAreaElement).value);
+                  e.preventDefault();
+                }
               }}
-            />
-            <Button variant="outlined" startIcon={<FilterAltIcon />}>
-              Filter
-            </Button>
+              sx={{
+                "& .MuiInputBase-root": {
+                  borderRadius: "50px",
+                  backgroundColor: "var(--bg-3)",
+                  border: "none",
+                  "& input": {
+                    padding: "12px 24px",
+                  },
+                  "& fieldset": {
+                    border: "none",
+                  },
+                  ":hover": { boxShadow: "0 4px 8px rgba(0, 0, 0, .20)" },
+                },
+              }}
+            ></TextField>
+            <CustomButton
+              text="Filters"
+              type="tertiary"
+              onClick={handleShowFilterMenu}
+              style={{ padding: "0px", margin: "12px 0px" }}
+            ></CustomButton>
           </Stack>
-          {/* todo: conditionally show welcome card */}
-          <Card sx={{ minWidth: 100 }}>
-            <CardContent>
-              <InfoIcon sx={{ display: "inline" }} />
-              <Typography sx={{ display: "inline" }} variant="h5">
-                Hello!
-              </Typography>
-              <Typography variant="body2">
-                UW Cal will help you through your course selection process
-                through our interactive scheduler.
-                <br />
-                <br />
-                {"Create a new schedule now to start!"}
-              </Typography>
-            </CardContent>
-          </Card>
-          <SearchCards />
+          {showFilterMenu && (
+            <FilteringMenu setShowFilterMenu={setShowFilterMenu} />
+          )}
+          <SearchCards
+            resultsLoading={resultsLoading}
+            searchResults={searchResults}
+            searchQuery={searchQuery}
+            setCourseHovered={setCourseHovered}
+          />
         </Stack>
       </Box>
     </div>

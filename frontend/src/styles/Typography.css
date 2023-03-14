@@ -1,0 +1,61 @@
+@import "./Constants.css";
+
+* {
+  font-family: var(--font-family);
+  letter-spacing: var(--letter-spacing);
+}
+
+h1,
+.heading-1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-xxl);
+}
+
+h2,
+.heading-2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-xl);
+}
+
+h3,
+.heading-3 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-l);
+}
+
+h4,
+.heading-4 {
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-thin);
+  line-height: var(--line-height-m);
+}
+
+h5,
+.heading-5 {
+  font-size: var(--font-size-h5);
+  font-weight: var(--font-weight-thin);
+  line-height: var(--line-height-s);
+}
+
+h6,
+.heading-6,
+.subject {
+  font-size: var(--font-size-h6);
+  font-weight: var(--font-weight-thin);
+  line-height: var(--line-height-xs);
+}
+
+.text {
+  font-size: var(--font-size-text);
+  font-weight: var(--font-weight-thin);
+  line-height: var(--line-height-xxs);
+}
+
+.button-text {
+  font-size: var(--font-size-h5);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-s);
+}
