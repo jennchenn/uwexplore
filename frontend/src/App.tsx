@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
-import CoursesOnCalendar from "./components/CoursesOnCalendar";
+import CalendarTray from "./components/CalendarTray";
 
 export interface Props {
   className?: string;
@@ -75,7 +75,7 @@ function App() {
               )}
             </PerfectScrollbar>
           </Box>
-          <CoursesOnCalendar />
+          <CalendarTray setCourseHovered={setCourseHovered} />
         </Grid>
         {/* RHS CALENDAR */}
         <Grid xs={calendarWidth} className="calendar-base">

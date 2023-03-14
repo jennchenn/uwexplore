@@ -83,7 +83,8 @@ export default function CourseCard({
 
   return (
     <Card
-      style={{ marginTop: "16px" }}
+      className={CourseCardProps.className}
+      style={{ marginTop: "16px", ...CourseCardProps.style }}
       elevation={2}
       key={CourseCardProps.course.id}
       sx={{
@@ -149,12 +150,12 @@ export default function CourseCard({
           >
             <IconButton
               // show ghost course on cal on hover
-              //   onMouseOver={() => {
-              //     CourseCardProps.setCourseHovered(CourseCardProps.course);
-              //   }}
-              //   onMouseLeave={() => {
-              //     CourseCardProps.setCourseHovered({});
-              //   }}
+              onMouseOver={() => {
+                CourseCardProps.setCourseHovered(CourseCardProps.course);
+              }}
+              onMouseLeave={() => {
+                CourseCardProps.setCourseHovered({});
+              }}
               sx={{ marginLeft: "auto", marginRight: "0px", padding: "4px" }}
             >
               {type === "search" ? (
@@ -234,7 +235,7 @@ export default function CourseCard({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/* {CourseCardProps.course.sections.map((section: any) => {
+                    {CourseCardProps.course.sections.map((section: any) => {
                       // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
                       let days = "";
                       for (let i = 0; i < section.day.length; i++) {
@@ -281,7 +282,7 @@ export default function CourseCard({
                           </StyledTableCell>
                         </TableRow>
                       );
-                    })} */}
+                    })}
                   </TableBody>
                 </Table>
               </PerfectScrollbar>
