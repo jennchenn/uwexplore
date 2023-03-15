@@ -34,6 +34,6 @@
     padding: 0 16px;
 }
 
-.tray-contents-container {
+.tray-contents-container .css-9l5vo-MuiCollapse-wrapperInner{
     max-height: 30vh;
 }
