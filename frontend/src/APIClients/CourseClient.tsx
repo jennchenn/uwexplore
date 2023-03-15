@@ -13,6 +13,7 @@ export type CourseObject = {
   department: string;
   description_abbreviated: string;
   description: string;
+  full_code: string;
   name: string;
   prerequisites: string[];
   sections: object[];
