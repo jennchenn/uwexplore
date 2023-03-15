@@ -63,11 +63,17 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
                   border: "none",
                   "& input": {
                     padding: "12px 24px",
+                    ":focus": {
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, .20)",
+                      borderRadius: "50px",
+                    },
                   },
                   "& fieldset": {
                     border: "none",
                   },
-                  ":hover": { boxShadow: "0 4px 8px rgba(0, 0, 0, .20)" },
+                  ":hover": {
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, .20)",
+                  },
                 },
               }}
             ></TextField>
