@@ -1,7 +1,7 @@
 @import "./Constants.css";
 @import "./Typography.css";
 
-.login-modal {
+.login-modal, .sign-up-modal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -16,25 +16,34 @@
   padding: 48px 0;
 }
 
-.login-modal-title {
+.login-modal-title, .sign-up-modal-title {
   color: var(--black-1);
   padding: 0 72px;
 }
 
-.login-modal-description {
+.login-modal-description, .sign-up-modal-description {
   color: var(--black-3);
   padding: 16px 72px;
   text-align: center;
 }
 
-.login-modal-alert {
+.login-modal-alert, .sign-up-modal-alert {
   color: var(--alerts-warning-1);
   padding: 0 72px 16px;
   text-align: center;
 }
 
-.modal-input-button, .modal-input-text {
-  width: -webkit-fill-available; 
+.modal-input-text, .modal-input-button {
+  width: -webkit-fill-available;
   width: -moz-available;
   margin: 8px 72px;
+}
+
+.modal-checkbox-text, Checkbox {
+  opacity: 0.6;
+}
+
+.terms-conditions-check {
+  align-self: normal;
+  margin-left: 72px !important;
 }
