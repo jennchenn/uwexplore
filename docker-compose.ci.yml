@@ -26,3 +26,8 @@ services:
       - FIREBASE_WEB_API_KEY
       - FIREBASE_REFRESH_TOKEN_URL
       - FIREBASE_SIGN_IN_URL
+      - MAIL_SERVER
+      - MAIL_PORT
+      - MAIL_USE_SSL
+      - MAIL_USERNAME
+      - MAIL_PASSWORD
