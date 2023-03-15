@@ -1,5 +1,9 @@
 @import "../styles/Constants.css";
 
+.login-signup-nav-button {
+  border-radius: 50px !important;
+}
+
 .customize-toolbar {
   /* min-height: 7vh !important; */
   background: var(--main-purple-1);

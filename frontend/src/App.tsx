@@ -14,9 +14,10 @@ import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 
 export interface Props {
+  id?: string;
   className?: string;
+  ref?: any;
   style?: Object;
-  name?: string;
 }
 
 const sectionSizes = {
