@@ -33,3 +33,7 @@
 .tray-contents {
     padding: 0 16px;
 }
+
+.tray-contents-container {
+    max-height: 30vh;
+}
