@@ -28,6 +28,7 @@ const abd: CourseObject = {
   prerequisites: ["8", "9"],
   sections: [{ day: ["TH", "M"], type: "sfdjk" }],
   tags: ["10", "11"],
+  past_course: false,
 };
 
 interface searchProps {
@@ -47,6 +48,7 @@ export default function SearchCards({
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
+  const [checkbox, setCheckbox] = useState(abd.past_course);
 
   const renderSearchResultsFoundMessage = () => {
     if (!resultsLoading) {
@@ -156,6 +158,8 @@ export default function SearchCards({
         setExpandedCard={setExpandedCard}
         setBookmarkedCourses={setBookmarkedCourses}
         setCourseHovered={setCourseHovered}
+        checkbox={checkbox}
+        setCheckbox={setCheckbox}
       />
       {renderMaxResultsDisplayedCard()}
     </Box>

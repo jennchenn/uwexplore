@@ -15,8 +15,11 @@ import {
   Paper,
   tableCellClasses,
   styled,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import "../styles/CourseCard.css";
 
 //MUI icon imports
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -34,12 +37,16 @@ interface CourseCardProps extends Props {
   expandedCard: string;
   setExpandedCard: (value: string) => void;
   bookmarkedCourses: Record<string, any>;
-  setBookmarkedCourses: (input: any) => void;
+  setBookmarkedCourses: (value: any) => void;
+  checkbox?: boolean;
+  setCheckbox?: (value: boolean) => void;
   setCourseHovered?: any;
   type?: "search" | "added";
 }
 
 export default function CourseCard({
+  checkbox = false,
+  setCheckbox = () => {},
   type = "search",
   ...CourseCardProps
 }: CourseCardProps) {
@@ -83,13 +90,14 @@ export default function CourseCard({
 
   return (
     <Card
-      className={CourseCardProps.className}
-      style={{ marginTop: "16px", ...CourseCardProps.style }}
+      className={`course-card-container ${CourseCardProps.className}`}
+      style={CourseCardProps.style}
       elevation={2}
       key={CourseCardProps.course.id}
       sx={{
         "& .MuiCardContent-root": {
           padding: "2px",
+          paddingBottom: "28px",
         },
         borderRadius: "var(--border-radius)",
         backgroundColor: "var(--bg-3)",
@@ -290,6 +298,22 @@ export default function CourseCard({
           </TableContainer>
 
           {/* todo: add prereq and antireq info */}
+          <FormControlLabel
+            className="past-course-check"
+            control={
+              <Checkbox
+                checked={checkbox}
+                onChange={() => {
+                  setCheckbox(!checkbox);
+                }}
+              />
+            }
+            label={
+              <div className="past-course-checkbox-text">
+                I have completed this course
+              </div>
+            }
+          />
         </Collapse>
       </CardContent>
     </Card>

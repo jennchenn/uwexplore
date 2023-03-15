@@ -54,6 +54,7 @@ export default function CalendarTrayCalendar({
     prerequisites: ["8", "9"],
     sections: [{ day: ["TH", "M"], type: "sfdjk" }],
     tags: ["10", "11"],
+    past_course: false,
   };
 
   return (
