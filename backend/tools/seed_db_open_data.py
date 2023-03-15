@@ -50,6 +50,9 @@ def get_courses(terms):
 
 
 def _get_mseconds_since_start(dt):
+    # online class start and end times come as 0001-01-01 00:00:00
+    if dt.date().year == 1:
+        return None
     day = (
         datetime.datetime(
             dt.date().year,
