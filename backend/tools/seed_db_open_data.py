@@ -80,6 +80,7 @@ def insert_courses(courses):
                 course_id=course["courseId"],
                 description=course["description"],
                 description_abbreviated=course["descriptionAbbreviated"],
+                requisites=course["requirementsDescription"],
             ).save()
             print(f"Inserted {course['subjectCode']} {course['catalogNumber']}")
         except Exception as e:
