@@ -53,6 +53,14 @@ def create_app(config_name):
         ),
     )
 
+    app.config.update(
+        MAIL_SERVER=os.getenv("MAIL_SERVER"),
+        MAIL_PORT=int(os.getenv("MAIL_PORT")),
+        MAIL_USE_SSL=bool(os.getenv("MAIL_USE_SSL")),
+        MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
+        MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
+    )
+
     from . import models, routes
 
     models.init_app(app)

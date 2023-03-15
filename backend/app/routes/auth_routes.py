@@ -45,3 +45,14 @@ def refresh_token():
     except Exception as e:
         error_message = getattr(e, "message", None)
         return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
+@blueprint.route("/reset", methods=["POST"], strict_slashes=False)
+def reset_password():
+    try:
+        email = request.json["email"]
+        result = user_service.reset_password(email)
+        return jsonify(result), 200
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500
