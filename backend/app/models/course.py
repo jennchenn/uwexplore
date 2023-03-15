@@ -54,6 +54,8 @@ class Section(EmbeddedDocument):
         dict = self.to_mongo().to_dict()
         id = dict.pop("_id", None)
         dict["id"] = str(id)
+        course_id = dict.pop("course_id", None)
+        dict["course_id"] = str(course_id)
         return dict
 
 
