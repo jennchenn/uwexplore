@@ -1,30 +1,74 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Link, Modal } from "@mui/material";
 import { Props } from "../App";
-import "../styles/LoginModal.css";
+
+import "../styles/LoginSignUpModal.css";
+
 import CustomButton from "./CustomButton";
-import TextInput from "./TextInput";
+import { TextInput } from "./TextInput";
 
 interface LoginModalProps extends Props {
-  modalTitle?: string;
-  modalInfo?: string;
-  open?: boolean;
-  setOpen: (open: boolean) => any;
-  buttonText?: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  linkOpen: () => void;
 }
 
 export default function LoginModal({
   open = true,
   ...LoginModalProps
 }: LoginModalProps) {
-  const [alert] = useState("");
-  const [validate] = useState(true);
+  const [alert, setAlert] = useState("");
+  const [validate, setValidate] = useState(true);
 
-  const [email] = useState("");
-  const [password] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const emailRef = React.createRef<HTMLElement>();
+  const passwordRef = React.createRef<HTMLElement>();
+
+  const regEmail = new RegExp(
+    // eslint-disable-next-line
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  );
+
+  useEffect(() => {
+    if (emailRef.current && emailRef.current.firstChild)
+      (emailRef.current.firstChild as HTMLElement).focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [email]);
+
+  useEffect(() => {
+    if (passwordRef.current && passwordRef.current.firstChild)
+      (passwordRef.current.firstChild as HTMLElement).focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [password]);
 
   const handleClose = () => {
+    setEmail("");
+    setPassword("");
+    setAlert("");
+    setValidate(true);
     LoginModalProps.setOpen(false);
+  };
+
+  const handleSubmit = () => {
+    if (!email || !regEmail.test(email) || !password) {
+      setValidate(false);
+      setAlert("Please input a valid email/password.");
+    } else if (email && regEmail.test(email) && password) {
+      setValidate(true);
+      setAlert("");
+    } else {
+      /* to do: make the call the sign in 
+      // on error:
+      setValidate(false);
+      setAlert("Your email or password is incorrect. Please try again.");
+      // on success:
+      setValidate(true);
+      setAlert("");
+      // save returned to var to be included in all other api calls
+      */
+    }
   };
 
   const linkStyles = {
@@ -34,16 +78,24 @@ export default function LoginModal({
     margin: "8px 104px",
     fontSize: "12px",
     fontWeight: "700",
+
+    cursor: "pointer",
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal
+      id={LoginModalProps.id}
+      className={LoginModalProps.className}
+      open={open}
+      onClose={handleClose}
+      style={LoginModalProps.style}
+    >
       <Box className="login-modal">
-        <div className="login-modal-title heading-1">
-          {LoginModalProps.modalTitle}
-        </div>
+        <div className="login-modal-title heading-1">LOGIN</div>
         <div className="login-modal-description heading-6">
-          {LoginModalProps.modalInfo}
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+          sollicitudin dapibus nisi, quis eleifend felis pharetra vel. Mauris ac
+          iaculis mauris.
         </div>
         {!validate && alert !== "" && (
           <div className="login-modal-alert heading-4">{alert}</div>
@@ -52,7 +104,10 @@ export default function LoginModal({
           className="modal-input-text"
           id="login-email"
           placeholder="Email"
+          type="email"
           value={email}
+          setValue={setEmail}
+          ref={emailRef}
           required
         />
         <TextInput
@@ -61,17 +116,25 @@ export default function LoginModal({
           placeholder="Password"
           type="password"
           value={password}
+          setValue={setPassword}
+          ref={passwordRef}
           required
         />
         <Link href="#" style={linkStyles}>
           Forgot Password?
         </Link>
-        <CustomButton className="modal-input-button" text="login" type="CTA" />
+        <CustomButton
+          className="modal-input-button"
+          text="login"
+          type="CTA"
+          onClick={handleSubmit}
+        />
         <CustomButton
           className="modal-input-button"
           text="create account"
           type="tertiary"
           style={{ paddingBottom: "0" }}
+          onClick={LoginModalProps.linkOpen}
         />
       </Box>
     </Modal>

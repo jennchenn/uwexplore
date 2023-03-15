@@ -2,6 +2,8 @@ import os
 
 import firebase_admin.auth
 import requests
+from flask import current_app as app
+from flask_mail import Mail
 
 from ..models.user import User
 
@@ -148,6 +150,27 @@ class UserService:
             "id_token": response_json["idToken"],
             "refresh_token": response_json["refreshToken"],
         }
+
+    def reset_password(self, email):
+        try:
+            link = firebase_admin.auth.generate_password_reset_link(email)
+            mail = Mail(app)
+            mail.send_message(
+                "Reset your password for uw explore!",
+                sender=os.getenv("MAIL_USERNAME"),
+                recipients=[email],
+                body=f"Click here to reset: {link}",
+            )
+            return {"success": True}
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            reason = reason if reason else str(e)
+            self.logger.error(
+                "Failed to generate reset link for user with password {email}. Reason = {reason}".format(
+                    email=email, reason=reason
+                )
+            )
+            return {"success": False, "reason": reason}
 
     # https://github.com/uwblueprint/starter-code-v2/blob/430de47c026e8480b0e24b4cb77f9c29ec19a0bc/backend/python/app/utilities/firebase_rest_client.py
     def refresh_token(self, refresh_token):
