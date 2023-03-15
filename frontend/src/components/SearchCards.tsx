@@ -11,6 +11,25 @@ import Paper from "@mui/material/Paper";
 //MUI icon imports
 import CourseCard from "./CourseCard";
 
+const abd: CourseObject = {
+  id: "id",
+  antirequisites: ["1", "2"],
+  ceab_eng_design: 3,
+  ceab_eng_sci: 4,
+  ceab_math: 5,
+  ceab_sci: 6,
+  code: "code",
+  course_id: "course id",
+  cse_weight: 7,
+  department: "department",
+  description_abbreviated: "description abbreviated",
+  description: "description",
+  name: "name",
+  prerequisites: ["8", "9"],
+  sections: [{ day: ["TH", "M"], type: "sfdjk" }],
+  tags: ["10", "11"],
+};
+
 interface searchProps {
   resultsLoading: boolean;
   searchResults: CourseObject[];
@@ -117,7 +136,7 @@ export default function SearchCards({
       ) : (
         <></>
       )}
-      {searchResults
+      {/* {searchResults
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
         .map((course, i) => (
           <CourseCard
@@ -128,7 +147,16 @@ export default function SearchCards({
             setBookmarkedCourses={setBookmarkedCourses}
             setCourseHovered={setCourseHovered}
           />
-        ))}
+        ))}*/}
+
+      <CourseCard
+        course={abd}
+        expandedCard={expandedCard}
+        bookmarkedCourses={bookmarkedCourses}
+        setExpandedCard={setExpandedCard}
+        setBookmarkedCourses={setBookmarkedCourses}
+        setCourseHovered={setCourseHovered}
+      />
       {renderMaxResultsDisplayedCard()}
     </Box>
   );
