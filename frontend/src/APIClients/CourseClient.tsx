@@ -3,7 +3,6 @@ import axios, { AxiosError } from "axios";
 
 export type CourseObject = {
   id: string;
-  antirequisites: string[];
   ceab_eng_design: number;
   ceab_eng_sci: number;
   ceab_math: number;
@@ -16,7 +15,7 @@ export type CourseObject = {
   description: string;
   full_code: string;
   name: string;
-  prerequisites: string[];
+  requisites: string;
   sections: object[];
   tags: string[];
 };
