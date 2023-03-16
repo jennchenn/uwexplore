@@ -33,8 +33,8 @@ interface CourseCardProps extends Props {
   course: CourseObject;
   expandedCard: string;
   setExpandedCard: (value: string) => void;
-  bookmarkedCourses: Record<string, any>;
-  setBookmarkedCourses: (input: any) => void;
+  bookmarkedCourses?: Record<string, any>;
+  setBookmarkedCourses?: (input: any) => void;
   setCourseHovered?: any;
   type?: "search" | "added";
 }
@@ -69,16 +69,20 @@ export default function CourseCard({
   };
 
   const handleBookmarkClick = (courseToBookmark: any) => {
-    if (courseToBookmark.id in CourseCardProps.bookmarkedCourses) {
-      const newBookmarks = { ...CourseCardProps.bookmarkedCourses };
-      delete newBookmarks[courseToBookmark.id];
-      CourseCardProps.setBookmarkedCourses(newBookmarks);
-    } else {
-      CourseCardProps.setBookmarkedCourses({
-        ...CourseCardProps.bookmarkedCourses,
-        [courseToBookmark.id]: courseToBookmark,
-      });
-    }
+    if (
+      CourseCardProps.bookmarkedCourses &&
+      CourseCardProps.setBookmarkedCourses
+    )
+      if (courseToBookmark.id in CourseCardProps.bookmarkedCourses) {
+        const newBookmarks = { ...CourseCardProps.bookmarkedCourses };
+        delete newBookmarks[courseToBookmark.id];
+        CourseCardProps.setBookmarkedCourses(newBookmarks);
+      } else {
+        CourseCardProps.setBookmarkedCourses({
+          ...CourseCardProps.bookmarkedCourses,
+          [courseToBookmark.id]: courseToBookmark,
+        });
+      }
   };
 
   return (
@@ -88,6 +92,7 @@ export default function CourseCard({
       elevation={2}
       key={CourseCardProps.course.id}
       sx={{
+        paddingLeft: "12px",
         "& .MuiCardContent-root": {
           padding: "2px",
         },
@@ -107,31 +112,33 @@ export default function CourseCard({
             alignItems: "center",
           }}
         >
-          <Tooltip
-            title={
-              CourseCardProps.course.id in CourseCardProps.bookmarkedCourses
-                ? "Unpin Course"
-                : "Pin Course to Search Results"
-            }
-            enterNextDelay={1000}
-            arrow
-          >
-            <IconButton
-              aria-label="expand more"
-              style={{
-                padding: "0px",
-                margin: "0px 6px",
-              }}
-              onClick={() => handleBookmarkClick(CourseCardProps.course)}
+          {CourseCardProps.bookmarkedCourses && (
+            <Tooltip
+              title={
+                CourseCardProps.course.id in CourseCardProps.bookmarkedCourses
+                  ? "Unpin Course"
+                  : "Pin Course to Search Results"
+              }
+              enterNextDelay={1000}
+              arrow
             >
-              {CourseCardProps.course.id in
-              CourseCardProps.bookmarkedCourses ? (
-                <BookmarkIcon sx={{ color: "var(--main-purple-1)" }} />
-              ) : (
-                <BookmarkBorderIcon sx={{ color: "var(--main-purple-4)" }} />
-              )}
-            </IconButton>
-          </Tooltip>
+              <IconButton
+                aria-label="pin course"
+                style={{
+                  padding: "0px",
+                  marginRight: "6px",
+                }}
+                onClick={() => handleBookmarkClick(CourseCardProps.course)}
+              >
+                {CourseCardProps.course.id in
+                CourseCardProps.bookmarkedCourses ? (
+                  <BookmarkIcon sx={{ color: "var(--main-purple-1)" }} />
+                ) : (
+                  <BookmarkBorderIcon sx={{ color: "var(--main-purple-4)" }} />
+                )}
+              </IconButton>
+            </Tooltip>
+          )}
           <h3
             style={{
               whiteSpace: "nowrap",

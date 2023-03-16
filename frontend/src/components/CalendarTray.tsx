@@ -90,45 +90,35 @@ export default function CalendarTrayCalendar({
                 <CourseCard
                   course={course}
                   expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
                   setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
                   type="added"
                 />
                 <CourseCard
                   course={course}
                   expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
                   setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
                   type="added"
                 />
                 <CourseCard
                   course={course}
                   expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
                   setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
                   type="added"
                 />
                 <CourseCard
                   course={course}
                   expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
                   setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
                   type="added"
                 />
                 <CourseCard
                   course={course}
                   expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
                   setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
                   type="added"
                 />
