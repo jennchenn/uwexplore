@@ -1,4 +1,5 @@
 import os
+import re
 
 import firebase_admin
 from flask import Flask
@@ -15,9 +16,16 @@ def create_app(config_name):
     if type(config_name) is not ScriptInfo:
         app.config.from_object(app_config[config_name])
 
-    app.config["CORS_ORIGINS"] = [
-        "http://localhost:3000",
-    ]
+    if os.getenv("IS_PREVIEW_DEPLOY", "False") == "True":
+        app.config["CORS_ORIGINS"] = re.compile("https://fydp-bread.*")
+    elif config_name == "production":
+        app.config["CORS_ORIGINS"] = os.getenv(
+            "CORS_ORIGINS", "http://localhost:3000"
+        ).split(",")
+    else:
+        app.config["CORS_ORIGINS"] = [
+            "http://localhost:3000",
+        ]
     app.config["CORS_SUPPORTS_CREDENTIALS"] = True
     CORS(app)
 
