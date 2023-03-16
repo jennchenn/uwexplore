@@ -104,7 +104,7 @@ def insert_schedules(terms, skip_update=False):
         courses = _get_class_schedule_by_term(term["termCode"])
         term_name = term["name"]
         exceptions = []
-        for course in courses:
+        for course in courses[:100]:
             schedule = _get_class_schedule_term_class_code(term["termCode"], course)
             course_object = Course.objects(course_id=course).first()
             if (
@@ -226,10 +226,10 @@ def update_current_term_data(clear_sections=False):
 def update_six_terms_data():
     terms = get_six_terms_data()
     courses = get_courses(terms)
-    insert_course_exceptions = insert_courses(courses)
+    # insert_course_exceptions = insert_courses(courses)
     insert_schedule_exceptions = insert_schedules(terms)
     return {
-        "course_exceptions": insert_course_exceptions,
+        # "course_exceptions": insert_course_exceptions,
         "schedule_exceptions": insert_schedule_exceptions,
     }
 
