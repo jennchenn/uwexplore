@@ -148,15 +148,23 @@ class CourseService:
                 current_schedule = Schedule.objects(id=schedule_id).first()
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            courses = [
-                course.to_serializable_dict() for course in current_schedule.courses
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
 
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def update_schedule_color_by_user(self, user, uid, color):
+        try:
+            schedule_id = user.get("schedule")
+            return self.update_schedule_color_by_id(schedule_id, uid, color)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -178,10 +186,7 @@ class CourseService:
             current_schedule = Schedule.objects(id=schedule_id).first()
             if not current_schedule:
                 raise KeyError(f"No saved schedule with id={schedule_id}")
-            courses = [
-                course.to_serializable_dict() for course in current_schedule["courses"]
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -205,14 +210,30 @@ class CourseService:
             else:
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            courses = [
-                course.to_serializable_dict() for course in current_schedule.courses
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def update_schedule_color_by_id(self, schedule_id, uid, color):
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            if not current_schedule:
+                raise KeyError(
+                    f"No saved schedule with id={schedule_id} with item uid={schedule_id}"
+                )
+            for course in current_schedule.courses:
+                if str(course._id) == uid:
+                    course.color = color
+            current_schedule.save()
+            return self._format_schedule_courses(current_schedule)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to update course in schedule. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -227,10 +248,7 @@ class CourseService:
                 )
             )
             current_schedule.save()
-            courses = [
-                course.to_serializable_dict() for course in current_schedule.courses
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -238,8 +256,11 @@ class CourseService:
             )
             raise e
 
-    def _format_schedule_courses(self, scheduled_courses):
+    def _format_schedule_courses(self, current_schedule):
         courses = []
+        scheduled_courses = [
+            course.to_serializable_dict() for course in current_schedule.courses
+        ]
         for course_info in scheduled_courses:
             course_obj = Course.objects(_id=course_info["course_id"]).first()
             sections = course_obj.sections
