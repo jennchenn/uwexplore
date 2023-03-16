@@ -227,7 +227,10 @@ class CourseService:
                 )
             )
             current_schedule.save()
-            return current_schedule.to_serializable_dict()
+            courses = [
+                course.to_serializable_dict() for course in current_schedule.courses
+            ]
+            return self._format_schedule_courses(courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -245,6 +248,9 @@ class CourseService:
                 self._find_section(sections, course_info["section_id"])
             ]
             course["color"] = course_info["color"]
+            course["uid"] = course_info[
+                "id"
+            ]  # this is the ID that references the specific entry in the user schedule
             courses.append(course)
         return courses
 
