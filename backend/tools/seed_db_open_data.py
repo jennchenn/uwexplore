@@ -50,6 +50,9 @@ def get_courses(terms):
 
 
 def _get_mseconds_since_start(dt):
+    # online class start and end times come as 0001-01-01 00:00:00
+    if dt.date().year == 1:
+        return None
     day = (
         datetime.datetime(
             dt.date().year,
@@ -73,9 +76,11 @@ def insert_courses(courses):
                 name=course["title"],
                 department=course["subjectCode"],
                 code=course["catalogNumber"],
+                full_code=course["subjectCode"] + course["catalogNumber"],
                 course_id=course["courseId"],
                 description=course["description"],
                 description_abbreviated=course["descriptionAbbreviated"],
+                requisites=course["requirementsDescription"],
             ).save()
             print(f"Inserted {course['subjectCode']} {course['catalogNumber']}")
         except Exception as e:
@@ -118,7 +123,9 @@ def insert_schedules(terms, skip_update=False):
                     capacity = s["maxEnrollmentCapacity"]
                     term_code = s["termCode"]
                     class_number = int(s["classNumber"])
-                    class_section = str(s["classSection"])
+                    class_section = str(s["classSection"]).rjust(
+                        3, "0"
+                    )  # pad sections with 0 in the beginning
 
                     if s["scheduleData"]:
                         for i, schedule_details in enumerate(s["scheduleData"]):
@@ -236,6 +243,8 @@ def update_database(update_current=True):
         print("Adding data from past two academic years...")
         res = update_six_terms_data()
         print(res)
+        with open("upload_logs.txt", "w") as f:
+            f.writelines(res)
 
 
 def clear_database():

@@ -36,6 +36,7 @@ class CourseService:
             if search_query_list:
                 # we expect search_query to be a list of size 1, so we fetch the actual string
                 keyword = search_query_list[0]
+                stripped_keyword = keyword.replace(" ", "")
                 # {"$options": "i"} allows for case insensitive search
                 filters.append(
                     {
@@ -48,6 +49,12 @@ class CourseService:
                                 }
                             },
                             {"department": {"$regex": f"{keyword}", "$options": "i"}},
+                            {
+                                "full_code": {
+                                    "$regex": f"{stripped_keyword}",
+                                    "$options": "i",
+                                }
+                            },
                         ]
                     }
                 )
@@ -56,13 +63,13 @@ class CourseService:
             if filters:
                 query_results = (
                     Course.objects(__raw__={"$and": filters})
-                    .order_by("department", "course_code")
+                    .order_by("full_code")
                     .limit(MAX_QUERY_SIZE)
                 )
             else:
-                query_results = Course.objects.order_by(
-                    "department", "course_code"
-                ).limit(MAX_QUERY_SIZE)
+                query_results = Course.objects.order_by("full_code").limit(
+                    MAX_QUERY_SIZE
+                )
 
             for result in query_results:
                 result_dict = result.to_serializable_dict()
