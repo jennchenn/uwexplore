@@ -148,10 +148,7 @@ class CourseService:
                 current_schedule = Schedule.objects(id=schedule_id).first()
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            courses = [
-                course.to_serializable_dict() for course in current_schedule.courses
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
 
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -189,10 +186,7 @@ class CourseService:
             current_schedule = Schedule.objects(id=schedule_id).first()
             if not current_schedule:
                 raise KeyError(f"No saved schedule with id={schedule_id}")
-            courses = [
-                course.to_serializable_dict() for course in current_schedule["courses"]
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -216,10 +210,7 @@ class CourseService:
             else:
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            courses = [
-                course.to_serializable_dict() for course in current_schedule.courses
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -238,10 +229,7 @@ class CourseService:
                 if str(course._id) == uid:
                     course.color = color
             current_schedule.save()
-            courses = [
-                course.to_serializable_dict() for course in current_schedule.courses
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -260,10 +248,7 @@ class CourseService:
                 )
             )
             current_schedule.save()
-            courses = [
-                course.to_serializable_dict() for course in current_schedule.courses
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -271,8 +256,11 @@ class CourseService:
             )
             raise e
 
-    def _format_schedule_courses(self, scheduled_courses):
+    def _format_schedule_courses(self, current_schedule):
         courses = []
+        scheduled_courses = [
+            course.to_serializable_dict() for course in current_schedule.courses
+        ]
         for course_info in scheduled_courses:
             course_obj = Course.objects(_id=course_info["course_id"]).first()
             sections = course_obj.sections
