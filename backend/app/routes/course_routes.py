@@ -63,7 +63,9 @@ def schedule_courses_by_user(curr_user):
             )
         elif request.method == "DELETE":
             request_data = request.get_json()
-            schedule_object_id = request_data["id"]
+            schedule_object_id = request_data[
+                "id"
+            ]  # this should be one of the UIDs returned from the above calls
             result = course_service.delete_course_from_schedule_by_user(
                 curr_user, schedule_object_id
             )
