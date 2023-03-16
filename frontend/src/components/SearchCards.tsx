@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { CourseObject } from "../APIClients/CourseClient";
+import moment from "moment";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import clients, { CourseObject } from "../APIClients/CourseClient";
 
 // MUI component imports
 import Box from "@mui/material/Box";
@@ -16,6 +18,8 @@ interface searchProps {
   searchResults: CourseObject[];
   searchQuery: string;
   setCourseHovered: any;
+  setCoursesOnSchedule: any;
+  scheduleId: string;
 }
 
 export default function SearchCards({
@@ -23,6 +27,8 @@ export default function SearchCards({
   searchResults,
   searchQuery,
   setCourseHovered,
+  setCoursesOnSchedule,
+  scheduleId,
 }: searchProps) {
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<

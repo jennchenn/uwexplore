@@ -50,6 +50,9 @@ def get_courses(terms):
 
 
 def _get_mseconds_since_start(dt):
+    # online class start and end times come as 0001-01-01 00:00:00
+    if dt.date().year == 1:
+        return None
     day = (
         datetime.datetime(
             dt.date().year,
@@ -73,9 +76,11 @@ def insert_courses(courses):
                 name=course["title"],
                 department=course["subjectCode"],
                 code=course["catalogNumber"],
+                full_code=course["subjectCode"] + course["catalogNumber"],
                 course_id=course["courseId"],
                 description=course["description"],
                 description_abbreviated=course["descriptionAbbreviated"],
+                requisites=course["requirementsDescription"],
             ).save()
             print(f"Inserted {course['subjectCode']} {course['catalogNumber']}")
         except Exception as e:
@@ -99,7 +104,7 @@ def insert_schedules(terms, skip_update=False):
         courses = _get_class_schedule_by_term(term["termCode"])
         term_name = term["name"]
         exceptions = []
-        for course in courses:
+        for course in courses[:100]:
             schedule = _get_class_schedule_term_class_code(term["termCode"], course)
             course_object = Course.objects(course_id=course).first()
             if (
@@ -118,7 +123,9 @@ def insert_schedules(terms, skip_update=False):
                     capacity = s["maxEnrollmentCapacity"]
                     term_code = s["termCode"]
                     class_number = int(s["classNumber"])
-                    class_section = str(s["classSection"])
+                    class_section = str(s["classSection"]).rjust(
+                        3, "0"
+                    )  # pad sections with 0 in the beginning
 
                     if s["scheduleData"]:
                         for i, schedule_details in enumerate(s["scheduleData"]):
@@ -219,10 +226,10 @@ def update_current_term_data(clear_sections=False):
 def update_six_terms_data():
     terms = get_six_terms_data()
     courses = get_courses(terms)
-    insert_course_exceptions = insert_courses(courses)
+    # insert_course_exceptions = insert_courses(courses)
     insert_schedule_exceptions = insert_schedules(terms)
     return {
-        "course_exceptions": insert_course_exceptions,
+        # "course_exceptions": insert_course_exceptions,
         "schedule_exceptions": insert_schedule_exceptions,
     }
 
@@ -236,6 +243,8 @@ def update_database(update_current=True):
         print("Adding data from past two academic years...")
         res = update_six_terms_data()
         print(res)
+        with open("upload_logs.txt", "w") as f:
+            f.writelines(res)
 
 
 def clear_database():
