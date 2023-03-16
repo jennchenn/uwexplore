@@ -148,7 +148,11 @@ class CourseService:
                 current_schedule = Schedule.objects(id=schedule_id).first()
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            return current_schedule.to_serializable_dict()
+            courses = [
+                course.to_serializable_dict() for course in current_schedule.courses
+            ]
+            return self._format_schedule_courses(courses)
+
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -201,7 +205,10 @@ class CourseService:
             else:
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            return current_schedule.to_serializable_dict()
+            courses = [
+                course.to_serializable_dict() for course in current_schedule.courses
+            ]
+            return self._format_schedule_courses(courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
