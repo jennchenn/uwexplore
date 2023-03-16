@@ -241,7 +241,7 @@ class CourseService:
 
     def _find_section(self, sections, section_id):
         for section in sections:
-            if section._id == section_id:
+            if str(section._id) == section_id:
                 return section.to_serializable_dict()
 
     def _get_course_name_from_id(self, course_id):
