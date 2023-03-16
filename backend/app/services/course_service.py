@@ -36,6 +36,7 @@ class CourseService:
             if search_query_list:
                 # we expect search_query to be a list of size 1, so we fetch the actual string
                 keyword = search_query_list[0]
+                stripped_keyword = keyword.replace(" ", "")
                 # {"$options": "i"} allows for case insensitive search
                 filters.append(
                     {
@@ -48,6 +49,12 @@ class CourseService:
                                 }
                             },
                             {"department": {"$regex": f"{keyword}", "$options": "i"}},
+                            {
+                                "full_code": {
+                                    "$regex": f"{stripped_keyword}",
+                                    "$options": "i",
+                                }
+                            },
                         ]
                     }
                 )
@@ -56,13 +63,13 @@ class CourseService:
             if filters:
                 query_results = (
                     Course.objects(__raw__={"$and": filters})
-                    .order_by("department", "course_code")
+                    .order_by("full_code")
                     .limit(MAX_QUERY_SIZE)
                 )
             else:
-                query_results = Course.objects.order_by(
-                    "department", "course_code"
-                ).limit(MAX_QUERY_SIZE)
+                query_results = Course.objects.order_by("full_code").limit(
+                    MAX_QUERY_SIZE
+                )
 
             for result in query_results:
                 result_dict = result.to_serializable_dict()
@@ -141,11 +148,23 @@ class CourseService:
                 current_schedule = Schedule.objects(id=schedule_id).first()
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            return current_schedule.to_serializable_dict()
+            return self._format_schedule_courses(current_schedule)
+
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def update_schedule_color_by_user(self, user, uid, color):
+        try:
+            schedule_id = user.get("schedule")
+            return self.update_schedule_color_by_id(schedule_id, uid, color)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -167,10 +186,7 @@ class CourseService:
             current_schedule = Schedule.objects(id=schedule_id).first()
             if not current_schedule:
                 raise KeyError(f"No saved schedule with id={schedule_id}")
-            courses = [
-                course.to_serializable_dict() for course in current_schedule["courses"]
-            ]
-            return self._format_schedule_courses(courses)
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -194,11 +210,30 @@ class CourseService:
             else:
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
-            return current_schedule.to_serializable_dict()
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def update_schedule_color_by_id(self, schedule_id, uid, color):
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            if not current_schedule:
+                raise KeyError(
+                    f"No saved schedule with id={schedule_id} with item uid={schedule_id}"
+                )
+            for course in current_schedule.courses:
+                if str(course._id) == uid:
+                    course.color = color
+            current_schedule.save()
+            return self._format_schedule_courses(current_schedule)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to update course in schedule. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -213,7 +248,7 @@ class CourseService:
                 )
             )
             current_schedule.save()
-            return current_schedule.to_serializable_dict()
+            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -221,20 +256,28 @@ class CourseService:
             )
             raise e
 
-    def _format_schedule_courses(self, scheduled_courses):
+    def _format_schedule_courses(self, current_schedule):
         courses = []
+        scheduled_courses = [
+            course.to_serializable_dict() for course in current_schedule.courses
+        ]
         for course_info in scheduled_courses:
             course_obj = Course.objects(_id=course_info["course_id"]).first()
             sections = course_obj.sections
             course = dict(course_obj.to_serializable_dict())
-            course["sections"] = self._find_section(sections, course_info["section_id"])
+            course["sections"] = [
+                self._find_section(sections, course_info["section_id"])
+            ]
             course["color"] = course_info["color"]
+            course["uid"] = course_info[
+                "id"
+            ]  # this is the ID that references the specific entry in the user schedule
             courses.append(course)
         return courses
 
     def _find_section(self, sections, section_id):
         for section in sections:
-            if section._id == section_id:
+            if str(section._id) == section_id:
                 return section.to_serializable_dict()
 
     def _get_course_name_from_id(self, course_id):

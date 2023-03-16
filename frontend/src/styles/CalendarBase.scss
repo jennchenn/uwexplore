@@ -39,6 +39,10 @@
   min-height: 30px;
 }
 
+.rbc-time-view .rbc-row {
+  min-height: 0px;
+}
+
 // ------ HEADER STYLES ------
 .rbc-button-link {
   color: var(--black-3);

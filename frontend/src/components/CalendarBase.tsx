@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import "../styles/CalendarBase.scss";
 import backgroundColors from "../styles/calendarCourseBackgroundColors";
 import moment from "moment";
@@ -6,7 +6,6 @@ import moment from "moment";
 import Box from "@mui/material/Box";
 
 import CalendarModal from "./CalendarModal";
-import courses from "../APIClients/courses";
 import warningImg from "../images/warning.png";
 
 const ReactBigCalendar = require("react-big-calendar");
@@ -14,22 +13,27 @@ const { Calendar, momentLocalizer } = ReactBigCalendar;
 
 interface courseHoverProps {
   courseHovered: any;
+  coursesOnSchedule: any;
+  setCoursesOnSchedule: any;
+  scheduleId: string;
 }
 
-interface courseHoverProps {
-  courseHovered: any;
-}
-
-export default function CalendarBase({ courseHovered }: courseHoverProps) {
+export default function CalendarBase({
+  courseHovered,
+  coursesOnSchedule,
+  setCoursesOnSchedule,
+  scheduleId,
+}: courseHoverProps) {
   // localizer is required
   const localizer = momentLocalizer(moment);
 
   // for popup modal when clicking a course on the calendar
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("placeholder title");
-  const [modalId, setModalId] = useState("placeholder id");
   const [modalInfo, setModalInfo] = useState("placeholder info");
   const [modalConflicts, setModalConflicts] = useState([] as any);
+  const [modalClass, setModalClass] = useState({} as any);
+
+  const [classes, setClasses] = useState([] as any);
 
   /* returns an array that contains an object for each individual class event
       ex: a SYDE TUT on both T and TH will have an entry for each */
@@ -43,24 +47,35 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
       THURSDAY: 1672894800000,
       FRIDAY: 1672981200000,
     };
+    let colorIndex = 0;
     return allCourses.flatMap((course: any) => {
-      return course.sections.flatMap((section: any) => {
-        // new title property that appears on the event (ex. "SYDE 411 - LEC")
-        const courseTitle = `${course.department} ${course.code} - ${section.type}`;
-        // this mapping splits up the day array to make individual entries
-        return section.day.map((day: any) => ({
-          ...section,
-          // add in the parent course ID for colour assignment
-          courseId: course.id,
-          // create a unique id for this specific class section
-          uniqueClassId: `${day} ${section.id}`,
-          day,
-          title: courseTitle,
-          // times are created from the UNIX weekday + section time, both in ms)
-          start_time: new Date(unixWeekdays[day] + section.start_time),
-          end_time: new Date(unixWeekdays[day] + section.end_time),
-        }));
-      });
+      if (course.sections !== null) {
+        return course.sections.flatMap((section: any) => {
+          // new title property that appears on the event (ex. "SYDE 411 - LEC")
+          const courseTitle = `${course.department} ${course.code} - ${section.type}`;
+          // this mapping splits up the day array to make individual entries
+          return section.day.map((day: any) => ({
+            ...section,
+            // add in the parent course ID for colour assignment
+            courseId: course.id,
+            color: [
+              course.color === "#000000"
+                ? backgroundColors[colorIndex++ % backgroundColors.length]
+                : course.color,
+            ],
+            // create a unique id for this specific class section
+            uniqueClassId: `${day} ${section.id}`,
+            uid: course.uid,
+            day,
+            title: courseTitle,
+            // times are created from the UNIX weekday + section time, both in ms)
+            start_time: new Date(unixWeekdays[day] + section.start_time),
+            end_time: new Date(unixWeekdays[day] + section.end_time),
+          }));
+        });
+      } else {
+        return [];
+      }
     });
   }, []);
 
@@ -91,8 +106,10 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
     return overlaps;
   };
 
-  // classes = the events that appear on the calendar
-  const classes = getEachClass(courses);
+  useEffect(() => {
+    setClasses(getEachClass(coursesOnSchedule));
+  }, [getEachClass, coursesOnSchedule]);
+
   const overlaps = findOverlappingClasses(classes);
 
   let hoverEvents = (hovered: any) => {
@@ -128,8 +145,7 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
         event.instructor === ("" || undefined) ? "N/A" : "\n" + event.instructor
       }`;
 
-      setModalTitle(event.title);
-      setModalId(event.courseId);
+      setModalClass(event);
       setModalInfo(eventDetails);
       setModalConflicts(overlaps[event.uniqueClassId]);
       setModalOpen(true);
@@ -140,9 +156,7 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
   const eventStyleGetter = (event: any) => {
     let style = {
       // some checks to see if the course is being hovered
-      backgroundColor: event.background
-        ? "var(--main-purple-4)"
-        : courseColors[event.courseId],
+      backgroundColor: event.background ? "var(--main-purple-4)" : event.color,
       zIndex: event.background ? "10" : "",
       opacity: event.background ? 0.9 : 1,
       border: "0px",
@@ -159,26 +173,6 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
       style: style,
     };
   };
-
-  const courseColors = useMemo(() => {
-    const results: any = {};
-    let colorMap = new Map();
-    let colorIndex = 0;
-    for (let event of classes) {
-      let courseId = event.courseId;
-      if (!colorMap.has(courseId)) {
-        // Get a unique hex color for a course
-        colorMap.set(
-          courseId,
-          // using mod so colours repeat after end of list is reached
-          backgroundColors[colorIndex++ % backgroundColors.length],
-        );
-      }
-      results[event.courseId] = colorMap.get(courseId);
-    }
-    return results;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const { defaultDate, formats, views } = useMemo(
     () => ({
@@ -218,14 +212,14 @@ export default function CalendarBase({ courseHovered }: courseHoverProps) {
           views={views}
         ></Calendar>
         <CalendarModal
-          modalTitle={modalTitle}
-          modalId={modalId}
+          modalClass={modalClass}
           modalInfo={modalInfo}
           modalOpen={modalOpen}
           modalConflicts={modalConflicts}
           setModalOpen={setModalOpen}
-          courseColors={courseColors}
           availableBackgroundColors={backgroundColors}
+          setCoursesOnSchedule={setCoursesOnSchedule}
+          scheduleId={scheduleId}
         ></CalendarModal>
       </div>
     </Box>

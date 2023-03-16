@@ -3,7 +3,6 @@ import axios, { AxiosError } from "axios";
 
 export type CourseObject = {
   id: string;
-  antirequisites: string[];
   ceab_eng_design: number;
   ceab_eng_sci: number;
   ceab_math: number;
@@ -14,14 +13,73 @@ export type CourseObject = {
   department: string;
   description_abbreviated: string;
   description: string;
+  full_code: string;
   name: string;
-  prerequisites: string[];
+  requisites: string;
   sections: object[];
   tags: string[];
   past_course: boolean;
 };
 
 export type CalendarCourseObject = CourseObject & { color: string };
+
+const addCoursesByScheduleId = async (
+  id: string,
+  course_id: string,
+  section_id: string,
+  color: string,
+) => {
+  try {
+    const payload = {
+      course_id: course_id,
+      section_id: section_id,
+      color: color,
+    };
+    const { data } = await APIClient.post(
+      `/courses/schedules/${id}`,
+      JSON.stringify(payload),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
+const deleteCoursesByScheduleId = async (id: string, section_id: string) => {
+  try {
+    const payload = {
+      id: section_id,
+    };
+    const { data } = await APIClient.delete(`/courses/schedules/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(payload),
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
 
 const getCourses = async (
   queryParams: string | null,
@@ -51,17 +109,62 @@ const getCoursesOnCalendar = async (): Promise<CalendarCourseObject[]> => {
   return data;
 };
 
-const getCoursesByCalendarId = async (
+const getCoursesByScheduleId = async (
   id: string,
 ): Promise<CalendarCourseObject[]> => {
-  // FIXME: this should be thrown into a try catch
-  const { data } = await APIClient.get(`/courses/schedules/${id}`);
-  return data;
+  try {
+    const { data } = await APIClient.get(`/courses/schedules/${id}`);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
+const updateCourseColorByScheduleId = async (
+  id: string,
+  uid: string,
+  color: string,
+) => {
+  try {
+    const payload = {
+      uid: uid,
+      color: color,
+    };
+    const { data } = await APIClient.put(
+      `/courses/schedules/${id}`,
+      JSON.stringify(payload),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
 };
 
 const clients = {
+  addCoursesByScheduleId,
+  deleteCoursesByScheduleId,
   getCourses,
   getCoursesOnCalendar,
-  getCoursesByCalendarId,
+  getCoursesByScheduleId,
+  updateCourseColorByScheduleId,
 };
 export default clients;
