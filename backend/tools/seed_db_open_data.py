@@ -123,7 +123,9 @@ def insert_schedules(terms, skip_update=False):
                     capacity = s["maxEnrollmentCapacity"]
                     term_code = s["termCode"]
                     class_number = int(s["classNumber"])
-                    class_section = str(s["classSection"])
+                    class_section = str(s["classSection"]).rjust(
+                        3, "0"
+                    )  # pad sections with 0 in the beginning
 
                     if s["scheduleData"]:
                         for i, schedule_details in enumerate(s["scheduleData"]):
@@ -241,6 +243,8 @@ def update_database(update_current=True):
         print("Adding data from past two academic years...")
         res = update_six_terms_data()
         print(res)
+        with open("upload_logs.txt", "w") as f:
+            f.writelines(res)
 
 
 def clear_database():
