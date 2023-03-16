@@ -17,9 +17,12 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [resultsLoading, setResultsLoading] = useState(false);
+  const [filteringQuery, setFilteringQuery] = useState("");
 
   const handleShowFilterMenu = () => {
     setShowFilterMenu(!showFilterMenu);
+    setResultsLoading(false);
+    setFilteringQuery("");
   };
 
   useEffect(() => {
@@ -27,14 +30,16 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
       setSearchResults([]);
       setResultsLoading(false);
     } else {
-      const results = clients.getCourses(`?query=${searchQuery}`);
+      const results = clients.getCourses(
+        `?query=${searchQuery}&${filteringQuery}`,
+      );
 
       results.then((value) => {
         setResultsLoading(false);
         setSearchResults(value as any);
       });
     }
-  }, [searchQuery]);
+  }, [searchQuery, filteringQuery]);
 
   return (
     <div>
@@ -85,7 +90,11 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
             ></CustomButton>
           </Stack>
           {showFilterMenu && (
-            <FilteringMenu setShowFilterMenu={setShowFilterMenu} />
+            <FilteringMenu
+              setShowFilterMenu={setShowFilterMenu}
+              setResultsLoading={setResultsLoading}
+              setFilteringQuery={setFilteringQuery}
+            />
           )}
           <SearchCards
             resultsLoading={resultsLoading}
