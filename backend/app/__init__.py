@@ -18,14 +18,10 @@ def create_app(config_name):
 
     if os.getenv("IS_PREVIEW_DEPLOY", "False") == "True":
         app.config["CORS_ORIGINS"] = re.compile("https://fydp-bread.*")
-    elif config_name == "production":
+    else:
         app.config["CORS_ORIGINS"] = os.getenv(
             "CORS_ORIGINS", "http://localhost:3000"
         ).split(",")
-    else:
-        app.config["CORS_ORIGINS"] = [
-            "http://localhost:3000",
-        ]
     app.config["CORS_SUPPORTS_CREDENTIALS"] = True
     CORS(app)
 
