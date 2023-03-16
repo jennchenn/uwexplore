@@ -39,7 +39,8 @@ export default function CalendarTrayCalendar({
 
   const course: CourseObject = {
     id: "id",
-    antirequisites: ["1", "2"],
+    full_code: "full code",
+    requisites: "1",
     ceab_eng_design: 3,
     ceab_eng_sci: 4,
     ceab_math: 5,
@@ -51,7 +52,6 @@ export default function CalendarTrayCalendar({
     description_abbreviated: "description abbreviated",
     description: "description",
     name: "name",
-    prerequisites: ["8", "9"],
     sections: [{ day: ["TH", "M"], type: "sfdjk" }],
     tags: ["10", "11"],
   };
