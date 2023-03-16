@@ -37,3 +37,11 @@
 .tray-contents-container .css-9l5vo-MuiCollapse-wrapperInner{
     max-height: 30vh;
 }
+
+.MuiGrid2-grid-xs-0 .MuiBox-root .retractable-tray {
+    display: none
+}
+
+.MuiGrid2-grid-xs-5 .MuiBox-root .retractable-tray {
+    display: block
+}

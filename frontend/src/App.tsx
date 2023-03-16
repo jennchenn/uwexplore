@@ -75,8 +75,8 @@ function App() {
                 <Search setCourseHovered={setCourseHovered} />
               )}
             </PerfectScrollbar>
+            <CalendarTray setCourseHovered={setCourseHovered} />
           </Box>
-          <CalendarTray setCourseHovered={setCourseHovered} />
         </Grid>
         {/* RHS CALENDAR */}
         <Grid xs={calendarWidth} className="calendar-base">
