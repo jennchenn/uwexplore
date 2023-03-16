@@ -47,7 +47,9 @@ def get_past_courses(curr_user):
         return jsonify({"error": (error_message if error_message else str(e))}), 500
 
 
-@blueprint.route("/schedule", methods=["GET", "POST", "DELETE"], strict_slashes=False)
+@blueprint.route(
+    "/schedule", methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False
+)
 @require_login
 def schedule_courses_by_user(curr_user):
     try:
@@ -61,6 +63,11 @@ def schedule_courses_by_user(curr_user):
             result = course_service.add_course_to_schedule_by_user(
                 curr_user, course_id, section_id, color
             )
+        elif request.method == "PUT":
+            request_data = request.get_json()
+            uid = request_data["uid"]
+            color = request_data["color"]
+            result = course_service.update_schedule_color_by_user(curr_user, uid, color)
         elif request.method == "DELETE":
             request_data = request.get_json()
             schedule_object_id = request_data[
@@ -78,7 +85,7 @@ def schedule_courses_by_user(curr_user):
 
 
 @blueprint.route(
-    "/schedules/<id>", methods=["GET", "POST", "DELETE"], strict_slashes=False
+    "/schedules/<id>", methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False
 )
 def schedule_courses_by_id(id):
     try:
@@ -92,6 +99,11 @@ def schedule_courses_by_id(id):
             result = course_service.add_course_to_schedule_by_id(
                 id, course_id, section_id, color
             )
+        elif request.method == "PUT":
+            request_data = request.get_json()
+            uid = request_data["uid"]
+            color = request_data["color"]
+            result = course_service.update_schedule_color_by_id(id, uid, color)
         elif request.method == "DELETE":
             request_data = request.get_json()
             schedule_object_id = request_data["id"]
