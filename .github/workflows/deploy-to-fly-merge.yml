@@ -1,0 +1,24 @@
+name: Deploy to Flyctl on merge
+on:
+  push:
+    paths:
+      - "backend/**"
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: backend
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - run: flyctl deploy -c fly-preview.toml --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
