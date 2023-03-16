@@ -160,6 +160,17 @@ class CourseService:
             )
             raise e
 
+    def update_schedule_color_by_user(self, user, uid, color):
+        try:
+            schedule_id = user.get("schedule")
+            return self.update_schedule_color_by_id(schedule_id, uid, color)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def delete_course_from_schedule_by_user(self, user, schedule_object_id):
         try:
             schedule_id = user.get("schedule")
@@ -213,6 +224,28 @@ class CourseService:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def update_schedule_color_by_id(self, schedule_id, uid, color):
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            if not current_schedule:
+                raise KeyError(
+                    f"No saved schedule with id={schedule_id} with item uid={schedule_id}"
+                )
+            for course in current_schedule.courses:
+                if str(course._id) == uid:
+                    course.color = color
+            current_schedule.save()
+            courses = [
+                course.to_serializable_dict() for course in current_schedule.courses
+            ]
+            return self._format_schedule_courses(courses)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to update course in schedule. Reason={reason if reason else str(e)}"
             )
             raise e
 
