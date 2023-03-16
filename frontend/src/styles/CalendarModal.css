@@ -25,4 +25,5 @@
 
 .conflict-info {
   color: var(--alerts-warning-1);
+  margin: 10px 0px;
 }

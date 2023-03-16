@@ -10,9 +10,15 @@ import clients from "../APIClients/CourseClient";
 
 interface courseHoverProps {
   setCourseHovered: any;
+  setCoursesOnSchedule: any;
+  scheduleId: string;
 }
 
-export default function Search({ setCourseHovered }: courseHoverProps) {
+export default function Search({
+  setCourseHovered,
+  setCoursesOnSchedule,
+  scheduleId,
+}: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -101,6 +107,8 @@ export default function Search({ setCourseHovered }: courseHoverProps) {
             searchResults={searchResults}
             searchQuery={searchQuery}
             setCourseHovered={setCourseHovered}
+            setCoursesOnSchedule={setCoursesOnSchedule}
+            scheduleId={scheduleId}
           />
         </Stack>
       </Box>
