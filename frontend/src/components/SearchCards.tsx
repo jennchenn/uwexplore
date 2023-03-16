@@ -225,11 +225,16 @@ export default function SearchCards({
                 onMouseLeave={() => {
                   setCourseHovered({});
                 }}
-                sx={{ marginLeft: "auto", marginRight: "0px", padding: "4px" }}
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: "0px",
+                  padding: "4px",
+                  color: "var(--main-purple-1)",
+                }}
+                disabled={course.sections.length === 0 ? true : false}
               >
                 <AddCircleIcon
                   sx={{
-                    color: "var(--main-purple-1)",
                     fontSize: "28px",
                   }}
                 />
