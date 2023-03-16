@@ -23,14 +23,13 @@ class Weekday(Enum):
     FRIDAY = "F"
     SATURDAY = "S"
     SUNDAY = "U"
-    ONLINE = "E"
 
 
 class Section(EmbeddedDocument):
     _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
     # mongo saves this as a String; when we update a section, it'll throw an error if it's Enum
     # we are keeping the Weekday enum to ensure we're consistent here
-    day = ListField(StringField(), required=True)
+    day = ListField(StringField())
     term_code = StringField(required=True)
     term_name = StringField(required=True)  # Winter 2023
     instructor = StringField()
@@ -75,7 +74,8 @@ class Course(Document):
     name = StringField(required=True)
     department = StringField(required=True)
     code = StringField(required=True)
-    course_id = StringField(required=True, unique=True)
+    full_code = StringField(required=True, unique=True)
+    course_id = StringField(required=True)
     description = StringField(required=True)
     description_abbreviated = StringField()
     cse_weight = FloatField(required=True, default=0.0)
@@ -85,8 +85,7 @@ class Course(Document):
     ceab_eng_design = FloatField(required=True, default=0.0)
     course_type = EnumField(CourseType)
     sections = EmbeddedDocumentListField(Section)
-    prerequisites = ListField(StringField())
-    antirequisites = ListField(StringField())
+    requisites = StringField()
     tags = ListField(StringField())
 
     def to_serializable_dict(self):
