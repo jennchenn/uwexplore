@@ -241,7 +241,9 @@ class CourseService:
             course_obj = Course.objects(_id=course_info["course_id"]).first()
             sections = course_obj.sections
             course = dict(course_obj.to_serializable_dict())
-            course["sections"] = self._find_section(sections, course_info["section_id"])
+            course["sections"] = [
+                self._find_section(sections, course_info["section_id"])
+            ]
             course["color"] = course_info["color"]
             courses.append(course)
         return courses
