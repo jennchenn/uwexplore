@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles/App.css";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
+import clients from "./APIClients/CourseClient";
 
 export interface Props {
   id?: string;
@@ -35,6 +36,11 @@ function App() {
   // state to see a ghost course time on cal when hovering on search card
   const [courseHovered, setCourseHovered] = useState({});
 
+  const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
+  // todo: useState for scheduleId when accounts are integrated
+  // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
+  const scheduleId = "64127ede93deee8bdc7a9121";
+
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
     setCalendarWidth(sectionSizes.allCal.calendar);
@@ -46,6 +52,12 @@ function App() {
     setCalendarWidth(sectionSizes.default.calendar);
     setSectionInView("both");
   };
+
+  useEffect(() => {
+    clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
+      setCoursesOnSchedule(value);
+    });
+  }, []);
 
   return (
     <Box>
@@ -70,7 +82,11 @@ function App() {
               {sectionInView === "calendar" ? (
                 <></>
               ) : (
-                <Search setCourseHovered={setCourseHovered} />
+                <Search
+                  setCourseHovered={setCourseHovered}
+                  setCoursesOnSchedule={setCoursesOnSchedule}
+                  scheduleId={scheduleId}
+                />
               )}
             </PerfectScrollbar>
           </Box>
@@ -93,7 +109,12 @@ function App() {
                   className="cal-collapse-icon"
                   onClick={expandSearch}
                 ></KeyboardDoubleArrowRightIcon>
-                <Calendar courseHovered={courseHovered} />
+                <Calendar
+                  courseHovered={courseHovered}
+                  coursesOnSchedule={coursesOnSchedule}
+                  setCoursesOnSchedule={setCoursesOnSchedule}
+                  scheduleId={scheduleId}
+                />
                 <Ceab />
               </Stack>
             </PerfectScrollbar>
