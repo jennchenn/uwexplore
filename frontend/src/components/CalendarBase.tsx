@@ -108,7 +108,7 @@ export default function CalendarBase({
 
   useEffect(() => {
     setClasses(getEachClass(coursesOnSchedule));
-  }, [coursesOnSchedule]);
+  }, [getEachClass, coursesOnSchedule]);
 
   const overlaps = findOverlappingClasses(classes);
 
@@ -173,26 +173,6 @@ export default function CalendarBase({
       style: style,
     };
   };
-
-  const courseColors = useMemo(() => {
-    const results: any = {};
-    let colorMap = new Map();
-    let colorIndex = 0;
-    for (let event of classes) {
-      let courseId = event.courseId;
-      if (!colorMap.has(courseId)) {
-        // Get a unique hex color for a course
-        colorMap.set(
-          courseId,
-          // using mod so colours repeat after end of list is reached
-          backgroundColors[colorIndex++ % backgroundColors.length],
-        );
-      }
-      results[event.courseId] = colorMap.get(courseId);
-    }
-    return results;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const { defaultDate, formats, views } = useMemo(
     () => ({
