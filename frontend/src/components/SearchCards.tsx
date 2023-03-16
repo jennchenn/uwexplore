@@ -1,7 +1,5 @@
 import { useState } from "react";
-import moment from "moment";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import clients, { CourseObject } from "../APIClients/CourseClient";
+import { CourseObject } from "../APIClients/CourseClient";
 
 // MUI component imports
 import Box from "@mui/material/Box";
