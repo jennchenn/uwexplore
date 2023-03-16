@@ -27,12 +27,13 @@ def create_app(config_name):
         else os.getenv("MONGODB_URL")
     )
 
-    Limiter(
-        get_remote_address,
-        app=app,
-        storage_uri=app.config["MONGODB_URL"],
-        strategy="fixed-window",
-    )
+    if config_name != "production":
+        Limiter(
+            get_remote_address,
+            app=app,
+            storage_uri=app.config["MONGODB_URL"],
+            strategy="fixed-window",
+        )
 
     firebase_admin.initialize_app(
         firebase_admin.credentials.Certificate(
