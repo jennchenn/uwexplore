@@ -3,7 +3,6 @@ from bson.objectid import ObjectId
 from ..models.course import Course
 from ..models.user import PastCourses
 
-
 MAX_QUERY_SIZE = 30
 
 

@@ -143,7 +143,7 @@ def seed_database():
 
 
 def test_calculate_ceab_numbers_for_user_success(ceab_service):
-    user = User.objects().first().to_serializable_dict()
+    user = User.objects().first()
     res = ceab_service.get_ceab_numbers_by_user(user)
     # TODO: shouldn't hardcode these
     assert res == {

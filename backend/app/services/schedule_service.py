@@ -9,7 +9,7 @@ class ScheduleService:
 
     def get_schedule_courses_by_user(self, user):
         try:
-            schedule_id = user.schedule
+            schedule_id = user.schedule.id
             return self.get_courses_by_schedule_id(schedule_id)
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -26,16 +26,15 @@ class ScheduleService:
             schedule_obj = ScheduleCourses(
                 course_id=course_id, section_id=section_id, color=color
             )
-            schedule_id = user.schedule
+            current_schedule = user.schedule
 
-            if not schedule_id:  # make new schedule
+            if not current_schedule:  # make new schedule
                 current_schedule = Schedule(courses=[schedule_obj])
                 current_schedule.save()
                 user_obj = User.objects(id=user["id"]).first()
-                user_obj.schedule = current_schedule.id
+                user_obj.schedule = current_schedule
                 user_obj.save()
             else:
-                current_schedule = Schedule.objects(id=schedule_id).first()
                 if self._is_duplicate_course(current_schedule, schedule_obj):
                     raise Exception("Course and section already exist in calendar.")
                 current_schedule.courses.append(schedule_obj)
@@ -51,8 +50,11 @@ class ScheduleService:
 
     def update_schedule_color_by_user(self, user, uid, color):
         try:
-            schedule_id = user.schedule
-            return self.update_schedule_color_by_id(schedule_id, uid, color)
+            current_schedule = user.schedule
+            if not current_schedule:
+                raise KeyError(f"No saved schedule for user")
+            return self._update_schedule_color(current_schedule, uid, color)
+
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -62,9 +64,11 @@ class ScheduleService:
 
     def delete_course_from_schedule_by_user(self, user, schedule_object_id):
         try:
-            schedule_id = user.schedule
-            return self.delete_course_from_schedule_by_id(
-                schedule_id, schedule_object_id
+            current_schedule = user.schedule
+            if not current_schedule:
+                raise Exception("User does not have a schedule.")
+            return self._delete_course_from_schedule(
+                current_schedule, schedule_object_id
             )
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -119,11 +123,8 @@ class ScheduleService:
                 raise KeyError(
                     f"No saved schedule with id={schedule_id} with item uid={schedule_id}"
                 )
-            for course in current_schedule.courses:
-                if str(course._id) == uid:
-                    course.color = color
-            current_schedule.save()
-            return self._format_schedule_courses(current_schedule)
+            return self._update_schedule_color(current_schedule, uid, color)
+
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -136,13 +137,9 @@ class ScheduleService:
             current_schedule = Schedule.objects(id=schedule_id).first()
             if not current_schedule:
                 raise KeyError(f"No schedule with id={schedule_id}")
-            current_schedule.courses = list(
-                filter(
-                    lambda x: str(x._id) != schedule_object_id, current_schedule.courses
-                )
+            return self._delete_course_from_schedule(
+                current_schedule, schedule_object_id
             )
-            current_schedule.save()
-            return self._format_schedule_courses(current_schedule)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -155,6 +152,20 @@ class ScheduleService:
             if courses.section_id == new_course.section_id:
                 return True
         return False
+
+    def _delete_course_from_schedule(self, current_schedule, schedule_object_id):
+        current_schedule.courses = list(
+            filter(lambda x: str(x._id) != schedule_object_id, current_schedule.courses)
+        )
+        current_schedule.save()
+        return self._format_schedule_courses(current_schedule)
+
+    def _update_schedule_color(self, current_schedule, uid, color):
+        for course in current_schedule.courses:
+            if str(course._id) == uid:
+                course.color = color
+        current_schedule.save()
+        return self._format_schedule_courses(current_schedule)
 
     def _format_schedule_courses(self, current_schedule):
         courses = []
