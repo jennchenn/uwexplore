@@ -10,7 +10,9 @@ import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
+import Portal from "@mui/material/Portal";
 import Stack from "@mui/material/Stack";
+import Snackbar from "@mui/material/Snackbar";
 import Tooltip from "@mui/material/Tooltip";
 
 // MUI table imports
@@ -67,13 +69,21 @@ export default function SearchCards({
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const addCourseToSchedule = (course_id: string, section_id: string) => {
     clients
       // todo: don't set default colour to black?
       .addCoursesByScheduleId(scheduleId, course_id, section_id, "#000000")
       .then((value: any) => {
-        setCoursesOnSchedule(value);
+        if (value.length !== 0) {
+          setCoursesOnSchedule(value);
+        }
+        setOpen(true);
       });
   };
 
@@ -388,6 +398,23 @@ export default function SearchCards({
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
         .map((course, i) => createCourseCard(course))}
       {renderMaxResultsDisplayedCard()}
+      <Portal>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          open={open}
+          autoHideDuration={2000}
+          onClose={handleClose}
+          message="Success! Course added to schedule."
+          sx={{
+            "& .MuiSnackbarContent-root": {
+              backgroundColor: "var(--alerts-success-7)",
+              color: "var(--alerts-success-1)",
+              minWidth: "150px",
+              marginTop: "64px",
+            },
+          }}
+        />
+      </Portal>
     </Box>
   );
 }

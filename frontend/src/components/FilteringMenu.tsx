@@ -42,8 +42,8 @@ export default function FilteringMenu({
 
   const handleCancel = () => {
     setShowFilterMenu(false);
-    setResultsLoading(true);
-    setFilteringQuery("");
+    // setResultsLoading(true);
+    // setFilteringQuery("");
   };
 
   return (

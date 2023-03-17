@@ -27,8 +27,8 @@ export default function Search({
 
   const handleShowFilterMenu = () => {
     setShowFilterMenu(!showFilterMenu);
-    setResultsLoading(false);
-    setFilteringQuery("");
+    // setResultsLoading(false);
+    // setFilteringQuery("");
   };
 
   useEffect(() => {
