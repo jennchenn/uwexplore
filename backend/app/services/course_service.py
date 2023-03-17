@@ -116,13 +116,14 @@ class CourseService:
 
     def add_past_course(self, user, term, course_id):
         try:
-            past_courses = user.past_courses or PastCourses().to_serializable_dict()
+            past_courses = user.past_courses or PastCourses()
             if term not in past_courses:
                 raise KeyError(f"Invalid term={term}")
             # TODO: optimize this check for duplicates
             if ObjectId(course_id) in past_courses[term]:
                 raise Exception(f"Course={course_id} already added to term={term}.")
             past_courses[term].append(course_id)
+            user.past_courses = past_courses
             user.save()
             return self._format_past_courses(user.past_courses)
         except Exception as e:
