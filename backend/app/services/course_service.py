@@ -111,6 +111,22 @@ class CourseService:
             )
             raise e
 
+    def delete_saved_course_by_user(self, user, course_id):
+        try:
+            course_oid = ObjectId(course_id)
+            try:
+                user.saved_courses.remove(course_oid)
+                user.save()
+                return self._format_course_id_list(user.saved_courses)
+            except Exception as e:
+                raise KeyError(f"Course with id={course_id} not saved")
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to delete saved course. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def get_past_courses_by_user(self, user):
         try:
             past_courses = user.past_courses
