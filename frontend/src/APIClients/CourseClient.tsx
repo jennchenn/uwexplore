@@ -18,7 +18,6 @@ export type CourseObject = {
   requisites: string;
   sections: object[];
   tags: string[];
-  past_course: boolean;
 };
 
 export type CalendarCourseObject = CourseObject & { color: string };
