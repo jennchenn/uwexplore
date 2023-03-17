@@ -120,9 +120,10 @@ class CourseService:
             if term not in past_courses:
                 raise KeyError(f"Invalid term={term}")
             # TODO: optimize this check for duplicates
-            if ObjectId(course_id) not in past_courses[term]:
-                past_courses[term].append(course_id)
-                user.save()
+            if ObjectId(course_id) in past_courses[term]:
+                raise Exception(f"Course={course_id} already added to term={term}.")
+            past_courses[term].append(course_id)
+            user.save()
             return self._format_past_courses(user.past_courses)
         except Exception as e:
             reason = getattr(e, "message", None)
