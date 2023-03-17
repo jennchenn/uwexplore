@@ -34,11 +34,11 @@ def saved_courses(curr_user):
         elif request.method == "POST":
             request_data = request.get_json()
             course_id = request_data["course_id"]
-            result = course_service.add_saved_course_by_user(curr_user, course_id)
+            result = course_service.add_saved_course(curr_user, course_id)
         elif request.method == "DELETE":
             request_data = request.get_json()
             course_id = request_data["course_id"]
-            result = course_service.delete_saved_course_by_user(curr_user, course_id)
+            result = course_service.delete_saved_course(curr_user, course_id)
         else:
             raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200

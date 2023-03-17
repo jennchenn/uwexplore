@@ -96,7 +96,7 @@ class CourseService:
             )
             raise e
 
-    def add_saved_course_by_user(self, user, course_id):
+    def add_saved_course(self, user, course_id):
         try:
             course_oid = ObjectId(course_id)
             if course_oid in user.saved_courses:
@@ -111,7 +111,7 @@ class CourseService:
             )
             raise e
 
-    def delete_saved_course_by_user(self, user, course_id):
+    def delete_saved_course(self, user, course_id):
         try:
             course_oid = ObjectId(course_id)
             try:
