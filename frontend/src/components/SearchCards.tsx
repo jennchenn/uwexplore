@@ -1,7 +1,7 @@
 import { useState } from "react";
 import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { CourseObject } from "../APIClients/CourseClient";
+import clients, { CourseObject } from "../APIClients/CourseClient";
 
 // MUI component imports
 import Box from "@mui/material/Box";
@@ -51,6 +51,8 @@ interface searchProps {
   searchResults: CourseObject[];
   searchQuery: string;
   setCourseHovered: any;
+  setCoursesOnSchedule: any;
+  scheduleId: string;
 }
 
 export default function SearchCards({
@@ -58,11 +60,22 @@ export default function SearchCards({
   searchResults,
   searchQuery,
   setCourseHovered,
+  setCoursesOnSchedule,
+  scheduleId,
 }: searchProps) {
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
+
+  const addCourseToSchedule = (course_id: string, section_id: string) => {
+    clients
+      // todo: don't set default colour to black?
+      .addCoursesByScheduleId(scheduleId, course_id, section_id, "#000000")
+      .then((value: any) => {
+        setCoursesOnSchedule(value);
+      });
+  };
 
   // currently only allowing one card to be expanded at a time
   const handleExpandClick = (courseToExpand: any) => {
@@ -225,11 +238,20 @@ export default function SearchCards({
                 onMouseLeave={() => {
                   setCourseHovered({});
                 }}
-                sx={{ marginLeft: "auto", marginRight: "0px", padding: "4px" }}
+                onClick={() => {
+                  // todo: don't hardcode first section id to add
+                  addCourseToSchedule(course.id, course.sections[0].id);
+                }}
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: "0px",
+                  padding: "4px",
+                  color: "var(--main-purple-1)",
+                }}
+                disabled={course.sections.length === 0 ? true : false}
               >
                 <AddCircleIcon
                   sx={{
-                    color: "var(--main-purple-1)",
                     fontSize: "28px",
                   }}
                 />
