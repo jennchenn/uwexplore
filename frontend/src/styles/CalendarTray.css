@@ -45,3 +45,11 @@
 .MuiGrid2-grid-xs-5 .MuiBox-root .retractable-tray {
     display: block
 }
+
+.empty-tray-card {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.4) !important;
+    font-weight: var(--font-weight-regular);
+}

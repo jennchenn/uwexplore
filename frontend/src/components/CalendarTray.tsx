@@ -29,31 +29,9 @@ export default function CalendarTrayCalendar({
 }: CalendarTrayProps) {
   const [expanded, setExpanded] = useState(false);
   const [expandedCard, setExpandedCard] = useState("");
-  const [bookmarkedCourses, setBookmarkedCourses] = useState<
-    Record<string, any>
-  >({});
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
-  };
-
-  const course: CourseObject = {
-    id: "id",
-    full_code: "full code",
-    requisites: "1",
-    ceab_eng_design: 3,
-    ceab_eng_sci: 4,
-    ceab_math: 5,
-    ceab_sci: 6,
-    code: "code",
-    course_id: "course id",
-    cse_weight: 7,
-    department: "department",
-    description_abbreviated: "description abbreviated",
-    description: "description",
-    name: "name",
-    sections: [{ day: ["TH", "M"], type: "sfdjk" }],
-    tags: ["10", "11"],
   };
 
   return (
@@ -86,51 +64,20 @@ export default function CalendarTrayCalendar({
           <Collapse in={expanded} className="tray-contents-container">
             <PerfectScrollbar>
               <Stack className="tray-contents" spacing={1}>
-                {/* {addedCourses.map(key)} */}
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  setExpandedCard={setExpandedCard}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  setExpandedCard={setExpandedCard}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  setExpandedCard={setExpandedCard}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  setExpandedCard={setExpandedCard}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  setExpandedCard={setExpandedCard}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
-                  setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  type="added"
-                />
+                {addedCourses.map((course, i) => (
+                  <CourseCard
+                    course={course}
+                    expandedCard={expandedCard}
+                    setExpandedCard={setExpandedCard}
+                    setCourseHovered={CalendarTrayProps.setCourseHovered}
+                    type="added"
+                  />
+                ))}
+                {!addedCourses.length && (
+                  <Card className="empty-tray-card heading-2">
+                    Added courses will appear here!
+                  </Card>
+                )}
               </Stack>
             </PerfectScrollbar>
           </Collapse>

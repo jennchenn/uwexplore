@@ -91,7 +91,10 @@ function App() {
                 />
               )}
             </PerfectScrollbar>
-            <CalendarTray setCourseHovered={setCourseHovered} />
+            <CalendarTray
+              setCourseHovered={setCourseHovered}
+              addedCourses={coursesOnSchedule}
+            />
           </Box>
         </Grid>
         {/* RHS CALENDAR */}
