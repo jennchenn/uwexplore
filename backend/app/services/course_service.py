@@ -103,12 +103,7 @@ class CourseService:
             past_courses = user.get("past_courses")
             if not past_courses:  # return an empty object with the expected keys
                 return PastCourses().to_serializable_dict()
-            for term, courses in past_courses.items():
-                course_names = [
-                    self._get_course_name_from_id(course_id) for course_id in courses
-                ]
-                past_courses[term] = course_names
-            return past_courses
+            return self._format_past_courses(past_courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -116,6 +111,50 @@ class CourseService:
             )
             raise e
 
+    def add_past_course(self, user, term, course_id):
+        try:
+            past_courses = user.get(
+                "past_courses", PastCourses().to_serializable_dict()
+            )
+            if term not in past_courses:
+                raise KeyError(f"Invalid term={term}")
+            past_courses[term].append(course_id)
+            user.save()
+            return self._format_past_courses(user.past_courses)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to add past course. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def delete_past_course(self, user, term, course_id):
+        try:
+            past_courses = user.get(
+                "past_courses", PastCourses().to_serializable_dict()
+            )
+            if term not in past_courses:
+                raise KeyError(f"Invalid term={term}")
+            past_courses[term].remove(
+                course_id
+            )  # will raise ValueError if course id not found
+            return past_courses
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to add past course. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def _get_course_name_from_id(self, course_id):
         course = Course.objects(_id=course_id).first()
         return f"{course.department} {course.code}"
+
+    def _format_past_courses(self, term_to_course_ids):
+        # Past courses are saved as arrays of object ids; map them to the course title before returning
+        for term, courses in term_to_course_ids.items():
+            course_names = [
+                self._get_course_name_from_id(course_id) for course_id in courses
+            ]
+            term_to_course_ids[term] = course_names
+        return term_to_course_ids
