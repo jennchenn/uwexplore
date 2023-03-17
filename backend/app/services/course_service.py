@@ -146,6 +146,8 @@ class CourseService:
                 user_obj.save()
             else:
                 current_schedule = Schedule.objects(id=schedule_id).first()
+                if self._is_duplicate_course(current_schedule, schedule_obj):
+                    raise Exception("Course and section already exist in calendar.")
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
             return self._format_schedule_courses(current_schedule)
@@ -208,6 +210,8 @@ class CourseService:
                 current_schedule = Schedule(courses=[schedule_obj])
                 current_schedule.save()
             else:
+                if self._is_duplicate_course(current_schedule, schedule_obj):
+                    raise Exception("Course and section already exist in calendar.")
                 current_schedule.courses.append(schedule_obj)
                 current_schedule.save()
             return self._format_schedule_courses(current_schedule)
@@ -255,6 +259,12 @@ class CourseService:
                 f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
             )
             raise e
+
+    def _is_duplicate_course(self, schedule, new_course):
+        for courses in schedule.courses:
+            if courses.section_id == new_course.section_id:
+                return True
+        return False
 
     def _format_schedule_courses(self, current_schedule):
         courses = []
