@@ -217,7 +217,7 @@ class UserService:
             user = User.objects(auth_id=auth_id).first()
             if not user:
                 raise KeyError(f"No user with ID")
-            return user.to_serializable_dict()
+            return user
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(

@@ -9,7 +9,7 @@ class ScheduleService:
 
     def get_schedule_courses_by_user(self, user):
         try:
-            schedule_id = user.get("schedule")
+            schedule_id = user.schedule
             return self.get_courses_by_schedule_id(schedule_id)
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -26,7 +26,7 @@ class ScheduleService:
             schedule_obj = ScheduleCourses(
                 course_id=course_id, section_id=section_id, color=color
             )
-            schedule_id = user.get("schedule")
+            schedule_id = user.schedule
 
             if not schedule_id:  # make new schedule
                 current_schedule = Schedule(courses=[schedule_obj])
@@ -51,7 +51,7 @@ class ScheduleService:
 
     def update_schedule_color_by_user(self, user, uid, color):
         try:
-            schedule_id = user.get("schedule")
+            schedule_id = user.schedule
             return self.update_schedule_color_by_id(schedule_id, uid, color)
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -62,7 +62,7 @@ class ScheduleService:
 
     def delete_course_from_schedule_by_user(self, user, schedule_object_id):
         try:
-            schedule_id = user.get("schedule")
+            schedule_id = user.schedule
             return self.delete_course_from_schedule_by_id(
                 schedule_id, schedule_object_id
             )

@@ -1,5 +1,8 @@
+from bson.objectid import ObjectId
+
 from ..models.course import Course
 from ..models.user import PastCourses
+
 
 MAX_QUERY_SIZE = 30
 
@@ -85,7 +88,7 @@ class CourseService:
     def get_saved_courses_by_user(self, user):
         try:
             saved_courses = []
-            saved_courses_list = user.get("saved_courses")
+            saved_courses_list = user.saved_courses
             if saved_courses_list:
                 for course_id in saved_courses_list:
                     course = Course.objects(_id=course_id).first()
@@ -100,7 +103,7 @@ class CourseService:
 
     def get_past_courses_by_user(self, user):
         try:
-            past_courses = user.get("past_courses")
+            past_courses = user.past_courses
             if not past_courses:  # return an empty object with the expected keys
                 return PastCourses().to_serializable_dict()
             return self._format_past_courses(past_courses)
@@ -113,13 +116,13 @@ class CourseService:
 
     def add_past_course(self, user, term, course_id):
         try:
-            past_courses = user.get(
-                "past_courses", PastCourses().to_serializable_dict()
-            )
+            past_courses = user.past_courses or PastCourses().to_serializable_dict()
             if term not in past_courses:
                 raise KeyError(f"Invalid term={term}")
-            past_courses[term].append(course_id)
-            user.save()
+            # TODO: optimize this check for duplicates
+            if ObjectId(course_id) not in past_courses[term]:
+                past_courses[term].append(course_id)
+                user.save()
             return self._format_past_courses(user.past_courses)
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -130,15 +133,19 @@ class CourseService:
 
     def delete_past_course(self, user, term, course_id):
         try:
-            past_courses = user.get(
-                "past_courses", PastCourses().to_serializable_dict()
-            )
+            past_courses = user.past_courses or PastCourses()
             if term not in past_courses:
                 raise KeyError(f"Invalid term={term}")
-            past_courses[term].remove(
-                course_id
-            )  # will raise ValueError if course id not found
-            return past_courses
+            try:
+                past_courses[term].remove(
+                    ObjectId(course_id)
+                )  # will raise ValueError if course id not found
+            except Exception as e:
+                raise KeyError(
+                    f"Course with id={course_id} does not exist in term={term}"
+                )
+            user.save()
+            return self._format_past_courses(past_courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -152,6 +159,7 @@ class CourseService:
 
     def _format_past_courses(self, term_to_course_ids):
         # Past courses are saved as arrays of object ids; map them to the course title before returning
+        term_to_course_ids = term_to_course_ids.to_serializable_dict()
         for term, courses in term_to_course_ids.items():
             course_names = [
                 self._get_course_name_from_id(course_id) for course_id in courses
