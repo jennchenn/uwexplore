@@ -35,7 +35,7 @@ const addCoursesByScheduleId = async (
       color: color,
     };
     const { data } = await APIClient.post(
-      `/courses/schedules/${id}`,
+      `/schedules/${id}`,
       JSON.stringify(payload),
       {
         headers: {
@@ -61,7 +61,7 @@ const deleteCoursesByScheduleId = async (id: string, section_id: string) => {
     const payload = {
       id: section_id,
     };
-    const { data } = await APIClient.delete(`/courses/schedules/${id}`, {
+    const { data } = await APIClient.delete(`/schedules/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -102,7 +102,7 @@ const getCoursesOnCalendar = async (): Promise<CalendarCourseObject[]> => {
   // FIXME: this should be thrown into a try catch
   // FIXME: add authorization header! "Authorization: Bearer <>"
   const bearerToken = "";
-  const { data } = await APIClient.get("/courses/schedule", {
+  const { data } = await APIClient.get("/schedules", {
     headers: { Authorization: bearerToken },
   });
   return data;
@@ -112,7 +112,7 @@ const getCoursesByScheduleId = async (
   id: string,
 ): Promise<CalendarCourseObject[]> => {
   try {
-    const { data } = await APIClient.get(`/courses/schedules/${id}`);
+    const { data } = await APIClient.get(`/schedules/${id}`);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -137,7 +137,7 @@ const updateCourseColorByScheduleId = async (
       color: color,
     };
     const { data } = await APIClient.put(
-      `/courses/schedules/${id}`,
+      `/schedules/${id}`,
       JSON.stringify(payload),
       {
         headers: {
