@@ -44,6 +44,8 @@ LABEL_TO_REQ = {
     CeabRequirements.ENG_SCI_DES.value: "min_eng_sci_des",
 }
 
+COMPULSORY_PD_COURSE_CODES = set(["PD19", "PD20", "PD21"])
+
 
 class CeabService:
     def __init__(self, logger):
@@ -123,7 +125,7 @@ class CeabService:
             if course_info.course_type:
                 if (
                     course_info.course_type.value == "PD"
-                    and requirements_counts[CeabRequirements.PD_COMP.value] < 2
+                    and course_info.full_code in COMPULSORY_PD_COURSE_CODES
                 ):
                     requirements_counts[CeabRequirements.PD_COMP.value] += 1
                 elif course_info.course_type.value == "PD":
