@@ -131,30 +131,6 @@ export default function SearchCards({
     }
   };
 
-  const renderRequisiteInfo = (course: any) => {
-    const prereqLength = course.prerequisites.length;
-    const antireqLength = course.antirequisites.length;
-    const noneMsg = "None";
-
-    const prereqMsg = `Prerequisites: ${
-      prereqLength === 0 ? noneMsg : course.prerequisites.join(", ")
-    }`;
-    const antireqMsg = `Antirequisites: ${
-      antireqLength === 0 ? noneMsg : course.antirequisites.join(", ")
-    }`;
-
-    return (
-      <div>
-        <h5 style={{ margin: "0px 6px 6px" }}>
-          <em>{prereqMsg}</em>
-        </h5>
-        <h5 style={{ margin: "0px 6px 16px" }}>
-          <em>{antireqMsg}</em>
-        </h5>
-      </div>
-    );
-  };
-
   const renderBookmarkedCourses = () => {
     if (Object.keys(bookmarkedCourses).length !== 0) {
       return (
@@ -390,7 +366,9 @@ export default function SearchCards({
                 </PerfectScrollbar>
               </div>
             </TableContainer>
-            {renderRequisiteInfo(course)}
+            <h5 style={{ margin: "0px 6px 16px" }}>
+              <em>{course.requisites}</em>
+            </h5>
           </Collapse>
         </CardContent>
       </Card>
