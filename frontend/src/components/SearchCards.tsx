@@ -69,10 +69,10 @@ export default function SearchCards({
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
-  const [open, setOpen] = useState(false);
+  const [courseAddedSnack, showCourseAddedSnack] = useState(false);
 
   const handleClose = () => {
-    setOpen(false);
+    showCourseAddedSnack(false);
   };
 
   const addCourseToSchedule = (course_id: string, section_id: string) => {
@@ -83,7 +83,7 @@ export default function SearchCards({
         if (value.length !== 0) {
           setCoursesOnSchedule(value);
         }
-        setOpen(true);
+        showCourseAddedSnack(true);
       });
   };
 
@@ -113,8 +113,7 @@ export default function SearchCards({
     if (!resultsLoading) {
       let message = `${searchResults.length} Search results found for "${searchQuery}"`;
       if (searchQuery === "") {
-        // todo: change this message?
-        message = "Search for courses above";
+        message = "Search Results";
       }
       return (
         <h4
@@ -129,8 +128,12 @@ export default function SearchCards({
     }
   };
 
-  const renderMaxResultsDisplayedCard = () => {
-    if (searchResults.length === 30) {
+  const renderResultsDisplayedCard = () => {
+    const message0 = `Searched courses will appear here!`;
+    const message30 = `30 search results displayed. Didn’t find the course you were
+   looking for? Be more specific or apply some filters!`;
+
+    if (searchResults.length === 30 || searchResults.length === 0) {
       return (
         <Paper
           elevation={0}
@@ -143,10 +146,7 @@ export default function SearchCards({
           }}
         >
           <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
-            <em>
-              30 search results displayed. Didn’t find the course you were
-              looking for? Be more specific or apply some filters!
-            </em>
+            <em>{searchResults.length === 0 ? message0 : message30}</em>
           </h5>
         </Paper>
       );
@@ -297,7 +297,7 @@ export default function SearchCards({
             <TableContainer
               component={Paper}
               sx={{
-                marginBottom: "10px",
+                marginBottom: "16px",
                 borderRadius: "var(--border-radius)",
               }}
             >
@@ -321,63 +321,85 @@ export default function SearchCards({
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {course.sections.map((section: any) => {
-                        // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
-                        let days = "";
-                        for (let i = 0; i < section.day.length; i++) {
-                          if (section.day[i].slice(0, 2) === "TH") {
-                            days = days.concat(section.day[i].slice(0, 2));
-                          } else {
-                            days = days.concat(section.day[i].slice(0, 1));
-                          }
-                          if (i < section.day.length - 1) {
-                            days = days.concat(", ");
-                          }
-                        }
-                        return (
-                          <TableRow
-                            key={section.id}
-                            sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
-                            }}
+                      {course.sections.length === 0 ? (
+                        <TableRow
+                          sx={{
+                            "&:last-child td, &:last-child th": {
+                              border: 0,
+                            },
+                          }}
+                        >
+                          <StyledTableCell
+                            component="th"
+                            scope="row"
+                            colSpan={7}
+                            align="center"
                           >
-                            <StyledTableCell component="th" scope="row">
-                              {section.type.slice(0, 3)} {section.number}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              {section.class_number}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              {section.enrolled_number}/{section.capacity}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              {moment()
-                                .startOf("day")
-                                .add(section.start_time, "milliseconds")
-                                .format("hh:mm A")}
-                              {" - "}
-                              {moment()
-                                .startOf("day")
-                                .add(section.end_time, "milliseconds")
-                                .format("hh:mm A")}
-                            </StyledTableCell>
-                            <StyledTableCell>{days}</StyledTableCell>
-                            <StyledTableCell>
-                              {section.location}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              {section.instructor}
-                            </StyledTableCell>
-                          </TableRow>
-                        );
-                      })}
+                            Information is not available for this class
+                          </StyledTableCell>
+                        </TableRow>
+                      ) : (
+                        course.sections.map((section: any) => {
+                          // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
+                          let days = "";
+                          for (let i = 0; i < section.day.length; i++) {
+                            if (section.day[i].slice(0, 2) === "TH") {
+                              days = days.concat(section.day[i].slice(0, 2));
+                            } else {
+                              days = days.concat(section.day[i].slice(0, 1));
+                            }
+                            if (i < section.day.length - 1) {
+                              days = days.concat(", ");
+                            }
+                          }
+                          return (
+                            <TableRow
+                              key={section.id}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              <StyledTableCell component="th" scope="row">
+                                {section.type} {section.number}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                {section.class_number}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                {section.enrolled_number}/{section.capacity}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                {moment()
+                                  .startOf("day")
+                                  .add(section.start_time, "milliseconds")
+                                  .format("hh:mm A")}
+                                {" - "}
+                                {moment()
+                                  .startOf("day")
+                                  .add(section.end_time, "milliseconds")
+                                  .format("hh:mm A")}
+                              </StyledTableCell>
+                              <StyledTableCell>{days}</StyledTableCell>
+                              <StyledTableCell>
+                                {section.location}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                {section.instructor}
+                              </StyledTableCell>
+                            </TableRow>
+                          );
+                        })
+                      )}
                     </TableBody>
                   </Table>
                 </PerfectScrollbar>
               </div>
             </TableContainer>
-
-            {/* todo: add prereq and antireq info */}
+            <h5 style={{ margin: "0px 6px 16px" }}>
+              <em>{course.requisites}</em>
+            </h5>
           </Collapse>
         </CardContent>
       </Card>
@@ -397,11 +419,11 @@ export default function SearchCards({
       {searchResults
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
         .map((course, i) => createCourseCard(course))}
-      {renderMaxResultsDisplayedCard()}
+      {renderResultsDisplayedCard()}
       <Portal>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={open}
+          open={courseAddedSnack}
           autoHideDuration={2000}
           onClose={handleClose}
           message="Success! Course added to schedule."

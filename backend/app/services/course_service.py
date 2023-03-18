@@ -1,6 +1,7 @@
+from bson.objectid import ObjectId
+
 from ..models.course import Course
-from ..models.schedule import Schedule, ScheduleCourses
-from ..models.user import PastCourses, User
+from ..models.user import PastCourses
 
 MAX_QUERY_SIZE = 30
 
@@ -85,31 +86,53 @@ class CourseService:
 
     def get_saved_courses_by_user(self, user):
         try:
-            saved_courses = []
-            saved_courses_list = user.get("saved_courses")
+            saved_courses_list = user.saved_courses
             if saved_courses_list:
-                for course_id in saved_courses_list:
-                    course = Course.objects(_id=course_id).first()
-                    saved_courses.append(course.to_serializable_dict())
-            return saved_courses
+                return self._format_course_id_list(saved_courses_list)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def add_saved_course(self, user, course_id):
+        try:
+            course_oid = ObjectId(course_id)
+            if course_oid in user.saved_courses:
+                raise Exception(f"Course with id={course_id} already saved")
+            user.saved_courses.append(course_oid)
+            user.save()
+            return self._format_course_id_list(user.saved_courses)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to add saved course. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def delete_saved_course(self, user, course_id):
+        try:
+            course_oid = ObjectId(course_id)
+            try:
+                user.saved_courses.remove(course_oid)
+                user.save()
+                return self._format_course_id_list(user.saved_courses)
+            except Exception as e:
+                raise KeyError(f"Course with id={course_id} not saved")
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to delete saved course. Reason={reason if reason else str(e)}"
             )
             raise e
 
     def get_past_courses_by_user(self, user):
         try:
-            past_courses = user.get("past_courses")
+            past_courses = user.past_courses
             if not past_courses:  # return an empty object with the expected keys
                 return PastCourses().to_serializable_dict()
-            for term, courses in past_courses.items():
-                course_names = [
-                    self._get_course_name_from_id(course_id) for course_id in courses
-                ]
-                past_courses[term] = course_names
-            return past_courses
+            return self._format_past_courses(past_courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -117,169 +140,64 @@ class CourseService:
             )
             raise e
 
-    def get_schedule_courses_by_user(self, user):
+    def add_past_course(self, user, term, course_id):
         try:
-            schedule_id = user.get("schedule")
-            return self.get_courses_by_schedule_id(schedule_id)
+            past_courses = user.past_courses or PastCourses()
+            if term not in past_courses:
+                raise KeyError(f"Invalid term={term}")
+            # TODO: optimize this check for duplicates
+            if ObjectId(course_id) in past_courses[term]:
+                raise Exception(f"Course={course_id} already added to term={term}.")
+            past_courses[term].append(course_id)
+            user.past_courses = past_courses
+            user.save()
+            return self._format_past_courses(user.past_courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
-                f"Failed to get courses. Reason={reason if reason else str(e)}"
+                f"Failed to add past course. Reason={reason if reason else str(e)}"
             )
             raise e
 
-    def add_course_to_schedule_by_user(self, user, course_id, section_id, color):
+    def delete_past_course(self, user, term, course_id):
         try:
-            course = Course.objects(_id=course_id).first()
-            if not course:
-                raise KeyError(f"No course with id={course_id}")
-            schedule_obj = ScheduleCourses(
-                course_id=course_id, section_id=section_id, color=color
-            )
-            schedule_id = user.get("schedule")
-
-            if not schedule_id:  # make new schedule
-                current_schedule = Schedule(courses=[schedule_obj])
-                current_schedule.save()
-                user_obj = User.objects(id=user["id"]).first()
-                user_obj.schedule = current_schedule.id
-                user_obj.save()
-            else:
-                current_schedule = Schedule.objects(id=schedule_id).first()
-                current_schedule.courses.append(schedule_obj)
-                current_schedule.save()
-            return self._format_schedule_courses(current_schedule)
-
-        except Exception as e:
-            reason = getattr(e, "message", None)
-            self.logger.error(
-                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
-            )
-            raise e
-
-    def update_schedule_color_by_user(self, user, uid, color):
-        try:
-            schedule_id = user.get("schedule")
-            return self.update_schedule_color_by_id(schedule_id, uid, color)
-        except Exception as e:
-            reason = getattr(e, "message", None)
-            self.logger.error(
-                f"Failed to get courses. Reason={reason if reason else str(e)}"
-            )
-            raise e
-
-    def delete_course_from_schedule_by_user(self, user, schedule_object_id):
-        try:
-            schedule_id = user.get("schedule")
-            return self.delete_course_from_schedule_by_id(
-                schedule_id, schedule_object_id
-            )
-        except Exception as e:
-            reason = getattr(e, "message", None)
-            self.logger.error(
-                f"Failed to get courses. Reason={reason if reason else str(e)}"
-            )
-            raise e
-
-    def get_courses_by_schedule_id(self, schedule_id):
-        try:
-            current_schedule = Schedule.objects(id=schedule_id).first()
-            if not current_schedule:
-                raise KeyError(f"No saved schedule with id={schedule_id}")
-            return self._format_schedule_courses(current_schedule)
-        except Exception as e:
-            reason = getattr(e, "message", None)
-            self.logger.error(
-                f"Failed to get courses. Reason={reason if reason else str(e)}"
-            )
-            raise e
-
-    def add_course_to_schedule_by_id(self, schedule_id, course_id, section_id, color):
-        try:
-            course = Course.objects(_id=course_id).first()
-            if not course:
-                raise KeyError(f"No course with id={course_id}")
-            schedule_obj = ScheduleCourses(
-                course_id=course_id, section_id=section_id, color=color
-            )
-            current_schedule = Schedule.objects(id=schedule_id).first()
-
-            if not schedule_id:  # make new schedule
-                current_schedule = Schedule(courses=[schedule_obj])
-                current_schedule.save()
-            else:
-                current_schedule.courses.append(schedule_obj)
-                current_schedule.save()
-            return self._format_schedule_courses(current_schedule)
-        except Exception as e:
-            reason = getattr(e, "message", None)
-            self.logger.error(
-                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
-            )
-            raise e
-
-    def update_schedule_color_by_id(self, schedule_id, uid, color):
-        try:
-            current_schedule = Schedule.objects(id=schedule_id).first()
-            if not current_schedule:
+            past_courses = user.past_courses or PastCourses()
+            if term not in past_courses:
+                raise KeyError(f"Invalid term={term}")
+            try:
+                past_courses[term].remove(
+                    ObjectId(course_id)
+                )  # will raise ValueError if course id not found
+            except Exception as e:
                 raise KeyError(
-                    f"No saved schedule with id={schedule_id} with item uid={schedule_id}"
+                    f"Course with id={course_id} does not exist in term={term}"
                 )
-            for course in current_schedule.courses:
-                if str(course._id) == uid:
-                    course.color = color
-            current_schedule.save()
-            return self._format_schedule_courses(current_schedule)
+            user.save()
+            return self._format_past_courses(past_courses)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
-                f"Failed to update course in schedule. Reason={reason if reason else str(e)}"
+                f"Failed to add past course. Reason={reason if reason else str(e)}"
             )
             raise e
-
-    def delete_course_from_schedule_by_id(self, schedule_id, schedule_object_id):
-        try:
-            current_schedule = Schedule.objects(id=schedule_id).first()
-            if not current_schedule:
-                raise KeyError(f"No schedule with id={schedule_id}")
-            current_schedule.courses = list(
-                filter(
-                    lambda x: str(x._id) != schedule_object_id, current_schedule.courses
-                )
-            )
-            current_schedule.save()
-            return self._format_schedule_courses(current_schedule)
-        except Exception as e:
-            reason = getattr(e, "message", None)
-            self.logger.error(
-                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
-            )
-            raise e
-
-    def _format_schedule_courses(self, current_schedule):
-        courses = []
-        scheduled_courses = [
-            course.to_serializable_dict() for course in current_schedule.courses
-        ]
-        for course_info in scheduled_courses:
-            course_obj = Course.objects(_id=course_info["course_id"]).first()
-            sections = course_obj.sections
-            course = dict(course_obj.to_serializable_dict())
-            course["sections"] = [
-                self._find_section(sections, course_info["section_id"])
-            ]
-            course["color"] = course_info["color"]
-            course["uid"] = course_info[
-                "id"
-            ]  # this is the ID that references the specific entry in the user schedule
-            courses.append(course)
-        return courses
-
-    def _find_section(self, sections, section_id):
-        for section in sections:
-            if str(section._id) == section_id:
-                return section.to_serializable_dict()
 
     def _get_course_name_from_id(self, course_id):
         course = Course.objects(_id=course_id).first()
         return f"{course.department} {course.code}"
+
+    def _format_past_courses(self, term_to_course_ids):
+        # Past courses are saved as arrays of object ids; map them to the course title before returning
+        term_to_course_ids = term_to_course_ids.to_serializable_dict()
+        for term, courses in term_to_course_ids.items():
+            course_names = [
+                self._get_course_name_from_id(course_id) for course_id in courses
+            ]
+            term_to_course_ids[term] = course_names
+        return term_to_course_ids
+
+    def _format_course_id_list(self, course_id_list):
+        courses = []
+        for course_id in course_id_list:
+            course = Course.objects(_id=course_id).first()
+            courses.append(course.to_serializable_dict())
+        return courses
