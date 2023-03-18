@@ -62,6 +62,7 @@ const user: UserObject = {
 
 interface CalendarTrayProps extends Props {
   setCourseHovered: any;
+  handleCeabPlanChange: any;
   addedCourses?: CourseObject[];
 }
 
@@ -121,61 +122,7 @@ export default function CalendarTrayCalendar({
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
                   pastCourses={pastCourses}
                   setPastCourses={setPastCourses}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
-                  setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  pastCourses={pastCourses}
-                  setPastCourses={setPastCourses}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
-                  setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  pastCourses={pastCourses}
-                  setPastCourses={setPastCourses}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
-                  setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  pastCourses={pastCourses}
-                  setPastCourses={setPastCourses}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
-                  setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  pastCourses={pastCourses}
-                  setPastCourses={setPastCourses}
-                  type="added"
-                />
-                <CourseCard
-                  course={course}
-                  expandedCard={expandedCard}
-                  bookmarkedCourses={bookmarkedCourses}
-                  setExpandedCard={setExpandedCard}
-                  setBookmarkedCourses={setBookmarkedCourses}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  pastCourses={pastCourses}
-                  setPastCourses={setPastCourses}
+                  handleCeabPlanChange={CalendarTrayProps.handleCeabPlanChange}
                   type="added"
                 />
               </Stack>

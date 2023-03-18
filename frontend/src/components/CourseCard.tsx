@@ -50,6 +50,7 @@ interface CourseCardProps extends Props {
   setExpandedCard: (value: string) => void;
   bookmarkedCourses: Record<string, any>;
   setBookmarkedCourses: (value: any) => void;
+  handleCeabPlanChange: any;
   setCourseHovered?: any;
   type?: "search" | "added";
 }
@@ -369,7 +370,10 @@ export default function CourseCard({
                 <Checkbox
                   checked={isPastCourse}
                   onChange={(e: any) => {
-                    if (isPastCourse) setIsPastCourse(false);
+                    if (isPastCourse) {
+                      setIsPastCourse(false);
+                      CourseCardProps.handleCeabPlanChange();
+                    }
                     setOpenTermSelect(e.target.checked);
                   }}
                 />
@@ -435,6 +439,7 @@ export default function CourseCard({
                       `${CourseCardProps.course.full_code}`,
                     ),
                   );
+                  CourseCardProps.handleCeabPlanChange();
                   setIsPastCourse(true);
                   handleClose();
                 }

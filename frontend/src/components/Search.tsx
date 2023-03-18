@@ -12,12 +12,14 @@ interface courseHoverProps {
   setCourseHovered: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
+  handleCeabPlanChange: any;
 }
 
 export default function Search({
   setCourseHovered,
   setCoursesOnSchedule,
   scheduleId,
+  handleCeabPlanChange,
 }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -109,6 +111,7 @@ export default function Search({
             setCourseHovered={setCourseHovered}
             setCoursesOnSchedule={setCoursesOnSchedule}
             scheduleId={scheduleId}
+            handleCeabPlanChange={handleCeabPlanChange}
           />
         </Stack>
       </Box>

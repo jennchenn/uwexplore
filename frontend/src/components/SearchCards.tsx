@@ -60,6 +60,7 @@ interface searchProps {
   setCourseHovered: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
+  handleCeabPlanChange: any;
 }
 
 export default function SearchCards({
@@ -69,6 +70,7 @@ export default function SearchCards({
   setCourseHovered,
   setCoursesOnSchedule,
   scheduleId,
+  handleCeabPlanChange,
 }: searchProps) {
   const [pastCourses, setPastCourses] = useState(user.past_courses);
   const [expandedCard, setExpandedCard] = useState("");
@@ -144,6 +146,7 @@ export default function SearchCards({
                   setCourseHovered={setCourseHovered}
                   pastCourses={pastCourses}
                   setPastCourses={setPastCourses}
+                  handleCeabPlanChange={handleCeabPlanChange}
                 />
               );
             })}
@@ -176,6 +179,7 @@ export default function SearchCards({
             setExpandedCard={setExpandedCard}
             setBookmarkedCourses={setBookmarkedCourses}
             setCourseHovered={setCourseHovered}
+            handleCeabPlanChange={handleCeabPlanChange}
           />
         ))}*/}
 
@@ -187,6 +191,7 @@ export default function SearchCards({
         setBookmarkedCourses={setBookmarkedCourses}
         setCourseHovered={setCourseHovered}
         pastCourses={pastCourses}
+        handleCeabPlanChange={handleCeabPlanChange}
         setPastCourses={setPastCourses}
       />
       {renderMaxResultsDisplayedCard()}

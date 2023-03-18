@@ -54,6 +54,8 @@ function App() {
     setSectionInView("both");
   };
 
+  const handleCeabPlanChange = () => {};
+
   useEffect(() => {
     clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
       setCoursesOnSchedule(value);
@@ -88,11 +90,15 @@ function App() {
                   setCourseHovered={setCourseHovered}
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
+                  handleCeabPlanChange={handleCeabPlanChange}
                 />
               )}
             </PerfectScrollbar>
           </Box>
-          <CalendarTray setCourseHovered={setCourseHovered} />
+          <CalendarTray
+            setCourseHovered={setCourseHovered}
+            handleCeabPlanChange={handleCeabPlanChange}
+          />
         </Grid>
         {/* RHS CALENDAR */}
         <Grid xs={calendarWidth} className="calendar-base">
