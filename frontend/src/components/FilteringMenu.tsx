@@ -11,10 +11,14 @@ import "../styles/FilteringMenu.css";
 
 interface FilteringMenuProps {
   setShowFilterMenu: (showFilterMenu: boolean) => void;
+  setResultsLoading: (resultsLoading: boolean) => void;
+  setFilteringQuery: (filteringQuery: string) => void;
 }
 
 export default function FilteringMenu({
   setShowFilterMenu,
+  setResultsLoading,
+  setFilteringQuery,
 }: FilteringMenuProps) {
   const checkboxStyle = {
     "& .MuiSvgIcon-root": { fontSize: 16 },
@@ -32,11 +36,14 @@ export default function FilteringMenu({
       new FormData(event.currentTarget) as any,
     ).toString();
 
-    // todo: remove console.log after further implementation
-    console.log(queryString);
+    setResultsLoading(true);
+    setFilteringQuery(queryString);
+  };
 
-    // todo: implement fetch
-    // todo: pass in props to update state?
+  const handleCancel = () => {
+    setShowFilterMenu(false);
+    setResultsLoading(true);
+    setFilteringQuery("");
   };
 
   return (
@@ -60,17 +67,17 @@ export default function FilteringMenu({
                 <h3 className="filter-headings">Offered In</h3>
                 <FormControlLabel
                   sx={checkboxStyle}
-                  control={<Checkbox name="term" value="F" />}
+                  control={<Checkbox name="term" value="F" disabled />}
                   label="Fall 2022"
                 />
                 <FormControlLabel
                   sx={checkboxStyle}
-                  control={<Checkbox name="term" value="W" />}
+                  control={<Checkbox name="term" value="W" disabled />}
                   label="Winter 2023"
                 />
                 <FormControlLabel
                   sx={checkboxStyle}
-                  control={<Checkbox name="term" value="S" />}
+                  control={<Checkbox name="term" value="S" disabled />}
                   label="Spring 2023"
                 />
               </Grid>
@@ -113,12 +120,12 @@ export default function FilteringMenu({
                 <h3 className="filter-headings">Prerequisites</h3>
                 <FormControlLabel
                   sx={checkboxStyle}
-                  control={<Checkbox name="prereq" value="none" />}
+                  control={<Checkbox name="prereq" value="none" disabled />}
                   label="None"
                 />
                 <FormControlLabel
                   sx={checkboxStyle}
-                  control={<Checkbox name="prereq" value="required" />}
+                  control={<Checkbox name="prereq" value="required" disabled />}
                   label="Required"
                 />
               </Grid>
@@ -128,12 +135,12 @@ export default function FilteringMenu({
                 <Stack direction="column">
                   <FormControlLabel
                     sx={checkboxStyle}
-                    control={<Checkbox name="capacity" value="full" />}
+                    control={<Checkbox name="capacity" value="full" disabled />}
                     label="Full"
                   />
                   <FormControlLabel
                     sx={checkboxStyle}
-                    control={<Checkbox name="capacity" value="free" />}
+                    control={<Checkbox name="capacity" value="free" disabled />}
                     label="Not Full"
                   />
                 </Stack>
@@ -143,12 +150,12 @@ export default function FilteringMenu({
                 <h3 className="filter-headings">Time</h3>
                 <FormControlLabel
                   sx={checkboxStyle}
-                  control={<Checkbox name="time" value="day" />}
+                  control={<Checkbox name="time" value="day" disabled />}
                   label="Day (Starts before 5PM)"
                 />
                 <FormControlLabel
                   sx={checkboxStyle}
-                  control={<Checkbox name="time" value="night" />}
+                  control={<Checkbox name="time" value="night" disabled />}
                   label="Night (Starts after 5PM)"
                 />
               </Grid>
@@ -178,7 +185,7 @@ export default function FilteringMenu({
               <CustomButton
                 type="tertiary"
                 text="Cancel"
-                onClick={() => setShowFilterMenu(false)}
+                onClick={() => handleCancel()}
               ></CustomButton>
             </Stack>
           </form>

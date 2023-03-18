@@ -1,40 +1,70 @@
 import { useState } from "react";
 import "../styles/CalendarModal.css";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import Modal from "@mui/material/Modal";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import clients from "../APIClients/CourseClient";
 
 type Props = {
-  modalTitle: string;
-  modalId: string;
+  modalClass: any;
   modalInfo: string;
   modalOpen: boolean;
   modalConflicts: string[];
   setModalOpen: (modalOpen: boolean) => any;
-  courseColors: any;
   availableBackgroundColors: string[];
+  setCoursesOnSchedule: any;
+  scheduleId: string;
 };
 
 export default function CalendarModal({
-  modalId,
+  modalClass,
   modalInfo,
-  modalTitle,
   modalOpen,
   modalConflicts,
   setModalOpen,
-  courseColors,
   availableBackgroundColors,
+  setCoursesOnSchedule,
+  scheduleId,
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(" ");
+  const [colorChanged, setColorChanged] = useState(false);
+
   const handleClose = () => {
-    setSelectedValue(" ");
-    setModalOpen(false);
+    if (selectedValue !== " ") {
+      clients
+        .updateCourseColorByScheduleId(
+          scheduleId,
+          modalClass.uid,
+          selectedValue,
+        )
+        .then((value: any) => {
+          setCoursesOnSchedule(value);
+        })
+        .then(() => {
+          setSelectedValue(" ");
+          setModalOpen(false);
+          setColorChanged(false);
+        });
+    } else {
+      setModalOpen(false);
+    }
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    courseColors[modalId] = event.currentTarget.value;
     setSelectedValue(event.target.value);
-    // todo: add feedback that colour did change?
+    setColorChanged(true);
+  };
+
+  const handleDeleteCourse = (id: string) => {
+    clients.deleteCoursesByScheduleId(scheduleId, id).then((value: any) => {
+      if (value.length !== 0) {
+        setCoursesOnSchedule(value);
+      }
+      setModalOpen(false);
+    });
   };
 
   const modalRadioButtons = () => {
@@ -42,7 +72,7 @@ export default function CalendarModal({
       <RadioGroup
         row
         onChange={handleChange}
-        value={courseColors[modalId] || selectedValue}
+        value={selectedValue === " " ? modalClass.color : selectedValue}
         style={{ marginLeft: "-12px" }}
       >
         {availableBackgroundColors.map((color, i) => (
@@ -69,7 +99,7 @@ export default function CalendarModal({
       aria-describedby="modal-modal-description"
     >
       <Box className="modal-style">
-        <h1 className="modal-title">{modalTitle}</h1>
+        <h1 className="modal-title">{modalClass.title}</h1>
         <h4 className="modal-info">{modalInfo}</h4>
         {modalRadioButtons()}
         <h5 className="conflict-info">
@@ -79,6 +109,32 @@ export default function CalendarModal({
             `This course conflicts with: ${modalConflicts.join(", ")}`
           )}
         </h5>
+        <IconButton
+          aria-label="delete course"
+          onClick={() => handleDeleteCourse(modalClass.uid)}
+          sx={{
+            marginLeft: "-8px",
+            "&:hover": {
+              borderRadius: "30px",
+            },
+          }}
+        >
+          <DeleteOutlineIcon
+            fontSize="small"
+            sx={{
+              backgroundColor: "var(--alerts-warning-1)",
+              borderRadius: "50%",
+              padding: "6px",
+              color: "white",
+            }}
+          />
+          <h5 style={{ margin: "0px" }}>Delete Course</h5>
+        </IconButton>
+        {colorChanged ? (
+          <h5 className="modal-info">Close popup to see colour changes!</h5>
+        ) : (
+          <></>
+        )}
       </Box>
     </Modal>
   );

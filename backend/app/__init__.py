@@ -1,4 +1,5 @@
 import os
+import re
 
 import firebase_admin
 from flask import Flask
@@ -15,9 +16,12 @@ def create_app(config_name):
     if type(config_name) is not ScriptInfo:
         app.config.from_object(app_config[config_name])
 
-    app.config["CORS_ORIGINS"] = [
-        "http://localhost:3000",
-    ]
+    if os.getenv("IS_PREVIEW_DEPLOY", "False") == "True":
+        app.config["CORS_ORIGINS"] = re.compile("https://fydp-bread.*")
+    else:
+        app.config["CORS_ORIGINS"] = os.getenv(
+            "CORS_ORIGINS", "http://localhost:3000"
+        ).split(",")
     app.config["CORS_SUPPORTS_CREDENTIALS"] = True
     CORS(app)
 
@@ -27,12 +31,13 @@ def create_app(config_name):
         else os.getenv("MONGODB_URL")
     )
 
-    Limiter(
-        get_remote_address,
-        app=app,
-        storage_uri=app.config["MONGODB_URL"],
-        strategy="fixed-window",
-    )
+    if config_name != "production":
+        Limiter(
+            get_remote_address,
+            app=app,
+            storage_uri=app.config["MONGODB_URL"],
+            strategy="fixed-window",
+        )
 
     firebase_admin.initialize_app(
         firebase_admin.credentials.Certificate(
@@ -51,6 +56,14 @@ def create_app(config_name):
                 "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_X509_CERT_URL"),
             }
         ),
+    )
+
+    app.config.update(
+        MAIL_SERVER=os.getenv("MAIL_SERVER"),
+        MAIL_PORT=int(os.getenv("MAIL_PORT")),
+        MAIL_USE_SSL=bool(os.getenv("MAIL_USE_SSL")),
+        MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
+        MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
     )
 
     from . import models, routes
