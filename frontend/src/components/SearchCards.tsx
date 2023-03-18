@@ -69,10 +69,10 @@ export default function SearchCards({
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
-  const [open, setOpen] = useState(false);
+  const [courseAddedSnack, showCourseAddedSnack] = useState(false);
 
   const handleClose = () => {
-    setOpen(false);
+    showCourseAddedSnack(false);
   };
 
   const addCourseToSchedule = (course_id: string, section_id: string) => {
@@ -83,7 +83,7 @@ export default function SearchCards({
         if (value.length !== 0) {
           setCoursesOnSchedule(value);
         }
-        setOpen(true);
+        showCourseAddedSnack(true);
       });
   };
 
@@ -401,7 +401,7 @@ export default function SearchCards({
       <Portal>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={open}
+          open={courseAddedSnack}
           autoHideDuration={2000}
           onClose={handleClose}
           message="Success! Course added to schedule."
