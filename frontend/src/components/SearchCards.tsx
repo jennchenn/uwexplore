@@ -113,7 +113,6 @@ export default function SearchCards({
     if (!resultsLoading) {
       let message = `${searchResults.length} Search results found for "${searchQuery}"`;
       if (searchQuery === "") {
-        // todo: change this message?
         message = "Search Results";
       }
       return (
