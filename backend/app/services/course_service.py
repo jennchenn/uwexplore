@@ -86,17 +86,44 @@ class CourseService:
 
     def get_saved_courses_by_user(self, user):
         try:
-            saved_courses = []
             saved_courses_list = user.saved_courses
             if saved_courses_list:
-                for course_id in saved_courses_list:
-                    course = Course.objects(_id=course_id).first()
-                    saved_courses.append(course.to_serializable_dict())
-            return saved_courses
+                return self._format_course_id_list(saved_courses_list)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def add_saved_course(self, user, course_id):
+        try:
+            course_oid = ObjectId(course_id)
+            if course_oid in user.saved_courses:
+                raise Exception(f"Course with id={course_id} already saved")
+            user.saved_courses.append(course_oid)
+            user.save()
+            return self._format_course_id_list(user.saved_courses)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to add saved course. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def delete_saved_course(self, user, course_id):
+        try:
+            course_oid = ObjectId(course_id)
+            try:
+                user.saved_courses.remove(course_oid)
+                user.save()
+                return self._format_course_id_list(user.saved_courses)
+            except Exception as e:
+                raise KeyError(f"Course with id={course_id} not saved")
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to delete saved course. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -167,3 +194,10 @@ class CourseService:
             ]
             term_to_course_ids[term] = course_names
         return term_to_course_ids
+
+    def _format_course_id_list(self, course_id_list):
+        courses = []
+        for course_id in course_id_list:
+            course = Course.objects(_id=course_id).first()
+            courses.append(course.to_serializable_dict())
+        return courses

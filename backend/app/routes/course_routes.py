@@ -25,11 +25,22 @@ def get_courses():
         return jsonify({"error": (error_message if error_message else str(e))}), 500
 
 
-@blueprint.route("/saved", methods=["GET"], strict_slashes=False)
+@blueprint.route("/saved", methods=["GET", "POST", "DELETE"], strict_slashes=False)
 @require_login
-def get_saved_courses(curr_user):
+def saved_courses(curr_user):
     try:
-        result = course_service.get_saved_courses_by_user(curr_user)
+        if request.method == "GET":
+            result = course_service.get_saved_courses_by_user(curr_user)
+        elif request.method == "POST":
+            request_data = request.get_json()
+            course_id = request_data["course_id"]
+            result = course_service.add_saved_course(curr_user, course_id)
+        elif request.method == "DELETE":
+            request_data = request.get_json()
+            course_id = request_data["course_id"]
+            result = course_service.delete_saved_course(curr_user, course_id)
+        else:
+            raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200
     except Exception as e:
         error_message = getattr(e, "message", None)
