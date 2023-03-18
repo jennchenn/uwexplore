@@ -7,10 +7,13 @@ import CustomButton from "./CustomButton";
 import SignUp from "./SignUpModal";
 import logo from "../images/logo.png";
 import LoginModal from "./LoginModal";
+import { TokenObject } from "../APIClients/UserClient";
 
 export default function Navbar() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+  // eslint-disable-next-line
+  const [token, setToken] = useState<TokenObject>();
 
   const handleCreateModalOpen = () => {
     setSignUpModalOpen(true);
@@ -45,11 +48,13 @@ export default function Navbar() {
         open={loginModalOpen}
         setOpen={setLoginModalOpen}
         linkOpen={handleCreateModalOpen}
+        setToken={setToken}
       />
       <SignUp
         open={signUpModalOpen}
         setOpen={setSignUpModalOpen}
         linkOpen={handleLoginModalOpen}
+        setToken={setToken}
       />
     </>
   );
