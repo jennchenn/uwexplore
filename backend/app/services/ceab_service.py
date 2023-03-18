@@ -37,15 +37,16 @@ class CeabService:
         try:
             courses = []
 
-            if user.get("schedule"):
-                current_schedule_id = user.get("schedule")
-                current_schedule = Schedule.objects(id=current_schedule_id).first()
+            if user.schedule:
+                current_schedule = user.schedule
+
                 courses += [
                     str(course["course_id"]) for course in current_schedule["courses"]
                 ]
 
-            if user.get("past_courses"):
-                for past_course_list in user.get("past_courses").values():
+            if user.past_courses:
+                for term in user.past_courses:
+                    past_course_list = user.past_courses[term]
                     courses += [str(id) for id in past_course_list]
 
             return self._calculate_requirements(courses)
