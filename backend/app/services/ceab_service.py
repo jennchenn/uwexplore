@@ -1,6 +1,7 @@
 from enum import Enum
 
 from ..models.course import Course
+from ..models.requirement import Requirement
 from ..models.schedule import Schedule
 
 
@@ -23,6 +24,27 @@ class CeabRequirements(Enum):
     ENG_SCI_DES = "ENG SCI & ENG DES"
 
 
+DEFAULT_GRAD_YEAR = 2023  # set a default year to base CEAB requirements off of
+
+LABEL_TO_REQ = {
+    CeabRequirements.CSE.value: "min_cse",
+    CeabRequirements.TE.value: "min_te",
+    CeabRequirements.TE_CSE.value: "min_cse_te",
+    CeabRequirements.LIST_A.value: "cse_a",
+    CeabRequirements.LIST_B.value: "cse_b",
+    CeabRequirements.LIST_C.value: "cse_c",
+    CeabRequirements.CSE_WEIGHT.value: "cse_weight",
+    CeabRequirements.PD_COMP.value: "pd_comp",
+    CeabRequirements.PD_ELEC.value: "pd_elec",
+    CeabRequirements.MATH.value: "math",
+    CeabRequirements.SCI.value: "sci",
+    CeabRequirements.ENG_SCI.value: "eng_sci",
+    CeabRequirements.ENG_DES.value: "eng_design",
+    CeabRequirements.MATH_SCI.value: "min_math_sci",
+    CeabRequirements.ENG_SCI_DES.value: "min_eng_sci_des",
+}
+
+
 class CeabService:
     def __init__(self, logger):
         self.logger = logger
@@ -39,7 +61,6 @@ class CeabService:
 
             if user.schedule:
                 current_schedule = user.schedule
-
                 courses += [
                     str(course["course_id"]) for course in current_schedule["courses"]
                 ]
@@ -49,7 +70,9 @@ class CeabService:
                     past_course_list = user.past_courses[term]
                     courses += [str(id) for id in past_course_list]
 
-            return self._calculate_requirements(courses)
+            completed_totals = self._calculate_requirements(courses)
+            requirements = self._get_ceab_requirements_by_grad_year(user.grad_year)
+            return self._map_totals_requirements(completed_totals, requirements)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -69,8 +92,9 @@ class CeabService:
             courses = [
                 str(course["course_id"]) for course in current_schedule["courses"]
             ]
-            return self._calculate_requirements(courses)
-
+            completed_totals = self._calculate_requirements(courses)
+            requirements = self._get_ceab_requirements_by_grad_year()
+            return self._map_totals_requirements(completed_totals, requirements)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -97,7 +121,15 @@ class CeabService:
                 CeabRequirements.ENG_DES.value
             ] += course_info.ceab_eng_design
             if course_info.course_type:
-                requirements_counts[course_info.course_type.value] += 1
+                if (
+                    course_info.course_type.value == "PD"
+                    and requirements_counts[CeabRequirements.PD_COMP.value] < 2
+                ):
+                    requirements_counts[CeabRequirements.PD_COMP.value] += 1
+                elif course_info.course_type.value == "PD":
+                    requirements_counts[CeabRequirements.PD_ELEC.value] += 1
+                else:
+                    requirements_counts[course_info.course_type.value] += 1
 
         # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
         self._sum_requirements(requirements_counts)
@@ -122,3 +154,21 @@ class CeabService:
         # Python float addition sometimes adds lots of decimals - round this before returning
         for req, value in requirements_counts.items():
             requirements_counts[req] = round(value, 2)
+
+    def _get_ceab_requirements_by_grad_year(self, grad_year=DEFAULT_GRAD_YEAR):
+        grad_year = DEFAULT_GRAD_YEAR if grad_year is None else int(grad_year)
+        requirements = Requirement.objects(grad_year=grad_year).first()
+        if not requirements:
+            requirements = Requirement.objects(grad_year=DEFAULT_GRAD_YEAR).first()
+        return requirements.to_serializable_dict()
+
+    def _map_totals_requirements(self, completed, requirements):
+        label_to_completed_totals = {}
+        for label, completed in completed.items():
+            # for requirements that do not have a total in requirements, use a random key
+            requirements_key = LABEL_TO_REQ.get(label, "na")
+            label_to_completed_totals[label] = {
+                "completed": completed,
+                "requirement": requirements.get(requirements_key, "NA"),
+            }
+        return label_to_completed_totals

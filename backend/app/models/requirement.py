@@ -25,7 +25,7 @@ class Requirement(Document):
         ObjectId must be converted to a string.
         """
         dict = self.to_mongo().to_dict()
-        id = dict.pop("id", None)
+        id = dict.pop("_id", None)
         dict["id"] = str(id)
         return dict
 
