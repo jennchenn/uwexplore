@@ -44,6 +44,7 @@ LABEL_TO_REQ = {
     CeabRequirements.ENG_SCI_DES.value: "min_eng_sci_des",
 }
 
+# https://uwaterloo.ca/engineering/undergraduate-students/co-op-experience/watpd-engineering
 COMPULSORY_PD_COURSE_CODES = set(["PD19", "PD20", "PD21"])
 
 

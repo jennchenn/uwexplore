@@ -7,7 +7,7 @@ from app.models.requirement import Requirement
 
 def update_database():
     update_course_requirements()
-    # update_ceab_totals()
+    update_ceab_totals()
 
 
 def update_course_requirements():
