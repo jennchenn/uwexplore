@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from flask import current_app
 
 from app.models.course import Course, Section
+from app.models.requirement import Requirement
 from app.models.schedule import Schedule, ScheduleCourses
 from app.models.user import PastCourses, User
 from app.services.ceab_service import CeabService
@@ -18,6 +19,7 @@ def ceab_service():
     User.objects.delete()
     Schedule.objects.delete()
     Course.objects.delete()
+    Requirement.objects.delete()
 
 
 DEFAULT_COURSES = [
@@ -140,29 +142,47 @@ def seed_database():
         past_courses=PastCourses(term_1a=course_ids),
     )
     user.save()
+    Requirement(
+        grad_year=2023,
+        cse_a=1,
+        cse_b=1,
+        cse_c=2,
+        min_cse=6,
+        min_te=6,
+        min_cse_te=13,
+        cse_weight=225,
+        math=195,
+        sci=195,
+        eng_sci=225,
+        eng_design=225,
+        min_math_sci=420,
+        min_eng_sci_des=900,
+        pd_comp=2,
+        pd_elec=3,
+    ).save()
 
 
 def test_calculate_ceab_numbers_for_user_success(ceab_service):
-    user = User.objects().first().to_serializable_dict()
+    user = User.objects().first()
     res = ceab_service.get_ceab_numbers_by_user(user)
     # TODO: shouldn't hardcode these
     assert res == {
-        "CSE ALL": 0,
-        "CSE WEIGHT": 0.0,
-        "ENG DES": 33.6,
-        "ENG SCI": 50.4,
-        "LIST A": 0,
-        "LIST B": 0,
-        "LIST C": 0,
-        "LIST D": 0,
-        "MATH": 168.0,
-        "PD COMP": 0,
-        "PD ELEC": 0,
-        "SCI": 0.0,
-        "TE": 2,
-        "TE & CSE": 2,
-        "MATH & SCI": 168.0,
-        "ENG SCI & ENG DES": 84.0,
+        "CSE ALL": {"completed": 0, "requirement": 6},
+        "CSE WEIGHT": {"completed": 0.0, "requirement": 225},
+        "ENG DES": {"completed": 33.6, "requirement": 225},
+        "ENG SCI": {"completed": 50.4, "requirement": 225},
+        "ENG SCI & ENG DES": {"completed": 84.0, "requirement": 900},
+        "LIST A": {"completed": 0, "requirement": 1},
+        "LIST B": {"completed": 0, "requirement": 1},
+        "LIST C": {"completed": 0, "requirement": 2},
+        "LIST D": {"completed": 0, "requirement": "NA"},
+        "MATH": {"completed": 168.0, "requirement": 195},
+        "MATH & SCI": {"completed": 168.0, "requirement": 420},
+        "PD COMP": {"completed": 0, "requirement": 2},
+        "PD ELEC": {"completed": 0, "requirement": 3},
+        "SCI": {"completed": 0.0, "requirement": 195},
+        "TE": {"completed": 2, "requirement": 6},
+        "TE & CSE": {"completed": 2, "requirement": 13},
     }
 
 
@@ -171,20 +191,20 @@ def test_calculate_ceab_numbers_by_schedule_success(ceab_service):
     res = ceab_service.get_ceab_numbers_by_schedule(schedule["id"])
     # TODO: shouldn't hardcode these
     assert res == {
-        "CSE ALL": 0,
-        "CSE WEIGHT": 0.0,
-        "ENG DES": 16.8,
-        "ENG SCI": 25.2,
-        "LIST A": 0,
-        "LIST B": 0,
-        "LIST C": 0,
-        "LIST D": 0,
-        "MATH": 84.0,
-        "PD COMP": 0,
-        "PD ELEC": 0,
-        "SCI": 0.0,
-        "TE": 1,
-        "TE & CSE": 1,
-        "MATH & SCI": 84.0,
-        "ENG SCI & ENG DES": 42.0,
+        "CSE ALL": {"completed": 0, "requirement": 6},
+        "CSE WEIGHT": {"completed": 0.0, "requirement": 225},
+        "ENG DES": {"completed": 16.8, "requirement": 225},
+        "ENG SCI": {"completed": 25.2, "requirement": 225},
+        "ENG SCI & ENG DES": {"completed": 42.0, "requirement": 900},
+        "LIST A": {"completed": 0, "requirement": 1},
+        "LIST B": {"completed": 0, "requirement": 1},
+        "LIST C": {"completed": 0, "requirement": 2},
+        "LIST D": {"completed": 0, "requirement": "NA"},
+        "MATH": {"completed": 84.0, "requirement": 195},
+        "MATH & SCI": {"completed": 84.0, "requirement": 420},
+        "PD COMP": {"completed": 0, "requirement": 2},
+        "PD ELEC": {"completed": 0, "requirement": 3},
+        "SCI": {"completed": 0.0, "requirement": 195},
+        "TE": {"completed": 1, "requirement": 6},
+        "TE & CSE": {"completed": 1, "requirement": 13},
     }
