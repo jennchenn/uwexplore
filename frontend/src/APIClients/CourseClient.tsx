@@ -22,27 +22,13 @@ export type CourseObject = {
 
 export type CalendarCourseObject = CourseObject & { color: string };
 
-const addCoursesByScheduleId = async (
-  id: string,
-  course_id: string,
-  section_id: string,
-  color: string,
-) => {
+const addCoursesByScheduleId = async (id: string, course: any) => {
   try {
-    const payload = {
-      course_id: course_id,
-      section_id: section_id,
-      color: color,
-    };
-    const { data } = await APIClient.post(
-      `/schedules/${id}`,
-      JSON.stringify(payload),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const { data } = await APIClient.post(`/schedules/${id}`, course, {
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

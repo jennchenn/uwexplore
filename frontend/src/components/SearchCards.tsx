@@ -74,9 +74,11 @@ export default function SearchCards({
     Record<string, any>
   >({});
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
 
   const [sectionsToAdd, setSectionsToAdd] = useState({} as any);
   const [coursesForCall, setCoursesForCall] = useState([] as any);
+  const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
   const handleClose = () => {
     showCourseAddedSnack(false);
@@ -87,48 +89,52 @@ export default function SearchCards({
     type: string,
     sectionsByTypeAndNumber: any,
   ) => {
-    setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
-
-    const classIds: any = [];
-    const extractIdsArray = sectionsByTypeAndNumber[type][event.target.value];
-    for (let i = 0; i < extractIdsArray.length; i++) {
-      classIds.push(extractIdsArray[i].id);
+    setSectionDropdownOpen(false);
+    if (event.target.value) {
+      setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
+      const classIds: any = [];
+      const extractIdsArray = sectionsByTypeAndNumber[type][event.target.value];
+      for (let i = 0; i < extractIdsArray.length; i++) {
+        classIds.push(extractIdsArray[i].id);
+      }
+      setCoursesForCall((prevState: any) => ({
+        ...prevState,
+        [type]: classIds,
+      }));
     }
-    setCoursesForCall((prevState: any) => ({
-      ...prevState,
-      [type]: classIds,
-    }));
   };
 
   // section_id -> an object that looks like { LEC: ["id1", "id2"], TUT: ["id1"]}
   const addCourseToSchedule = (course_id: string, section_id: any) => {
+    setAddLoading(true);
+    let formattedArray: any = [];
+
     Object.keys(section_id).forEach((key) => {
-      // TODO: replace with batch call to add courses
       for (let i = 0; i < section_id[key].length; i++) {
-        console.log(`adding section w id: ${section_id[key][i]}`);
-        clients
-          // todo: don't set default colour to black?
-          .addCoursesByScheduleId(
-            scheduleId,
-            course_id,
-            section_id[key][i],
-            "#000000",
-          )
-          .then((value: any) => {
-            if (value.length !== 0) {
-              setCoursesOnSchedule(value);
-              showCourseAddedSnack(true);
-            }
-          });
+        formattedArray.push({
+          course_id: course_id,
+          section_id: section_id[key][i],
+          color: "#000000",
+        });
       }
+      clients
+        // todo: don't set default colour to black?
+        .addCoursesByScheduleId(scheduleId, formattedArray)
+        .then((value: any) => {
+          if (value.length !== 0) {
+            setCoursesOnSchedule(value);
+            showCourseAddedSnack(true);
+            setAddLoading(false);
+          }
+        });
     });
   };
 
   // currently only allowing one card to be expanded at a time
   const handleExpandClick = (courseToExpand: any) => {
+    setSectionsToAdd({});
+    setCoursesForCall([]);
     if (expandedCard === courseToExpand.id) {
-      setSectionsToAdd({});
-      setCoursesForCall([]);
       setExpandedCard("");
     } else {
       setExpandedCard(courseToExpand.id);
@@ -234,7 +240,8 @@ export default function SearchCards({
 
     if (Object.keys(sectionsByTypeAndNumber).length !== 0) {
       return (
-        <div
+        <Stack
+          direction="row"
           style={{
             marginLeft: "auto",
             marginRight: "0px",
@@ -262,13 +269,17 @@ export default function SearchCards({
                 labelId="demo-select-small"
                 id="demo-select-small"
                 defaultValue=""
-                value={sectionsToAdd[type]}
+                value={sectionsToAdd[type] || ""}
                 label={type}
                 onChange={(e) =>
                   handleSectionChange(e, type, sectionsByTypeAndNumber)
                 }
+                onClick={() => setSectionDropdownOpen(true)}
                 onMouseOver={() => {
-                  if (sectionsToAdd[type] !== undefined) {
+                  if (
+                    sectionsToAdd[type] !== undefined &&
+                    !sectionDropdownOpen
+                  ) {
                     setCourseHovered(
                       (sectionsByTypeAndNumber as any)[type][
                         sectionsToAdd[type]
@@ -319,7 +330,7 @@ export default function SearchCards({
               </Select>
             </FormControl>
           ))}
-        </div>
+        </Stack>
       );
     }
   };
@@ -390,35 +401,46 @@ export default function SearchCards({
               : false}
             <Tooltip
               title={
-                expandedCard === course.id
+                course.sections.length === 0
+                  ? ""
+                  : expandedCard === course.id
                   ? "Add Classes to Calendar"
                   : "Expand Card to Add Classes"
               }
               arrow
             >
-              <IconButton
-                aria-label="add course"
-                onClick={() => {
-                  if (expandedCard === course.id) {
-                    addCourseToSchedule(course.id, coursesForCall);
-                  } else {
-                    handleExpandClick(course);
-                  }
-                }}
-                sx={{
-                  marginLeft: "auto",
-                  marginRight: "0px",
-                  padding: "4px",
-                  color: "var(--main-purple-1)",
-                }}
-                disabled={course.sections.length === 0 ? true : false}
-              >
-                <AddCircleIcon
-                  sx={{
-                    fontSize: "28px",
+              <div>
+                <IconButton
+                  aria-label="add course"
+                  onClick={() => {
+                    if (expandedCard === course.id) {
+                      addCourseToSchedule(course.id, coursesForCall);
+                    } else {
+                      handleExpandClick(course);
+                    }
                   }}
-                />
-              </IconButton>
+                  sx={{
+                    marginLeft: "auto",
+                    marginRight: "0px",
+                    padding: "4px",
+                    color: "var(--main-purple-1)",
+                  }}
+                  disabled={course.sections.length === 0 ? true : false}
+                >
+                  {addLoading ? (
+                    <CircularProgress
+                      size={24}
+                      sx={{ color: "var(--main-purple-2)" }}
+                    />
+                  ) : (
+                    <AddCircleIcon
+                      sx={{
+                        fontSize: "28px",
+                      }}
+                    />
+                  )}
+                </IconButton>
+              </div>
             </Tooltip>
             <IconButton
               aria-label="expand more"
