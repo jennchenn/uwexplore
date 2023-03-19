@@ -94,8 +94,6 @@ export default function SearchCards({
     type: string,
     sectionsByTypeAndNumber: any,
   ) => {
-    setSectionDropdownOpen(false);
-
     if (event.target.value) {
       setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
 
@@ -283,7 +281,8 @@ export default function SearchCards({
                 onChange={(e) =>
                   handleSectionChange(e, type, sectionsByTypeAndNumber)
                 }
-                onClick={() => setSectionDropdownOpen(true)}
+                onOpen={() => setSectionDropdownOpen(true)}
+                onClose={() => setSectionDropdownOpen(false)}
                 onMouseOver={() => {
                   if (
                     sectionsToAdd[type] !== undefined &&
