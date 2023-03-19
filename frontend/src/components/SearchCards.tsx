@@ -77,12 +77,19 @@ export default function SearchCards({
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
+
+  // snackbar appears after successful course add
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState({} as any);
+  // loading state while waiting for courses to be added
+  const [addLoading, setAddLoading] = useState(false);
 
+  // corresponds to the value of the section dropdowns
   const [sectionsToAdd, setSectionsToAdd] = useState({} as any);
+  // corresponds to the api call to add courses
   const [coursesForCall, setCoursesForCall] = useState([] as any);
+  const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
   const handleClose = () => {
     showCourseAddedSnack(false);
@@ -93,40 +100,46 @@ export default function SearchCards({
     type: string,
     sectionsByTypeAndNumber: any,
   ) => {
-    setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
+    setSectionDropdownOpen(false);
 
-    const classIds: any = [];
-    const extractIdsArray = sectionsByTypeAndNumber[type][event.target.value];
-    for (let i = 0; i < extractIdsArray.length; i++) {
-      classIds.push(extractIdsArray[i].id);
+    if (event.target.value) {
+      setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
+
+      // classIds -> an object that looks like { LEC: ["id1", "id2"], TUT: ["id1"]}
+      const classIds: any = [];
+      const extractIdsArray = sectionsByTypeAndNumber[type][event.target.value];
+      for (let i = 0; i < extractIdsArray.length; i++) {
+        classIds.push(extractIdsArray[i].id);
+      }
+      setCoursesForCall((prevState: any) => ({
+        ...prevState,
+        [type]: classIds,
+      }));
     }
-    setCoursesForCall((prevState: any) => ({
-      ...prevState,
-      [type]: classIds,
-    }));
   };
 
-  // section_id -> an object that looks like { LEC: ["id1", "id2"], TUT: ["id1"]}
-  const addCourseToSchedule = (course_id: string, section_id: any) => {
-    Object.keys(section_id).forEach((key) => {
-      // TODO: replace with batch call to add courses
-      for (let i = 0; i < section_id[key].length; i++) {
-        console.log(`adding section w id: ${section_id[key][i]}`);
-        clients
-          // todo: don't set default colour to black?
-          .addCoursesByScheduleId(
-            scheduleId,
-            course_id,
-            section_id[key][i],
-            "#000000",
-          )
-          .then((value: any) => {
-            if (value.length !== 0) {
-              setCoursesOnSchedule(value);
-              showCourseAddedSnack(true);
-            }
-          });
+  const addCourseToSchedule = (course_id: string, section_ids: any) => {
+    setAddLoading(true);
+    let formattedArray: any = [];
+
+    Object.keys(section_ids).forEach((key) => {
+      for (let i = 0; i < section_ids[key].length; i++) {
+        formattedArray.push({
+          course_id: course_id,
+          section_id: section_ids[key][i],
+          color: "#000000",
+        });
       }
+      clients
+        // todo: don't set default colour to black?
+        .addCoursesByScheduleId(scheduleId, formattedArray)
+        .then((value: any) => {
+          if (value.length !== 0) {
+            setCoursesOnSchedule(value);
+            showCourseAddedSnack(true);
+            setAddLoading(false);
+          }
+        });
     });
   };
 
@@ -140,9 +153,9 @@ export default function SearchCards({
 
   // currently only allowing one card to be expanded at a time
   const handleExpandClick = (courseToExpand: any) => {
+    setSectionsToAdd({});
+    setCoursesForCall([]);
     if (expandedCard === courseToExpand.id) {
-      setSectionsToAdd({});
-      setCoursesForCall([]);
       setExpandedCard("");
     } else {
       setExpandedCard(courseToExpand.id);
@@ -232,8 +245,9 @@ export default function SearchCards({
   };
 
   const createSectionDropdowns = (course: any) => {
+    // organize course obj by type and number
+    // format: { LEC: { 001: [course obj], 002: [course obj] }, TUT: { 101: [course obj]} }
     const sectionsByTypeAndNumber = {};
-
     for (const section of course.sections) {
       if (!(sectionsByTypeAndNumber as any)[section.type]) {
         (sectionsByTypeAndNumber as any)[section.type] = {};
@@ -246,9 +260,11 @@ export default function SearchCards({
       );
     }
 
+    // create selection dropdowns for adding sections
     if (Object.keys(sectionsByTypeAndNumber).length !== 0) {
       return (
-        <div
+        <Stack
+          direction="row"
           style={{
             marginLeft: "auto",
             marginRight: "0px",
@@ -276,13 +292,17 @@ export default function SearchCards({
                 labelId="demo-select-small"
                 id="demo-select-small"
                 defaultValue=""
-                value={sectionsToAdd[type]}
+                value={sectionsToAdd[type] || ""}
                 label={type}
                 onChange={(e) =>
                   handleSectionChange(e, type, sectionsByTypeAndNumber)
                 }
+                onClick={() => setSectionDropdownOpen(true)}
                 onMouseOver={() => {
-                  if (sectionsToAdd[type] !== undefined) {
+                  if (
+                    sectionsToAdd[type] !== undefined &&
+                    !sectionDropdownOpen
+                  ) {
                     setCourseHovered(
                       (sectionsByTypeAndNumber as any)[type][
                         sectionsToAdd[type]
@@ -333,7 +353,7 @@ export default function SearchCards({
               </Select>
             </FormControl>
           ))}
-        </div>
+        </Stack>
       );
     }
   };
@@ -404,57 +424,66 @@ export default function SearchCards({
               : false}
             <Tooltip
               title={
-                coursesOnSchedulesIds().includes(course.id)
+                course.sections.length === 0
+                  ? ""
+                  : coursesOnSchedulesIds().includes(course.id)
                   ? "Delete Course from Schedule"
                   : expandedCard === course.id
-                  ? "Add Classes to Schedule"
+                  ? "Add Classes to Calendar"
                   : "Expand Card to Add Classes"
               }
               arrow
             >
-              <IconButton
-                aria-label="add course"
-                onClick={() => {
-                  if (coursesOnSchedulesIds().includes(course.id)) {
-                    setDeleteModalOpen(true);
-                    setCourseToDelete({
-                      title: `${course.department} 
-                    ${course.code}`,
-                      id: course.id,
-                    });
-                  } else if (expandedCard === course.id) {
-                    addCourseToSchedule(course.id, coursesForCall);
-                  } else {
-                    handleExpandClick(course);
-                  }
-                }}
-                sx={{
-                  marginLeft: "auto",
-                  marginRight: "0px",
-                  padding: "4px",
-                  color: "var(--main-purple-1)",
-                }}
-                disabled={course.sections.length === 0 ? true : false}
-              >
-                {coursesOnSchedulesIds().includes(course.id) ? (
-                  <DeleteOutlineIcon
-                    sx={{
-                      backgroundColor: "var(--alerts-warning-1)",
-                      borderRadius: "50%",
-                      padding: "4px",
-                      color: "white",
-                      fontSize: "17px",
-                      marginRight: "1px",
-                    }}
-                  />
-                ) : (
-                  <AddCircleIcon
-                    sx={{
-                      fontSize: "28px",
-                    }}
-                  />
-                )}
-              </IconButton>
+              <div>
+                <IconButton
+                  aria-label="add course"
+                  onClick={() => {
+                    if (coursesOnSchedulesIds().includes(course.id)) {
+                      setDeleteModalOpen(true);
+                      setCourseToDelete({
+                        title: `${course.department} 
+                      ${course.code}`,
+                        id: course.id,
+                      });
+                    } else if (expandedCard === course.id) {
+                      addCourseToSchedule(course.id, coursesForCall);
+                    } else {
+                      handleExpandClick(course);
+                    }
+                  }}
+                  sx={{
+                    marginLeft: "auto",
+                    marginRight: "0px",
+                    padding: "4px",
+                    color: "var(--main-purple-1)",
+                  }}
+                  disabled={course.sections.length === 0 ? true : false}
+                >
+                  {coursesOnSchedulesIds().includes(course.id) ? (
+                    <DeleteOutlineIcon
+                      sx={{
+                        backgroundColor: "var(--alerts-warning-1)",
+                        borderRadius: "50%",
+                        padding: "4px",
+                        color: "white",
+                        fontSize: "17px",
+                        marginRight: "1px",
+                      }}
+                    />
+                  ) : addLoading ? (
+                    <CircularProgress
+                      size={24}
+                      sx={{ color: "var(--main-purple-2)" }}
+                    />
+                  ) : (
+                    <AddCircleIcon
+                      sx={{
+                        fontSize: "28px",
+                      }}
+                    />
+                  )}
+                </IconButton>
+              </div>
             </Tooltip>
             <IconButton
               aria-label="expand more"
