@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import clients, { CourseObject } from "../APIClients/CourseClient";
+import SearchDeleteModal from "./SearchDeleteModal";
 
 // MUI component imports
 import Box from "@mui/material/Box";
@@ -77,6 +78,8 @@ export default function SearchCards({
     Record<string, any>
   >({});
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState({} as any);
 
   const [sectionsToAdd, setSectionsToAdd] = useState({} as any);
   const [coursesForCall, setCoursesForCall] = useState([] as any);
@@ -123,16 +126,6 @@ export default function SearchCards({
               showCourseAddedSnack(true);
             }
           });
-      }
-    });
-  };
-
-  const deleteCourseFromSchedule = (id: string) => {
-    // todo: passing in wrong id for some reason... uid?
-    console.log(searchResults);
-    clients.deleteCoursesByScheduleId(scheduleId, id).then((value: any) => {
-      if (value.length !== 0) {
-        setCoursesOnSchedule(value);
       }
     });
   };
@@ -423,7 +416,12 @@ export default function SearchCards({
                 aria-label="add course"
                 onClick={() => {
                   if (coursesOnSchedulesIds().includes(course.id)) {
-                    deleteCourseFromSchedule(course.id);
+                    setDeleteModalOpen(true);
+                    setCourseToDelete({
+                      title: `${course.department} 
+                    ${course.code}`,
+                      id: course.id,
+                    });
                   } else if (expandedCard === course.id) {
                     addCourseToSchedule(course.id, coursesForCall);
                   } else {
@@ -614,6 +612,14 @@ export default function SearchCards({
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
         .map((course) => createCourseCard(course))}
       {renderResultsDisplayedCard()}
+      <SearchDeleteModal
+        courseToDelete={courseToDelete}
+        setCourseToDelete={setCourseToDelete}
+        setCoursesOnSchedule={setCoursesOnSchedule}
+        deleteModalOpen={deleteModalOpen}
+        setDeleteModalOpen={setDeleteModalOpen}
+        scheduleId={scheduleId}
+      ></SearchDeleteModal>
       <Portal>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
