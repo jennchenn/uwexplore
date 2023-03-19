@@ -31,12 +31,20 @@ def schedule_courses_by_user(curr_user):
             )
         elif request.method == "DELETE":
             request_data = request.get_json()
-            schedule_object_id = request_data[
-                "id"
-            ]  # this should be one of the UIDs returned from the above calls
-            result = schedule_service.delete_course_from_schedule_by_user(
-                curr_user, schedule_object_id
-            )
+            course_id = request_data.get("course_id", None)
+            schedule_object_id = request_data.get(
+                "id", None
+            )  # this should be one of the UIDs returned from the above calls
+            if course_id:
+                result = schedule_service.delete_courses_from_schedule_by_user(
+                    curr_user, course_id
+                )
+            elif schedule_object_id:
+                result = schedule_service.delete_course_from_schedule_by_user(
+                    curr_user, schedule_object_id
+                )
+            else:
+                raise Exception("At least one id must be specified for deletion!")
         else:
             raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200
@@ -67,10 +75,20 @@ def schedule_courses_by_id(id):
             result = schedule_service.update_schedule_color_by_id(id, uid, color)
         elif request.method == "DELETE":
             request_data = request.get_json()
-            schedule_object_id = request_data["id"]
-            result = schedule_service.delete_course_from_schedule_by_id(
-                id, schedule_object_id
-            )
+            course_id = request_data.get("course_id", None)
+            schedule_object_id = request_data.get(
+                "id", None
+            )  # this should be one of the UIDs returned from the above calls
+            if course_id:
+                result = schedule_service.delete_courses_from_schedule_by_id(
+                    id, course_id
+                )
+            elif schedule_object_id:
+                result = schedule_service.delete_course_from_schedule_by_id(
+                    id, schedule_object_id
+                )
+            else:
+                raise Exception("At least one id must be specified for deletion!")
         else:
             raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200
