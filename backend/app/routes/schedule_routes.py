@@ -21,8 +21,24 @@ def schedule_courses_by_user(curr_user):
             )
         elif request.method == "PUT":
             request_data = request.get_json()
-            uid = request_data["uid"]
             color = request_data["color"]
+            uid = request_data.get("uid", None)
+            course_id = request_data.get("course_id", None)
+            if uid:
+                result = schedule_service.update_schedule_color_by_user(
+                    curr_user, uid, color
+                )
+            elif course_id:
+                result = schedule_service.update_schedule_colors_by_user(
+                    curr_user, course_id, color
+                )
+            else:
+                return (
+                    jsonify(
+                        {"error": "At least one of course id or uid must be specified"}
+                    ),
+                    400,
+                )
             result = schedule_service.update_schedule_color_by_user(
                 curr_user, uid, color
             )
@@ -68,9 +84,22 @@ def schedule_courses_by_id(id):
             result = schedule_service.add_courses_to_schedule_by_id(id, courses)
         elif request.method == "PUT":
             request_data = request.get_json()
-            uid = request_data["uid"]
             color = request_data["color"]
-            result = schedule_service.update_schedule_color_by_id(id, uid, color)
+            uid = request_data.get("uid", None)
+            course_id = request_data.get("course_id", None)
+            if uid:
+                result = schedule_service.update_schedule_color_by_id(id, uid, color)
+            elif course_id:
+                result = schedule_service.update_schedule_colors_by_id(
+                    id, course_id, color
+                )
+            else:
+                return (
+                    jsonify(
+                        {"error": "At least one of course id or uid must be specified"}
+                    ),
+                    400,
+                )
         else:
             raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200

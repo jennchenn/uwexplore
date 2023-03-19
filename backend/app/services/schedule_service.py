@@ -66,12 +66,26 @@ class ScheduleService:
             current_schedule = user.schedule
             if not current_schedule:
                 raise KeyError(f"No saved schedule for user")
-            return self._update_schedule_color(current_schedule, uid, color)
-
+            return self._update_schedule_color_by_uid(current_schedule, uid, color)
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
                 f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def update_schedule_colors_by_user(self, user, course_id, color):
+        try:
+            current_schedule = user.schedule
+            if not current_schedule:
+                raise KeyError(f"No saved schedule for user")
+            return self._update_schedule_color_by_course_id(
+                current_schedule, course_id, color
+            )
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to update course in schedule. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -166,8 +180,25 @@ class ScheduleService:
                 raise KeyError(
                     f"No saved schedule with id={schedule_id} with item uid={schedule_id}"
                 )
-            return self._update_schedule_color(current_schedule, uid, color)
+            return self._update_schedule_color_by_uid(current_schedule, uid, color)
 
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to update course in schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def update_schedule_colors_by_id(self, schedule_id, course_id, color):
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            if not current_schedule:
+                raise KeyError(
+                    f"No saved schedule with id={schedule_id} with item uid={schedule_id}"
+                )
+            return self._update_schedule_color_by_course_id(
+                current_schedule, course_id, color
+            )
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
@@ -225,9 +256,16 @@ class ScheduleService:
         current_schedule.save()
         return self._format_schedule_courses(current_schedule)
 
-    def _update_schedule_color(self, current_schedule, uid, color):
+    def _update_schedule_color_by_uid(self, current_schedule, uid, color):
         for course in current_schedule.courses:
             if str(course._id) == uid:
+                course.color = color
+        current_schedule.save()
+        return self._format_schedule_courses(current_schedule)
+
+    def _update_schedule_color_by_course_id(self, current_schedule, course_id, color):
+        for course in current_schedule.courses:
+            if str(course.course_id) == course_id:
                 course.color = color
         current_schedule.save()
         return self._format_schedule_courses(current_schedule)
