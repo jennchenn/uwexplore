@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import clients, { CourseObject } from "../APIClients/CourseClient";
@@ -33,6 +33,7 @@ import TableRow from "@mui/material/TableRow";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -57,6 +58,7 @@ interface searchProps {
   searchResults: CourseObject[];
   searchQuery: string;
   setCourseHovered: any;
+  coursesOnSchedule: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
 }
@@ -66,6 +68,7 @@ export default function SearchCards({
   searchResults,
   searchQuery,
   setCourseHovered,
+  coursesOnSchedule,
   setCoursesOnSchedule,
   scheduleId,
 }: searchProps) {
@@ -123,6 +126,24 @@ export default function SearchCards({
       }
     });
   };
+
+  const deleteCourseFromSchedule = (id: string) => {
+    // todo: passing in wrong id for some reason... uid?
+    console.log(searchResults);
+    clients.deleteCoursesByScheduleId(scheduleId, id).then((value: any) => {
+      if (value.length !== 0) {
+        setCoursesOnSchedule(value);
+      }
+    });
+  };
+
+  const coursesOnSchedulesIds = useCallback(() => {
+    let coursesOnScheduleIds = [];
+    for (let i = 0; i < coursesOnSchedule.length; i++) {
+      coursesOnScheduleIds.push(coursesOnSchedule[i].id);
+    }
+    return coursesOnScheduleIds;
+  }, [coursesOnSchedule]);
 
   // currently only allowing one card to be expanded at a time
   const handleExpandClick = (courseToExpand: any) => {
@@ -390,8 +411,10 @@ export default function SearchCards({
               : false}
             <Tooltip
               title={
-                expandedCard === course.id
-                  ? "Add Classes to Calendar"
+                coursesOnSchedulesIds().includes(course.id)
+                  ? "Delete Course from Schedule"
+                  : expandedCard === course.id
+                  ? "Add Classes to Schedule"
                   : "Expand Card to Add Classes"
               }
               arrow
@@ -399,7 +422,9 @@ export default function SearchCards({
               <IconButton
                 aria-label="add course"
                 onClick={() => {
-                  if (expandedCard === course.id) {
+                  if (coursesOnSchedulesIds().includes(course.id)) {
+                    deleteCourseFromSchedule(course.id);
+                  } else if (expandedCard === course.id) {
                     addCourseToSchedule(course.id, coursesForCall);
                   } else {
                     handleExpandClick(course);
@@ -413,11 +438,24 @@ export default function SearchCards({
                 }}
                 disabled={course.sections.length === 0 ? true : false}
               >
-                <AddCircleIcon
-                  sx={{
-                    fontSize: "28px",
-                  }}
-                />
+                {coursesOnSchedulesIds().includes(course.id) ? (
+                  <DeleteOutlineIcon
+                    sx={{
+                      backgroundColor: "var(--alerts-warning-1)",
+                      borderRadius: "50%",
+                      padding: "4px",
+                      color: "white",
+                      fontSize: "17px",
+                      marginRight: "1px",
+                    }}
+                  />
+                ) : (
+                  <AddCircleIcon
+                    sx={{
+                      fontSize: "28px",
+                    }}
+                  />
+                )}
               </IconButton>
             </Tooltip>
             <IconButton
@@ -574,7 +612,7 @@ export default function SearchCards({
       )}
       {searchResults
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
-        .map((course, i) => createCourseCard(course))}
+        .map((course) => createCourseCard(course))}
       {renderResultsDisplayedCard()}
       <Portal>
         <Snackbar

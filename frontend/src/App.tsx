@@ -86,6 +86,7 @@ function App() {
               ) : (
                 <Search
                   setCourseHovered={setCourseHovered}
+                  coursesOnSchedule={coursesOnSchedule}
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
                 />
