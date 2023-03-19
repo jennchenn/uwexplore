@@ -73,10 +73,15 @@ export default function SearchCards({
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
+
+  // snackbar appears after successful course add
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
+  // loading state while waiting for courses to be added
   const [addLoading, setAddLoading] = useState(false);
 
+  // corresponds to the value of the section dropdowns
   const [sectionsToAdd, setSectionsToAdd] = useState({} as any);
+  // corresponds to the api call to add courses
   const [coursesForCall, setCoursesForCall] = useState([] as any);
   const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
@@ -90,8 +95,11 @@ export default function SearchCards({
     sectionsByTypeAndNumber: any,
   ) => {
     setSectionDropdownOpen(false);
+
     if (event.target.value) {
       setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
+
+      // classIds -> an object that looks like { LEC: ["id1", "id2"], TUT: ["id1"]}
       const classIds: any = [];
       const extractIdsArray = sectionsByTypeAndNumber[type][event.target.value];
       for (let i = 0; i < extractIdsArray.length; i++) {
@@ -104,16 +112,15 @@ export default function SearchCards({
     }
   };
 
-  // section_id -> an object that looks like { LEC: ["id1", "id2"], TUT: ["id1"]}
-  const addCourseToSchedule = (course_id: string, section_id: any) => {
+  const addCourseToSchedule = (course_id: string, section_ids: any) => {
     setAddLoading(true);
     let formattedArray: any = [];
 
-    Object.keys(section_id).forEach((key) => {
-      for (let i = 0; i < section_id[key].length; i++) {
+    Object.keys(section_ids).forEach((key) => {
+      for (let i = 0; i < section_ids[key].length; i++) {
         formattedArray.push({
           course_id: course_id,
-          section_id: section_id[key][i],
+          section_id: section_ids[key][i],
           color: "#000000",
         });
       }
@@ -224,8 +231,9 @@ export default function SearchCards({
   };
 
   const createSectionDropdowns = (course: any) => {
+    // organize course obj by type and number
+    // format: { LEC: { 001: [course obj], 002: [course obj] }, TUT: { 101: [course obj]} }
     const sectionsByTypeAndNumber = {};
-
     for (const section of course.sections) {
       if (!(sectionsByTypeAndNumber as any)[section.type]) {
         (sectionsByTypeAndNumber as any)[section.type] = {};
@@ -238,6 +246,7 @@ export default function SearchCards({
       );
     }
 
+    // create selection dropdowns for adding sections
     if (Object.keys(sectionsByTypeAndNumber).length !== 0) {
       return (
         <Stack
