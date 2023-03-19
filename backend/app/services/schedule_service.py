@@ -18,33 +18,46 @@ class ScheduleService:
             )
             raise e
 
-    def add_course_to_schedule_by_user(self, user, course_id, section_id, color):
+    def add_courses_to_schedule_by_user(self, user, courses):
         try:
-            course = Course.objects(_id=course_id).first()
-            if not course:
-                raise KeyError(f"No course with id={course_id}")
-            schedule_obj = ScheduleCourses(
-                course_id=course_id, section_id=section_id, color=color
-            )
+            new_courses = []
+            exceptions = []
             current_schedule = user.schedule
 
+            for course in courses:
+                course_obj = Course.objects(_id=course["course_id"]).first()
+                if not course_obj:
+                    exceptions.append(f"No course with id={course['course_id']}")
+                    continue
+                schedule_obj = ScheduleCourses(**course)
+                if current_schedule and self._is_duplicate_course(
+                    current_schedule, schedule_obj
+                ):
+                    exceptions.append(
+                        f"Course={course['course_id']} and section={course['section_id']} already exist in calendar."
+                    )
+                    continue
+                new_courses.append(schedule_obj)
+
+            if not new_courses:
+                raise Exception(f"Error adding courses: {exceptions}")
+
             if not current_schedule:  # make new schedule
-                current_schedule = Schedule(courses=[schedule_obj])
+                current_schedule = Schedule(courses=new_courses)
                 current_schedule.save()
-                user_obj = User.objects(id=user["id"]).first()
-                user_obj.schedule = current_schedule
-                user_obj.save()
+                user.schedule = current_schedule
+                user.save()
             else:
-                if self._is_duplicate_course(current_schedule, schedule_obj):
-                    raise Exception("Course and section already exist in calendar.")
-                current_schedule.courses.append(schedule_obj)
+                current_schedule.courses.extend(new_courses)
                 current_schedule.save()
+            for exception in exceptions:
+                self.logger.error("Error adding one or more courses: ", exception)
             return self._format_schedule_courses(current_schedule)
 
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
-                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+                f"Failed to add one or more courses to schedule. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -67,8 +80,23 @@ class ScheduleService:
             current_schedule = user.schedule
             if not current_schedule:
                 raise Exception("User does not have a schedule.")
-            return self._delete_course_from_schedule(
+            return self._delete_course_from_schedule_by_id(
                 current_schedule, schedule_object_id
+            )
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def delete_courses_from_schedule_by_user(self, user, course_id):
+        try:
+            current_schedule = user.schedule
+            if not current_schedule:
+                raise Exception("User does not have a schedule.")
+            return self._delete_courses_from_schedule_by_course_id(
+                current_schedule, course_id
             )
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -90,29 +118,44 @@ class ScheduleService:
             )
             raise e
 
-    def add_course_to_schedule_by_id(self, schedule_id, course_id, section_id, color):
+    def add_courses_to_schedule_by_id(self, schedule_id, courses):
         try:
-            course = Course.objects(_id=course_id).first()
-            if not course:
-                raise KeyError(f"No course with id={course_id}")
-            schedule_obj = ScheduleCourses(
-                course_id=course_id, section_id=section_id, color=color
-            )
+            new_courses = []
+            exceptions = []
             current_schedule = Schedule.objects(id=schedule_id).first()
 
-            if not schedule_id:  # make new schedule
-                current_schedule = Schedule(courses=[schedule_obj])
+            for course in courses:
+                course_obj = Course.objects(_id=course["course_id"]).first()
+                if not course_obj:
+                    exceptions.append(f"No course with id={course['course_id']}")
+                    continue
+                schedule_obj = ScheduleCourses(**course)
+                if current_schedule and self._is_duplicate_course(
+                    current_schedule, schedule_obj
+                ):
+                    exceptions.append(
+                        f"Course={course['course_id']} and section={course['section_id']} already exist in calendar."
+                    )
+                    continue
+                new_courses.append(schedule_obj)
+
+            if not new_courses:
+                raise Exception(f"Error adding courses: {exceptions}")
+
+            if not current_schedule:  # make new schedule
+                current_schedule = Schedule(courses=new_courses)
                 current_schedule.save()
             else:
-                if self._is_duplicate_course(current_schedule, schedule_obj):
-                    raise Exception("Course and section already exist in calendar.")
-                current_schedule.courses.append(schedule_obj)
+                current_schedule.courses.extend(new_courses)
                 current_schedule.save()
+            for exception in exceptions:
+                self.logger.error("Error adding one or more courses: ", exception)
             return self._format_schedule_courses(current_schedule)
+
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
-                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+                f"Failed to add one or more courses to schedule. Reason={reason if reason else str(e)}"
             )
             raise e
 
@@ -137,8 +180,23 @@ class ScheduleService:
             current_schedule = Schedule.objects(id=schedule_id).first()
             if not current_schedule:
                 raise KeyError(f"No schedule with id={schedule_id}")
-            return self._delete_course_from_schedule(
+            return self._delete_course_from_schedule_by_id(
                 current_schedule, schedule_object_id
+            )
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to add course to schedule. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def delete_courses_from_schedule_by_id(self, schedule_id, course_id):
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            if not current_schedule:
+                raise KeyError(f"No schedule with id={schedule_id}")
+            return self._delete_courses_from_schedule_by_course_id(
+                current_schedule, course_id
             )
         except Exception as e:
             reason = getattr(e, "message", None)
@@ -153,9 +211,16 @@ class ScheduleService:
                 return True
         return False
 
-    def _delete_course_from_schedule(self, current_schedule, schedule_object_id):
+    def _delete_course_from_schedule_by_id(self, current_schedule, schedule_object_id):
         current_schedule.courses = list(
             filter(lambda x: str(x._id) != schedule_object_id, current_schedule.courses)
+        )
+        current_schedule.save()
+        return self._format_schedule_courses(current_schedule)
+
+    def _delete_courses_from_schedule_by_course_id(self, current_schedule, course_id):
+        current_schedule.courses = list(
+            filter(lambda x: str(x.course_id) != course_id, current_schedule.courses)
         )
         current_schedule.save()
         return self._format_schedule_courses(current_schedule)
