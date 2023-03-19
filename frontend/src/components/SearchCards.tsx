@@ -74,8 +74,10 @@ export default function SearchCards({
     Record<string, any>
   >({});
 
-  // snackbar appears after successful course add
+  // snackbars
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
+  const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
+
   // loading state while waiting for courses to be added
   const [addLoading, setAddLoading] = useState(false);
 
@@ -85,8 +87,12 @@ export default function SearchCards({
   const [coursesForCall, setCoursesForCall] = useState([] as any);
   const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
-  const handleClose = () => {
+  const handleCloseAddedSnack = () => {
     showCourseAddedSnack(false);
+  };
+
+  const handleCloseNothingSnack = () => {
+    showNothingToAddSnack(false);
   };
 
   const handleSectionChange = (
@@ -111,28 +117,30 @@ export default function SearchCards({
   };
 
   const addCourseToSchedule = (course_id: string, section_ids: any) => {
-    setAddLoading(true);
-    let formattedArray: any = [];
+    if (Object.keys(section_ids).length !== 0) {
+      setAddLoading(true);
+      let formattedArray: any = [];
 
-    Object.keys(section_ids).forEach((key) => {
-      for (let i = 0; i < section_ids[key].length; i++) {
-        formattedArray.push({
-          course_id: course_id,
-          section_id: section_ids[key][i],
-          color: "#000000",
-        });
-      }
-      clients
-        // todo: don't set default colour to black?
-        .addCoursesByScheduleId(scheduleId, formattedArray)
-        .then((value: any) => {
-          if (value.length !== 0) {
-            setCoursesOnSchedule(value);
-            showCourseAddedSnack(true);
-            setAddLoading(false);
-          }
-        });
-    });
+      Object.keys(section_ids).forEach((key) => {
+        for (let i = 0; i < section_ids[key].length; i++) {
+          formattedArray.push({
+            course_id: course_id,
+            section_id: section_ids[key][i],
+            color: "#000000",
+          });
+        }
+        clients
+          // todo: don't set default colour to black?
+          .addCoursesByScheduleId(scheduleId, formattedArray)
+          .then((value: any) => {
+            if (value.length !== 0) {
+              setCoursesOnSchedule(value);
+              showCourseAddedSnack(true);
+              setAddLoading(false);
+            }
+          });
+      });
+    }
   };
 
   // currently only allowing one card to be expanded at a time
@@ -239,9 +247,10 @@ export default function SearchCards({
       if (!(sectionsByTypeAndNumber as any)[section.type][section.number]) {
         (sectionsByTypeAndNumber as any)[section.type][section.number] = [];
       }
-      (sectionsByTypeAndNumber as any)[section.type][section.number].push(
-        section,
-      );
+      (sectionsByTypeAndNumber as any)[section.type][section.number].push({
+        full_code: `${course.department} ${course.code}`,
+        ...section,
+      });
     }
 
     // create selection dropdowns for adding sections
@@ -422,6 +431,10 @@ export default function SearchCards({
                   aria-label="add course"
                   onClick={() => {
                     if (expandedCard === course.id) {
+                      if (coursesForCall.length === 0) {
+                        // show snack
+                        showNothingToAddSnack(true);
+                      }
                       addCourseToSchedule(course.id, coursesForCall);
                     } else {
                       handleExpandClick(course);
@@ -435,7 +448,7 @@ export default function SearchCards({
                   }}
                   disabled={course.sections.length === 0 ? true : false}
                 >
-                  {addLoading ? (
+                  {addLoading && expandedCard === course.id ? (
                     <CircularProgress
                       size={24}
                       sx={{ color: "var(--main-purple-2)" }}
@@ -611,12 +624,26 @@ export default function SearchCards({
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           open={courseAddedSnack}
           autoHideDuration={2000}
-          onClose={handleClose}
+          onClose={handleCloseAddedSnack}
           message="Success! Course added to schedule."
           sx={{
             "& .MuiSnackbarContent-root": {
               backgroundColor: "var(--alerts-success-7)",
               color: "var(--alerts-success-1)",
+              minWidth: "150px",
+              marginTop: "64px",
+            },
+          }}
+        />
+        <Snackbar
+          open={nothingToAddSnack}
+          autoHideDuration={2000}
+          onClose={handleCloseNothingSnack}
+          message="Please select at least one section to add."
+          sx={{
+            "& .MuiSnackbarContent-root": {
+              backgroundColor: "var(--alerts-conflict-5)",
+              color: "var(--black-3)",
               minWidth: "150px",
               marginTop: "64px",
             },
