@@ -15,12 +15,9 @@ def schedule_courses_by_user(curr_user):
         if request.method == "GET":
             result = schedule_service.get_schedule_courses_by_user(curr_user)
         elif request.method == "POST":
-            request_data = request.get_json()
-            course_id = request_data["course_id"]
-            section_id = request_data["section_id"]
-            color = request_data["color"]
-            result = schedule_service.add_course_to_schedule_by_user(
-                curr_user, course_id, section_id, color
+            courses = request.get_json()
+            result = schedule_service.add_courses_to_schedule_by_user(
+                curr_user, courses
             )
         elif request.method == "PUT":
             request_data = request.get_json()
@@ -67,13 +64,8 @@ def schedule_courses_by_id(id):
         if request.method == "GET":
             result = schedule_service.get_courses_by_schedule_id(id)
         elif request.method == "POST":
-            request_data = request.get_json()
-            course_id = request_data["course_id"]
-            section_id = request_data["section_id"]
-            color = request_data["color"]
-            result = schedule_service.add_course_to_schedule_by_id(
-                id, course_id, section_id, color
-            )
+            courses = request.get_json()
+            result = schedule_service.add_courses_to_schedule_by_id(id, courses)
         elif request.method == "PUT":
             request_data = request.get_json()
             uid = request_data["uid"]
