@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/CalendarModal.css";
+import backgroundColors from "../styles/calendarCourseBackgroundColors";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Modal from "@mui/material/Modal";
@@ -14,7 +15,6 @@ type Props = {
   modalOpen: boolean;
   modalConflicts: string[];
   setModalOpen: (modalOpen: boolean) => any;
-  availableBackgroundColors: string[];
   setCoursesOnSchedule: any;
   scheduleId: string;
 };
@@ -25,7 +25,6 @@ export default function CalendarModal({
   modalOpen,
   modalConflicts,
   setModalOpen,
-  availableBackgroundColors,
   setCoursesOnSchedule,
   scheduleId,
 }: Props) {
@@ -77,7 +76,7 @@ export default function CalendarModal({
         value={selectedValue === " " ? modalClass.color : selectedValue}
         style={{ marginLeft: "-12px" }}
       >
-        {availableBackgroundColors.map((color, i) => (
+        {backgroundColors.map((color, i) => (
           <Radio
             value={color}
             sx={{

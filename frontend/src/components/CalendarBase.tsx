@@ -1,6 +1,5 @@
 import { useMemo, useCallback, useState, useEffect } from "react";
 import "../styles/CalendarBase.scss";
-import backgroundColors from "../styles/calendarCourseBackgroundColors";
 import moment from "moment";
 
 import Box from "@mui/material/Box";
@@ -47,7 +46,7 @@ export default function CalendarBase({
       THURSDAY: 1672894800000,
       FRIDAY: 1672981200000,
     };
-    let colorIndex = 0;
+
     return allCourses.flatMap((course: any) => {
       if (course.sections !== null) {
         return course.sections.flatMap((section: any) => {
@@ -58,11 +57,7 @@ export default function CalendarBase({
             ...section,
             // add in the parent course ID for colour assignment
             courseId: course.id,
-            color: [
-              course.color === "#000000"
-                ? backgroundColors[colorIndex++ % backgroundColors.length]
-                : course.color,
-            ],
+            color: course.color,
             // create a unique id for this specific class section
             uniqueClassId: `${day} ${section.id}`,
             uid: course.uid,
@@ -245,7 +240,6 @@ export default function CalendarBase({
           modalOpen={modalOpen}
           modalConflicts={modalConflicts}
           setModalOpen={setModalOpen}
-          availableBackgroundColors={backgroundColors}
           setCoursesOnSchedule={setCoursesOnSchedule}
           scheduleId={scheduleId}
         ></CalendarModal>

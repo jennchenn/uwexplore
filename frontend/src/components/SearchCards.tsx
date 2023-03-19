@@ -3,6 +3,7 @@ import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import clients, { CourseObject } from "../APIClients/CourseClient";
 import SearchDeleteModal from "./SearchDeleteModal";
+import backgroundColors from "../styles/calendarCourseBackgroundColors";
 
 // MUI component imports
 import Box from "@mui/material/Box";
@@ -91,6 +92,8 @@ export default function SearchCards({
   const [coursesForCall, setCoursesForCall] = useState([] as any);
   const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
+  let [colorIndex, setColorIndex] = useState(0);
+
   const handleClose = () => {
     showCourseAddedSnack(false);
   };
@@ -121,23 +124,22 @@ export default function SearchCards({
   const addCourseToSchedule = (course_id: string, section_ids: any) => {
     setAddLoading(true);
     let formattedArray: any = [];
-
     Object.keys(section_ids).forEach((key) => {
       for (let i = 0; i < section_ids[key].length; i++) {
         formattedArray.push({
           course_id: course_id,
           section_id: section_ids[key][i],
-          color: "#000000",
+          color: backgroundColors[colorIndex % backgroundColors.length],
         });
       }
       clients
-        // todo: don't set default colour to black?
         .addCoursesByScheduleId(scheduleId, formattedArray)
         .then((value: any) => {
           if (value.length !== 0) {
             setCoursesOnSchedule(value);
             showCourseAddedSnack(true);
             setAddLoading(false);
+            setColorIndex(colorIndex++);
           }
         });
     });
