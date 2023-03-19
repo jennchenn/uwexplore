@@ -52,7 +52,7 @@ export default function CalendarBase({
       if (course.sections !== null) {
         return course.sections.flatMap((section: any) => {
           // new title property that appears on the event (ex. "SYDE 411 - LEC")
-          const courseTitle = `${course.department} ${course.code} - ${section.type}`;
+          const courseTitle = `${course.department} ${course.code} - ${section.type} ${section.number}`;
           // this mapping splits up the day array to make individual entries
           return section.day.map((day: any) => ({
             ...section,
@@ -77,6 +77,32 @@ export default function CalendarBase({
         return [];
       }
     });
+  }, []);
+
+  // basically same as above, but for hover events
+  const getHoverClasses = useCallback((classes: any) => {
+    const unixWeekdays: any = {
+      MONDAY: 1672635600000,
+      TUESDAY: 1672722000000,
+      WEDNESDAY: 1672808400000,
+      THURSDAY: 1672894800000,
+      FRIDAY: 1672981200000,
+    };
+
+    if (Array.isArray(classes)) {
+      return classes.flatMap((section: any) => {
+        const courseTitle = `${section.type} ${section.number}`;
+        return section.day.map((day: any) => ({
+          courseId: section.id,
+          uid: section.uid,
+          day,
+          title: courseTitle,
+          start_time: new Date(unixWeekdays[day] + section.start_time),
+          end_time: new Date(unixWeekdays[day] + section.end_time),
+          background: true,
+        }));
+      });
+    }
   }, []);
 
   const findOverlappingClasses = (classes: any) => {
@@ -120,6 +146,8 @@ export default function CalendarBase({
         ...section,
         background: true,
       }));
+    } else if (Array.isArray(hovered)) {
+      return getHoverClasses(hovered);
     } else {
       return course;
     }

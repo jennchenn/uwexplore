@@ -43,6 +43,7 @@ export default function Search({
       results.then((value) => {
         setResultsLoading(false);
         setSearchResults(value as any);
+        // console.log(value);
       });
     }
   }, [searchQuery, filteringQuery]);

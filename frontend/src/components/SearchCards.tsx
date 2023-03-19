@@ -9,8 +9,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
+import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
 import Portal from "@mui/material/Portal";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import Tooltip from "@mui/material/Tooltip";
@@ -71,25 +75,60 @@ export default function SearchCards({
   >({});
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
 
+  const [sectionsToAdd, setSectionsToAdd] = useState({} as any);
+  const [coursesForCall, setCoursesForCall] = useState([] as any);
+
   const handleClose = () => {
     showCourseAddedSnack(false);
   };
 
-  const addCourseToSchedule = (course_id: string, section_id: string) => {
-    clients
-      // todo: don't set default colour to black?
-      .addCoursesByScheduleId(scheduleId, course_id, section_id, "#000000")
-      .then((value: any) => {
-        if (value.length !== 0) {
-          setCoursesOnSchedule(value);
-        }
-        showCourseAddedSnack(true);
-      });
+  const handleSectionChange = (
+    event: SelectChangeEvent,
+    type: string,
+    sectionsByTypeAndNumber: any,
+  ) => {
+    setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
+
+    const classIds: any = [];
+    const extractIdsArray = sectionsByTypeAndNumber[type][event.target.value];
+    for (let i = 0; i < extractIdsArray.length; i++) {
+      classIds.push(extractIdsArray[i].id);
+    }
+    setCoursesForCall((prevState: any) => ({
+      ...prevState,
+      [type]: classIds,
+    }));
+  };
+
+  // section_id -> an object that looks like { LEC: ["id1", "id2"], TUT: ["id1"]}
+  const addCourseToSchedule = (course_id: string, section_id: any) => {
+    Object.keys(section_id).forEach((key) => {
+      // TODO: replace with batch call to add courses
+      for (let i = 0; i < section_id[key].length; i++) {
+        console.log(`adding section w id: ${section_id[key][i]}`);
+        clients
+          // todo: don't set default colour to black?
+          .addCoursesByScheduleId(
+            scheduleId,
+            course_id,
+            section_id[key][i],
+            "#000000",
+          )
+          .then((value: any) => {
+            if (value.length !== 0) {
+              setCoursesOnSchedule(value);
+              showCourseAddedSnack(true);
+            }
+          });
+      }
+    });
   };
 
   // currently only allowing one card to be expanded at a time
   const handleExpandClick = (courseToExpand: any) => {
     if (expandedCard === courseToExpand.id) {
+      setSectionsToAdd({});
+      setCoursesForCall([]);
       setExpandedCard("");
     } else {
       setExpandedCard(courseToExpand.id);
@@ -178,6 +217,113 @@ export default function SearchCards({
     }
   };
 
+  const createSectionDropdowns = (course: any) => {
+    const sectionsByTypeAndNumber = {};
+
+    for (const section of course.sections) {
+      if (!(sectionsByTypeAndNumber as any)[section.type]) {
+        (sectionsByTypeAndNumber as any)[section.type] = {};
+      }
+      if (!(sectionsByTypeAndNumber as any)[section.type][section.number]) {
+        (sectionsByTypeAndNumber as any)[section.type][section.number] = [];
+      }
+      (sectionsByTypeAndNumber as any)[section.type][section.number].push(
+        section,
+      );
+    }
+
+    if (Object.keys(sectionsByTypeAndNumber).length !== 0) {
+      return (
+        <div
+          style={{
+            marginLeft: "auto",
+            marginRight: "0px",
+          }}
+        >
+          {Object.keys(sectionsByTypeAndNumber).map((type, i) => (
+            <FormControl
+              sx={{
+                m: 1,
+                minWidth: 90,
+              }}
+              size="small"
+              key={i}
+            >
+              <InputLabel
+                id="demo-select-small"
+                sx={{
+                  color: "var(--main-purple-2)",
+                  fontWeight: "var(--font-weight-regular)",
+                }}
+              >
+                {type}
+              </InputLabel>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                defaultValue=""
+                value={sectionsToAdd[type]}
+                label={type}
+                onChange={(e) =>
+                  handleSectionChange(e, type, sectionsByTypeAndNumber)
+                }
+                onMouseOver={() => {
+                  if (sectionsToAdd[type] !== undefined) {
+                    setCourseHovered(
+                      (sectionsByTypeAndNumber as any)[type][
+                        sectionsToAdd[type]
+                      ],
+                    );
+                  }
+                }}
+                onMouseLeave={() => {
+                  setCourseHovered({});
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    border: "red",
+                    borderRadius: "8px",
+                  },
+                  "& .MuiSelect-select": {
+                    color: "var(--main-purple-1)",
+                    fontWeight: "var(--font-weight-regular)",
+                  },
+                  borderRadius: "10px",
+                  backgroundColor: "white",
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {Object.keys((sectionsByTypeAndNumber as any)[type]).map(
+                  (sectionNum, i) => {
+                    return (
+                      <MenuItem
+                        defaultValue=""
+                        value={sectionNum}
+                        key={i}
+                        onMouseOver={() => {
+                          setCourseHovered(
+                            (sectionsByTypeAndNumber as any)[type][sectionNum],
+                          );
+                        }}
+                        onMouseLeave={() => {
+                          setCourseHovered({});
+                        }}
+                      >
+                        {sectionNum}
+                      </MenuItem>
+                    );
+                  },
+                )}
+              </Select>
+            </FormControl>
+          ))}
+        </div>
+      );
+    }
+  };
+
   const createCourseCard = (course: any) => {
     return (
       <Card
@@ -233,24 +379,31 @@ export default function SearchCards({
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                flexGrow: 1,
               }}
             >
               {course.department}&nbsp;
               {course.code} - {course.name}
             </h3>
-            <Tooltip title="Add Course to Calendar" arrow>
+            {expandedCard === course.id
+              ? createSectionDropdowns(course)
+              : false}
+            <Tooltip
+              title={
+                expandedCard === course.id
+                  ? "Add Classes to Calendar"
+                  : "Expand Card to Add Classes"
+              }
+              arrow
+            >
               <IconButton
                 aria-label="add course"
-                // show ghost course on cal on hover
-                onMouseOver={() => {
-                  setCourseHovered(course);
-                }}
-                onMouseLeave={() => {
-                  setCourseHovered({});
-                }}
                 onClick={() => {
-                  // todo: don't hardcode first section id to add
-                  addCourseToSchedule(course.id, course.sections[0].id);
+                  if (expandedCard === course.id) {
+                    addCourseToSchedule(course.id, coursesForCall);
+                  } else {
+                    handleExpandClick(course);
+                  }
                 }}
                 sx={{
                   marginLeft: "auto",
@@ -283,6 +436,9 @@ export default function SearchCards({
           <Collapse
             in={expandedCard === course.id ? true : false}
             sx={{ margin: "0px 10px" }}
+            onMouseOver={() => {
+              setCourseHovered({});
+            }}
           >
             <h5
               style={{
