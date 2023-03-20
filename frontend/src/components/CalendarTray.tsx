@@ -16,7 +16,6 @@ import CourseCard from "./CourseCard";
 import { CourseObject } from "../APIClients/CourseClient";
 import { Props } from "../App";
 
-
 interface CalendarTrayProps extends Props {
   setCourseHovered: any;
   addedCourses?: CourseObject[];
