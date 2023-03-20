@@ -91,7 +91,7 @@ export default function CalendarBase({
 
     if (Array.isArray(classes)) {
       return classes.flatMap((section: any) => {
-        const courseTitle = `${section.type} ${section.number}`;
+        const courseTitle = `${section.full_code} - ${section.type} ${section.number}`;
         return section.day.map((day: any) => ({
           courseId: section.id,
           uid: section.uid,
