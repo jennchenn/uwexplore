@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Navbar.css";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -7,10 +7,27 @@ import CustomButton from "./CustomButton";
 import SignUp from "./SignUpModal";
 import logo from "../images/logo.png";
 import LoginModal from "./LoginModal";
+import { TokenObject } from "../APIClients/UserClient";
 
-export default function Navbar() {
+interface NavbarProps {
+  token: TokenObject | undefined;
+  setToken: (value: TokenObject) => void;
+}
+
+export default function Navbar({ token, setToken }: NavbarProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+  const [hideLogin, setHideLogin] = useState<boolean>(
+    token?.id_token ? true : false,
+  );
+
+  useEffect(() => {
+    if (token && token.id_token) {
+      setHideLogin(true);
+    } else {
+      setHideLogin(false);
+    }
+  }, [token]);
 
   const handleCreateModalOpen = () => {
     setSignUpModalOpen(true);
@@ -32,12 +49,14 @@ export default function Navbar() {
               <h2 className="title">uw</h2>
               <h2 className="title font-light">explore</h2>
             </div>
-            <CustomButton
-              type="secondary"
-              className="login-signup-nav-button"
-              onClick={() => setLoginModalOpen(true)}
-              text="Login/Signup"
-            />
+            {!hideLogin && (
+              <CustomButton
+                type="secondary"
+                className="login-signup-nav-button"
+                onClick={() => setLoginModalOpen(true)}
+                text="Login/Signup"
+              />
+            )}
           </Toolbar>
         </AppBar>
       </Box>
@@ -45,11 +64,13 @@ export default function Navbar() {
         open={loginModalOpen}
         setOpen={setLoginModalOpen}
         linkOpen={handleCreateModalOpen}
+        setToken={setToken}
       />
       <SignUp
         open={signUpModalOpen}
         setOpen={setSignUpModalOpen}
         linkOpen={handleLoginModalOpen}
+        setToken={setToken}
       />
     </>
   );

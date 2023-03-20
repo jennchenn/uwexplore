@@ -11,11 +11,13 @@ import { Props } from "../App";
 import { TextInput } from "./TextInput";
 import "../styles/LoginSignUpModal.css";
 import CustomButton from "./CustomButton";
+import { TokenObject } from "../APIClients/UserClient";
 
 interface SignUpModalProps extends Props {
   open: boolean;
   setOpen: (open: boolean) => any;
   linkOpen: () => void;
+  setToken: (token: TokenObject) => void;
 }
 
 export default function SignUp({
@@ -75,13 +77,17 @@ export default function SignUp({
     ) {
       event.preventDefault();
     } else {
-      /* to do: make the call the sign up
-      // on error:
-      setEmailUsed(true);
-      // on success:
-      handleClose();
-      // save returned to var to be included in all other api calls
-      */
+      // to do: debug this
+      // clients
+      //   .createUser(email, password)
+      //   .then((value: any) => {
+      //     console.log(value);
+      //     SignUpModalProps.setToken(value);
+      //     handleClose();
+      //   })
+      //   .catch(() => {
+      //     setEmailUsed(true);
+      //   });
     }
   };
 
