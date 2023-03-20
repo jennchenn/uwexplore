@@ -6,11 +6,13 @@ import "../styles/LoginSignUpModal.css";
 
 import CustomButton from "./CustomButton";
 import { TextInput } from "./TextInput";
+import clients, { TokenObject } from "../APIClients/UserClient";
 
 interface LoginModalProps extends Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   linkOpen: () => void;
+  setToken: (token: TokenObject) => void;
 }
 
 export default function LoginModal({
@@ -56,18 +58,18 @@ export default function LoginModal({
       setValidate(false);
       setAlert("Please input a valid email/password.");
     } else if (email && regEmail.test(email) && password) {
-      setValidate(true);
-      setAlert("");
-    } else {
-      /* to do: make the call the sign in 
-      // on error:
-      setValidate(false);
-      setAlert("Your email or password is incorrect. Please try again.");
-      // on success:
-      setValidate(true);
-      setAlert("");
-      // save returned to var to be included in all other api calls
-      */
+      clients
+        .login(email, password)
+        .then((value: any) => {
+          LoginModalProps.setToken(value);
+          setValidate(true);
+          setAlert("");
+          handleClose();
+        })
+        .catch((error) => {
+          setValidate(false);
+          setAlert(error);
+        });
     }
   };
 

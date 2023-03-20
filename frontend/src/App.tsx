@@ -14,6 +14,7 @@ import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
 import clients from "./APIClients/CourseClient";
+import { TokenObject } from "./APIClients/UserClient";
 
 export interface Props {
   id?: string;
@@ -36,6 +37,8 @@ function App() {
 
   // state to see a ghost course time on cal when hovering on search card
   const [courseHovered, setCourseHovered] = useState({});
+
+  const [token, setToken] = useState<TokenObject>();
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
   // todo: useState for scheduleId when accounts are integrated
@@ -64,7 +67,7 @@ function App() {
 
   return (
     <Box>
-      <Navbar></Navbar>
+      <Navbar token={token} setToken={setToken} />
 
       <Grid container>
         {/* LHS SEARCH */}
