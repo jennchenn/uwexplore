@@ -10,7 +10,7 @@ import LoginModal from "./LoginModal";
 import { TokenObject } from "../APIClients/UserClient";
 
 interface NavbarProps {
-  token: TokenObject;
+  token: TokenObject | undefined;
   setToken: (value: TokenObject) => void;
 }
 
