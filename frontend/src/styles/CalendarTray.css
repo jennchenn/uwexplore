@@ -34,7 +34,7 @@
     padding: 0 16px;
 }
 
-.tray-contents-container .css-9l5vo-MuiCollapse-wrapperInner{
+.tray-contents-container .MuiCollapse-wrapper .MuiCollapse-wrapperInner{
     max-height: 30vh;
     overflow-y: scroll;
 }
