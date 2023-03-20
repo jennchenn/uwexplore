@@ -30,6 +30,8 @@ export default function CalendarModal({
   scheduleId,
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(" ");
+  const [colorChanged, setColorChanged] = useState(false);
+
   const handleClose = () => {
     if (selectedValue !== " ") {
       clients
@@ -43,19 +45,25 @@ export default function CalendarModal({
         })
         .then(() => {
           setSelectedValue(" ");
+          setModalOpen(false);
+          setColorChanged(false);
         });
+    } else {
+      setModalOpen(false);
     }
-    setModalOpen(false);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
-    // todo: add feedback that colour did change?
+    setColorChanged(true);
   };
 
   const handleDeleteCourse = (id: string) => {
     clients.deleteCoursesByScheduleId(scheduleId, id).then((value: any) => {
-      setCoursesOnSchedule(value);
+      if (value.length !== 0) {
+        setCoursesOnSchedule(value);
+      }
+      setModalOpen(false);
     });
   };
 
@@ -122,6 +130,11 @@ export default function CalendarModal({
           />
           <h5 style={{ margin: "0px" }}>Delete Course</h5>
         </IconButton>
+        {colorChanged ? (
+          <h5 className="modal-info">Close popup to see colour changes!</h5>
+        ) : (
+          <></>
+        )}
       </Box>
     </Modal>
   );
