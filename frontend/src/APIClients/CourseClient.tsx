@@ -139,6 +139,38 @@ const getCoursesByScheduleId = async (
 
 const updateCourseColorByScheduleId = async (
   id: string,
+  course_id: string,
+  color: string,
+) => {
+  try {
+    const payload = {
+      course_id: course_id,
+      color: color,
+    };
+    const { data } = await APIClient.put(
+      `/schedules/${id}`,
+      JSON.stringify(payload),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
+const updateSectionColorByScheduleId = async (
+  id: string,
   uid: string,
   color: string,
 ) => {
@@ -177,5 +209,6 @@ const clients = {
   getCoursesOnCalendar,
   getCoursesByScheduleId,
   updateCourseColorByScheduleId,
+  updateSectionColorByScheduleId,
 };
 export default clients;
