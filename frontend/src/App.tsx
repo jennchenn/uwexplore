@@ -58,7 +58,9 @@ function App() {
 
   useEffect(() => {
     clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
-      setCoursesOnSchedule(value);
+      if (value.length !== 0) {
+        setCoursesOnSchedule(value);
+      }
     });
   }, []);
 

@@ -25,57 +25,20 @@ def get_courses():
         return jsonify({"error": (error_message if error_message else str(e))}), 500
 
 
-@blueprint.route("/saved", methods=["GET"], strict_slashes=False)
+@blueprint.route("/saved", methods=["GET", "POST", "DELETE"], strict_slashes=False)
 @require_login
-def get_saved_courses(curr_user):
-    try:
-        result = course_service.get_saved_courses_by_user(curr_user)
-        return jsonify(result), 200
-    except Exception as e:
-        error_message = getattr(e, "message", None)
-        return jsonify({"error": (error_message if error_message else str(e))}), 500
-
-
-@blueprint.route("/past", methods=["GET"], strict_slashes=False)
-@require_login
-def get_past_courses(curr_user):
-    try:
-        result = course_service.get_past_courses_by_user(curr_user)
-        return jsonify(result), 200
-    except Exception as e:
-        error_message = getattr(e, "message", None)
-        return jsonify({"error": (error_message if error_message else str(e))}), 500
-
-
-@blueprint.route(
-    "/schedule", methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False
-)
-@require_login
-def schedule_courses_by_user(curr_user):
+def saved_courses(curr_user):
     try:
         if request.method == "GET":
-            result = course_service.get_schedule_courses_by_user(curr_user)
+            result = course_service.get_saved_courses_by_user(curr_user)
         elif request.method == "POST":
             request_data = request.get_json()
             course_id = request_data["course_id"]
-            section_id = request_data["section_id"]
-            color = request_data["color"]
-            result = course_service.add_course_to_schedule_by_user(
-                curr_user, course_id, section_id, color
-            )
-        elif request.method == "PUT":
-            request_data = request.get_json()
-            uid = request_data["uid"]
-            color = request_data["color"]
-            result = course_service.update_schedule_color_by_user(curr_user, uid, color)
+            result = course_service.add_saved_course(curr_user, course_id)
         elif request.method == "DELETE":
             request_data = request.get_json()
-            schedule_object_id = request_data[
-                "id"
-            ]  # this should be one of the UIDs returned from the above calls
-            result = course_service.delete_course_from_schedule_by_user(
-                curr_user, schedule_object_id
-            )
+            course_id = request_data["course_id"]
+            result = course_service.delete_saved_course(curr_user, course_id)
         else:
             raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200
@@ -84,32 +47,22 @@ def schedule_courses_by_user(curr_user):
         return jsonify({"error": (error_message if error_message else str(e))}), 500
 
 
-@blueprint.route(
-    "/schedules/<id>", methods=["GET", "POST", "PUT", "DELETE"], strict_slashes=False
-)
-def schedule_courses_by_id(id):
+@blueprint.route("/past", methods=["GET", "POST", "DELETE"], strict_slashes=False)
+@require_login
+def past_courses(curr_user):
     try:
         if request.method == "GET":
-            result = course_service.get_courses_by_schedule_id(id)
+            result = course_service.get_past_courses_by_user(curr_user)
         elif request.method == "POST":
             request_data = request.get_json()
+            term = request_data["term"]
             course_id = request_data["course_id"]
-            section_id = request_data["section_id"]
-            color = request_data["color"]
-            result = course_service.add_course_to_schedule_by_id(
-                id, course_id, section_id, color
-            )
-        elif request.method == "PUT":
-            request_data = request.get_json()
-            uid = request_data["uid"]
-            color = request_data["color"]
-            result = course_service.update_schedule_color_by_id(id, uid, color)
+            result = course_service.add_past_course(curr_user, term, course_id)
         elif request.method == "DELETE":
             request_data = request.get_json()
-            schedule_object_id = request_data["id"]
-            result = course_service.delete_course_from_schedule_by_id(
-                id, schedule_object_id
-            )
+            term = request_data["term"]
+            course_id = request_data["course_id"]
+            result = course_service.delete_past_course(curr_user, term, course_id)
         else:
             raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200
