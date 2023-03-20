@@ -131,24 +131,24 @@ export default function SearchCards({
       let formattedArray: any = [];
 
       Object.keys(section_ids).forEach((key) => {
-      for (let i = 0; i < section_ids[key].length; i++) {
-        formattedArray.push({
-          course_id: course_id,
-          section_id: section_ids[key][i],
-          color: backgroundColors[colorIndex % backgroundColors.length],
-        });
-      }
-      clients
-        .addCoursesByScheduleId(scheduleId, formattedArray)
-        .then((value: any) => {
-          if (value.length !== 0) {
-            setCoursesOnSchedule(value);
-            showCourseAddedSnack(true);
-            setAddLoading(false);
-            setColorIndex(colorIndex++);
-          }
-        });
-    });
+        for (let i = 0; i < section_ids[key].length; i++) {
+          formattedArray.push({
+            course_id: course_id,
+            section_id: section_ids[key][i],
+            color: backgroundColors[colorIndex % backgroundColors.length],
+          });
+        }
+        clients
+          .addCoursesByScheduleId(scheduleId, formattedArray)
+          .then((value: any) => {
+            if (value.length !== 0) {
+              setCoursesOnSchedule(value);
+              showCourseAddedSnack(true);
+              setAddLoading(false);
+              setColorIndex(colorIndex++);
+            }
+          });
+      });
     }
   };
 
