@@ -16,7 +16,6 @@ import CourseCard from "./CourseCard";
 import { CourseObject } from "../APIClients/CourseClient";
 import { Props } from "../App";
 
-import PerfectScrollbar from "react-perfect-scrollbar";
 
 interface CalendarTrayProps extends Props {
   setCourseHovered: any;
@@ -62,24 +61,22 @@ export default function CalendarTrayCalendar({
             </Box>
           </Stack>
           <Collapse in={expanded} className="tray-contents-container">
-            <PerfectScrollbar>
-              <Stack className="tray-contents" spacing={1}>
-                {addedCourses.map((course, i) => (
-                  <CourseCard
-                    course={course}
-                    expandedCard={expandedCard}
-                    setExpandedCard={setExpandedCard}
-                    setCourseHovered={CalendarTrayProps.setCourseHovered}
-                    type="added"
-                  />
-                ))}
-                {!addedCourses.length && (
-                  <Card className="empty-tray-card heading-2">
-                    Added courses will appear here!
-                  </Card>
-                )}
-              </Stack>
-            </PerfectScrollbar>
+            <Stack className="tray-contents" spacing={1}>
+              {addedCourses.map((course, i) => (
+                <CourseCard
+                  course={course}
+                  expandedCard={expandedCard}
+                  setExpandedCard={setExpandedCard}
+                  setCourseHovered={CalendarTrayProps.setCourseHovered}
+                  type="added"
+                />
+              ))}
+              {!addedCourses.length && (
+                <Card className="empty-tray-card heading-2">
+                  Added courses will appear here!
+                </Card>
+              )}
+            </Stack>
           </Collapse>
         </CardContent>
       </Card>
