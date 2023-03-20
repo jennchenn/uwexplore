@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
+import CalendarTray from "./components/CalendarTray";
 import clients from "./APIClients/CourseClient";
 import { TokenObject } from "./APIClients/UserClient";
 
@@ -58,7 +59,9 @@ function App() {
 
   useEffect(() => {
     clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
-      setCoursesOnSchedule(value);
+      if (value.length !== 0) {
+        setCoursesOnSchedule(value);
+      }
     });
   }, []);
 
@@ -67,6 +70,7 @@ function App() {
       <Navbar token={token} setToken={setToken} />
 
       <Grid container>
+        {/* LHS SEARCH */}
         <Grid xs={searchWidth} className="search-base">
           <Box
             style={{
@@ -92,8 +96,13 @@ function App() {
                 />
               )}
             </PerfectScrollbar>
+            <CalendarTray
+              setCourseHovered={setCourseHovered}
+              addedCourses={coursesOnSchedule}
+            />
           </Box>
         </Grid>
+        {/* RHS CALENDAR */}
         <Grid xs={calendarWidth} className="calendar-base">
           <Box
             style={{

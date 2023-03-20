@@ -226,10 +226,10 @@ def update_current_term_data(clear_sections=False):
 def update_six_terms_data():
     terms = get_six_terms_data()
     courses = get_courses(terms)
-    # insert_course_exceptions = insert_courses(courses)
+    insert_course_exceptions = insert_courses(courses)
     insert_schedule_exceptions = insert_schedules(terms)
     return {
-        # "course_exceptions": insert_course_exceptions,
+        "course_exceptions": insert_course_exceptions,
         "schedule_exceptions": insert_schedule_exceptions,
     }
 
