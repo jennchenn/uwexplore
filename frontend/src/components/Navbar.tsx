@@ -9,11 +9,14 @@ import logo from "../images/logo.png";
 import LoginModal from "./LoginModal";
 import { TokenObject } from "../APIClients/UserClient";
 
-export default function Navbar() {
+interface NavbarProps {
+  token: TokenObject;
+  setToken: (value: TokenObject) => void;
+}
+
+export default function Navbar({ token, setToken }: NavbarProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signUpModalOpen, setSignUpModalOpen] = useState(false);
-  // eslint-disable-next-line
-  const [token, setToken] = useState<TokenObject>();
 
   const handleCreateModalOpen = () => {
     setSignUpModalOpen(true);
