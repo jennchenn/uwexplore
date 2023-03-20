@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import clients, { CourseObject } from "../APIClients/CourseClient";
+import SearchDeleteModal from "./SearchDeleteModal";
 
 // MUI component imports
 import Box from "@mui/material/Box";
@@ -33,6 +34,7 @@ import TableRow from "@mui/material/TableRow";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -57,6 +59,7 @@ interface searchProps {
   searchResults: CourseObject[];
   searchQuery: string;
   setCourseHovered: any;
+  coursesOnSchedule: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
 }
@@ -66,6 +69,7 @@ export default function SearchCards({
   searchResults,
   searchQuery,
   setCourseHovered,
+  coursesOnSchedule,
   setCoursesOnSchedule,
   scheduleId,
 }: searchProps) {
@@ -77,6 +81,9 @@ export default function SearchCards({
   // snackbars
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
   const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState({} as any);
 
   // loading state while waiting for courses to be added
   const [addLoading, setAddLoading] = useState(false);
@@ -142,6 +149,14 @@ export default function SearchCards({
       });
     }
   };
+
+  const coursesOnSchedulesIds = useCallback(() => {
+    let coursesOnScheduleIds = [];
+    for (let i = 0; i < coursesOnSchedule.length; i++) {
+      coursesOnScheduleIds.push(coursesOnSchedule[i].id);
+    }
+    return coursesOnScheduleIds;
+  }, [coursesOnSchedule]);
 
   // currently only allowing one card to be expanded at a time
   const handleExpandClick = (courseToExpand: any) => {
@@ -420,6 +435,8 @@ export default function SearchCards({
               title={
                 course.sections.length === 0
                   ? ""
+                  : coursesOnSchedulesIds().includes(course.id)
+                  ? "Delete Course from Schedule"
                   : expandedCard === course.id
                   ? "Add Classes to Calendar"
                   : "Expand Card to Add Classes"
@@ -430,12 +447,20 @@ export default function SearchCards({
                 <IconButton
                   aria-label="add course"
                   onClick={() => {
-                    if (expandedCard === course.id) {
+                    if (coursesOnSchedulesIds().includes(course.id)) {
+                      setDeleteModalOpen(true);
+                      setCourseToDelete({
+                        title: `${course.department} 
+                      ${course.code}`,
+                        id: course.id,
+                      });
+                    } else if (expandedCard === course.id) {
                       if (coursesForCall.length === 0) {
                         // show snack
                         showNothingToAddSnack(true);
+                      } else {
+                        addCourseToSchedule(course.id, coursesForCall);
                       }
-                      addCourseToSchedule(course.id, coursesForCall);
                     } else {
                       handleExpandClick(course);
                     }
@@ -448,7 +473,18 @@ export default function SearchCards({
                   }}
                   disabled={course.sections.length === 0 ? true : false}
                 >
-                  {addLoading && expandedCard === course.id ? (
+                  {coursesOnSchedulesIds().includes(course.id) ? (
+                    <DeleteOutlineIcon
+                      sx={{
+                        backgroundColor: "var(--alerts-warning-1)",
+                        borderRadius: "50%",
+                        padding: "4px",
+                        color: "white",
+                        fontSize: "17px",
+                        marginRight: "1px",
+                      }}
+                    />
+                  ) : addLoading && expandedCard === course.id ? (
                     <CircularProgress
                       size={24}
                       sx={{ color: "var(--main-purple-2)" }}
@@ -617,8 +653,16 @@ export default function SearchCards({
       )}
       {searchResults
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
-        .map((course, i) => createCourseCard(course))}
+        .map((course) => createCourseCard(course))}
       {renderResultsDisplayedCard()}
+      <SearchDeleteModal
+        courseToDelete={courseToDelete}
+        setCourseToDelete={setCourseToDelete}
+        setCoursesOnSchedule={setCoursesOnSchedule}
+        deleteModalOpen={deleteModalOpen}
+        setDeleteModalOpen={setDeleteModalOpen}
+        scheduleId={scheduleId}
+      ></SearchDeleteModal>
       <Portal>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
