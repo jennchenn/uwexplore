@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
+import CalendarTray from "./components/CalendarTray";
 import clients from "./APIClients/CourseClient";
 
 export interface Props {
@@ -66,6 +67,7 @@ function App() {
       <Navbar></Navbar>
 
       <Grid container>
+        {/* LHS SEARCH */}
         <Grid xs={searchWidth} className="search-base">
           <Box
             style={{
@@ -91,8 +93,13 @@ function App() {
                 />
               )}
             </PerfectScrollbar>
+            <CalendarTray
+              setCourseHovered={setCourseHovered}
+              addedCourses={coursesOnSchedule}
+            />
           </Box>
         </Grid>
+        {/* RHS CALENDAR */}
         <Grid xs={calendarWidth} className="calendar-base">
           <Box
             style={{
