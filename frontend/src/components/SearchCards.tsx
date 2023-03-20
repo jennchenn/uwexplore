@@ -6,6 +6,8 @@ import SearchDeleteModal from "./SearchDeleteModal";
 
 // MUI component imports
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import FormControl from "@mui/material/FormControl";
@@ -16,10 +18,18 @@ import Portal from "@mui/material/Portal";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
+import Tooltip from "@mui/material/Tooltip";
 
 // MUI table imports
 import Paper from "@mui/material/Paper";
-
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import CourseCard from "./CourseCard";
 //MUI icon imports
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
