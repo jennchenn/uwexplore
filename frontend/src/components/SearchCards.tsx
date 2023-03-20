@@ -4,12 +4,8 @@ import { CourseObject } from "../APIClients/CourseClient";
 // MUI component imports
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
 import Portal from "@mui/material/Portal";
-import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
-import Tooltip from "@mui/material/Tooltip";
 
 // MUI table imports
 import Paper from "@mui/material/Paper";
@@ -121,7 +117,7 @@ export default function SearchCards({
       return false;
     }
   };
-  
+
   return (
     <Box>
       {/* todo: clean up styles */}
@@ -134,14 +130,16 @@ export default function SearchCards({
       )}
       {searchResults
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
-        .map((course, i) => <CourseCard
+        .map((course, i) => (
+          <CourseCard
             course={course}
             expandedCard={expandedCard}
             bookmarkedCourses={bookmarkedCourses}
             setExpandedCard={setExpandedCard}
             setBookmarkedCourses={setBookmarkedCourses}
             setCourseHovered={setCourseHovered}
-          />)}
+          />
+        ))}
       {renderResultsDisplayedCard()}
       <Portal>
         <Snackbar
