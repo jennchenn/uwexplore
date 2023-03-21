@@ -20,6 +20,10 @@ export type CourseObject = {
   tags: string[];
 };
 
+export type ScheduleId = {
+  schedule_id: string | null;
+};
+
 export type CalendarCourseObject = CourseObject & { color: string };
 
 const addCoursesByScheduleId = async (
@@ -98,14 +102,22 @@ const getCourses = async (
   }
 };
 
-const getCoursesOnCalendar = async (): Promise<CalendarCourseObject[]> => {
-  // FIXME: this should be thrown into a try catch
-  // FIXME: add authorization header! "Authorization: Bearer <>"
-  const bearerToken = "";
-  const { data } = await APIClient.get("/schedules", {
-    headers: { Authorization: bearerToken },
-  });
-  return data;
+const getScheduleId = async (idToken: string): Promise<ScheduleId> => {
+  try {
+    const { data } = await APIClient.get("/schedules/id", {
+      headers: { Authorization: `Bearer ${idToken}` },
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return { schedule_id: null };
+  }
 };
 
 const getCoursesByScheduleId = async (
@@ -162,7 +174,7 @@ const clients = {
   addCoursesByScheduleId,
   deleteCoursesByScheduleId,
   getCourses,
-  getCoursesOnCalendar,
+  getScheduleId,
   getCoursesByScheduleId,
   updateCourseColorByScheduleId,
 };

@@ -41,9 +41,7 @@ function App() {
   const [token, setToken] = useState<TokenObject>();
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
-  // todo: useState for scheduleId when accounts are integrated
-  // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
-  const scheduleId = "64127ede93deee8bdc7a9121";
+  const [scheduleId, setScheduleId] = useState("");
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -58,12 +56,22 @@ function App() {
   };
 
   useEffect(() => {
-    clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
-      if (value.length !== 0) {
-        setCoursesOnSchedule(value);
-      }
-    });
-  }, []);
+    if (token) {
+      clients.getScheduleId(token.id_token).then((value: any) => {
+        setScheduleId(value.schedule_id);
+      });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (scheduleId) {
+      clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
+        if (value.length !== 0) {
+          setCoursesOnSchedule(value);
+        }
+      });
+    }
+  }, [scheduleId]);
 
   return (
     <Box>
