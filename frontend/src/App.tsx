@@ -15,6 +15,7 @@ import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
 import { TokenObject } from "./APIClients/UserClient";
 import courseClients from "./APIClients/CourseClient";
+import ceabClients from "./APIClients/CeabClient";
 
 export interface Props {
   id?: string;
@@ -43,6 +44,9 @@ function App() {
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
 
   const [pastCourses, setPastCourses] = useState({});
+  const [ceabOnSchedule, setCeabOnSchedule] = useState({});
+  const [ceabCounts, setCeabCounts] = useState({});
+
   // todo: useState for scheduleId when accounts are integrated
   // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
   const scheduleId = "64127ede93deee8bdc7a9121";
@@ -67,6 +71,11 @@ function App() {
         setCoursesOnSchedule(value);
       }
     });
+    ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
+      if (value.length !== 0) {
+        setCeabOnSchedule(value);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -74,6 +83,11 @@ function App() {
       courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
         if (value.length !== 0) {
           setPastCourses(value.past_courses);
+        }
+      });
+      ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
+        if (value.length !== 0) {
+          setCeabCounts(value.past_courses);
         }
       });
     }
@@ -154,6 +168,8 @@ function App() {
                   handleCeabPlanChange={handleCeabPlanChange}
                   pastCourses={pastCourses}
                   setPastCourses={setPastCourses}
+                  ceabOnSchedule={ceabOnSchedule}
+                  ceabCounts={ceabCounts}
                 />
               </Stack>
             </PerfectScrollbar>

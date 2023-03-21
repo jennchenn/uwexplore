@@ -35,12 +35,16 @@ interface CeabBaseProps {
   handleCeabPlanChange: any;
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
+  ceabCounts: any;
+  ceabOnSchedule: any;
 }
 
 export default function CeabBase({
   handleCeabPlanChange,
   pastCourses,
   setPastCourses,
+  ceabCounts,
+  ceabOnSchedule,
 }: CeabBaseProps) {
   const [term, setTerm] = useState("all");
   const [courseList, setCourseList] = useState<{ [key: string]: string }>({});
@@ -96,13 +100,16 @@ export default function CeabBase({
                 CEAB Requirements
               </h3>
               <Stack direction="column" spacing={1} sx={{ marginTop: "12px" }}>
-                {CeabRequirements.map((requirement, i) => (
+                {CeabRequirements.map((requirement: any, index) => (
                   <ProgressBar
                     label={requirement.label}
                     // todo: get user's ceab vals from taken courses and map properly
-                    completed="50"
+                    completed={
+                      ceabCounts[requirement.label].completed +
+                      ceabOnSchedule[requirement.label].completed
+                    }
                     total={requirement.requirement}
-                    key={i}
+                    key={index}
                   ></ProgressBar>
                 ))}
               </Stack>

@@ -1,25 +1,6 @@
 import APIClient from "./APIClient";
 import axios, { AxiosError } from "axios";
 
-export type CeabObject = {
-  TE: CeabCounts;
-  LIST_A: CeabCounts;
-  LIST_B: CeabCounts;
-  LIST_C: CeabCounts;
-  LIST_D: CeabCounts;
-  CSE: CeabCounts;
-  PD_COMP: CeabCounts;
-  PD_ELEC: CeabCounts;
-  MATH: CeabCounts;
-  SCI: CeabCounts;
-  ENG_SCI: CeabCounts;
-  ENG_DES: CeabCounts;
-  CSE_WEIGHT: CeabCounts;
-  TE_CSE: CeabCounts;
-  MATH_SCI: CeabCounts;
-  ENG_SCI_DES: CeabCounts;
-};
-
 export type CeabCounts = {
   completed: number;
   requirement: number;
