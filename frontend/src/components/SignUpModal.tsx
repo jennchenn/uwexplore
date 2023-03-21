@@ -120,9 +120,8 @@ export default function SignUp({
       <Box className="sign-up-modal">
         <div className="sign-up-modal-title heading-1">CREATE AN ACCOUNT</div>
         <div className="sign-up-modal-description heading-6">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          sollicitudin dapibus nisi, quis eleifend felis pharetra vel. Mauris ac
-          iaculis mauris.
+          Keep track of your planned courses on the UWExplore interactive
+          planner. Sign up to get started!
         </div>
         <TextInput
           ref={emailRef}
