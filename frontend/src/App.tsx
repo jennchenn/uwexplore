@@ -56,7 +56,16 @@ function App() {
   };
 
   useEffect(() => {
+    const lsToken = localStorage.getItem("token");
+    const token = lsToken ? JSON.parse(lsToken) : null;
     if (token) {
+      setToken(token);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", JSON.stringify(token));
       clients.getScheduleId(token.id_token).then((value: any) => {
         setScheduleId(value.schedule_id);
       });
