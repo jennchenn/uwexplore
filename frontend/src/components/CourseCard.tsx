@@ -39,7 +39,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Props } from "../App";
-import clients, { CourseObject } from "../APIClients/CourseClient";
+import courseClients, { CourseObject } from "../APIClients/CourseClient";
 import { useCallback, useEffect, useState } from "react";
 import CustomButton from "./CustomButton";
 
@@ -161,7 +161,7 @@ export default function CourseCard({
 
   const handleClose = () => {
     // if (selectedTerm !== " ") {
-    //   clients
+    //   courseClients
     //     .updateCourseColorByScheduleId(scheduleId, modalClass.uid, selectedTerm)
     //     .then((value: any) => {
     //       setCoursesOnSchedule(value);
@@ -333,7 +333,7 @@ export default function CourseCard({
             color: "#000000",
           });
         }
-        clients
+        courseClients
           // todo: don't set default colour to black?
           .addCoursesByScheduleId(CourseCardProps.scheduleId, formattedArray)
           .then((value: any) => {

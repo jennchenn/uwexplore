@@ -13,10 +13,8 @@ import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
-import clients from "./APIClients/CourseClient";
-import { TokenObject } from "./APIClients/UserClient";
-
-import { UserObject } from "./APIClients/UserClient";
+import userClients, { UserObject, TokenObject } from "./APIClients/UserClient";
+import courseClients from "./APIClients/CourseClient";
 
 const user: UserObject = {
   auth_id: "auth_id",
@@ -70,6 +68,7 @@ function App() {
   // todo: useState for scheduleId when accounts are integrated
   // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
   const scheduleId = "64127ede93deee8bdc7a9121";
+  const email = "";
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -86,9 +85,15 @@ function App() {
   const handleCeabPlanChange = () => {};
 
   useEffect(() => {
-    clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
+    courseClients.getCoursesByScheduleId(scheduleId).then((value: any) => {
       if (value.length !== 0) {
         setCoursesOnSchedule(value);
+      }
+    });
+    console.log(token);
+      console.log(value2);
+      if (value2.length !== 0) {
+        setPastCourses(value2.past_courses);
       }
     });
   }, []);

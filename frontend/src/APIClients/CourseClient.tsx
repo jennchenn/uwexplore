@@ -169,7 +169,7 @@ const updateCourseColorByScheduleId = async (
   }
 };
 
-const clients = {
+const courseClients = {
   addCoursesByScheduleId,
   deleteCoursesByScheduleId,
   deleteSingleCourseByScheduleId,
@@ -178,4 +178,4 @@ const clients = {
   getCoursesByScheduleId,
   updateCourseColorByScheduleId,
 };
-export default clients;
+export default courseClients;

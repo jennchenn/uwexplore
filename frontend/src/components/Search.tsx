@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import CustomButton from "./CustomButton";
 import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
-import clients from "../APIClients/CourseClient";
+import courseClients from "../APIClients/CourseClient";
 
 interface courseHoverProps {
   setCourseHovered: any;
@@ -44,7 +44,7 @@ export default function Search({
       setSearchResults([]);
       setResultsLoading(false);
     } else {
-      const results = clients.getCourses(
+      const results = courseClients.getCourses(
         `?query=${searchQuery}&${filteringQuery}`,
       );
 

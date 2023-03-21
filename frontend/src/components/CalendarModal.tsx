@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import clients from "../APIClients/CourseClient";
+import courseClients from "../APIClients/CourseClient";
 
 type Props = {
   modalClass: any;
@@ -34,7 +34,7 @@ export default function CalendarModal({
 
   const handleClose = () => {
     if (selectedValue !== " ") {
-      clients
+      courseClients
         .updateCourseColorByScheduleId(
           scheduleId,
           modalClass.uid,
@@ -59,7 +59,7 @@ export default function CalendarModal({
   };
 
   const handleDeleteCourse = (id: string) => {
-    clients
+    courseClients
       .deleteSingleCourseByScheduleId(scheduleId, id)
       .then((value: any) => {
         if (value.length !== 0) {

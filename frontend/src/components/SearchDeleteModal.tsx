@@ -1,4 +1,4 @@
-import clients from "../APIClients/CourseClient";
+import courseClients from "../APIClients/CourseClient";
 import CustomButton from "./CustomButton";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -35,7 +35,7 @@ export default function SearchDeleteModal({
   };
 
   const deleteCourseFromSchedule = (id: string) => {
-    clients
+    courseClients
       .deleteCoursesByScheduleId(scheduleId, id)
       .then((value: any) => {
         if (value.length !== 0) {
