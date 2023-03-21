@@ -41,6 +41,7 @@ export default function Navbar({ token, setToken }: NavbarProps) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    window.location.reload();
   };
 
   return (
