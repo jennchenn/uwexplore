@@ -131,15 +131,13 @@ function App() {
             <CalendarTray
               setCourseHovered={setCourseHovered}
               addedCourses={coursesOnSchedule}
+              setAddedCourses={setCoursesOnSchedule}
+              handleCeabPlanChange={handleCeabPlanChange}
+              pastCourses={pastCourses}
+              setPastCourses={setPastCourses}
+              scheduleId={scheduleId}
             />
           </Box>
-          <CalendarTray
-            setCourseHovered={setCourseHovered}
-            handleCeabPlanChange={handleCeabPlanChange}
-            pastCourses={pastCourses}
-            setPastCourses={setPastCourses}
-            addedCourses={coursesOnSchedule}
-          />
         </Grid>
         {/* RHS CALENDAR */}
         <Grid xs={calendarWidth} className="calendar-base">

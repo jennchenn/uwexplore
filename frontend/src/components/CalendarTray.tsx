@@ -15,13 +15,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CourseCard from "./CourseCard";
 import { CourseObject } from "../APIClients/CourseClient";
 import { Props } from "../App";
+import SearchDeleteModal from "./SearchDeleteModal";
 
 interface CalendarTrayProps extends Props {
   setCourseHovered: any;
   handleCeabPlanChange: any;
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
-  addedCourses?: CourseObject[];
+  addedCourses: CourseObject[];
+  setAddedCourses: (value: any) => void;
+  scheduleId: string;
 }
 
 export default function CalendarTrayCalendar({
@@ -30,6 +33,8 @@ export default function CalendarTrayCalendar({
 }: CalendarTrayProps) {
   const [expanded, setExpanded] = useState(false);
   const [expandedCard, setExpandedCard] = useState("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState({} as any);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -70,6 +75,14 @@ export default function CalendarTrayCalendar({
                   expandedCard={expandedCard}
                   setExpandedCard={setExpandedCard}
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
+                  pastCourses={CalendarTrayProps.pastCourses}
+                  setPastCourses={CalendarTrayProps.setPastCourses}
+                  handleCeabPlanChange={CalendarTrayProps.handleCeabPlanChange}
+                  setDeleteModalOpen={setDeleteModalOpen}
+                  coursesOnSchedule={addedCourses}
+                  setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
+                  setCourseToDelete={setCourseToDelete}
+                  scheduleId={CalendarTrayProps.scheduleId}
                   type="added"
                 />
               ))}
@@ -82,6 +95,14 @@ export default function CalendarTrayCalendar({
           </Collapse>
         </CardContent>
       </Card>
+      <SearchDeleteModal
+        courseToDelete={courseToDelete}
+        setCourseToDelete={setCourseToDelete}
+        setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
+        deleteModalOpen={deleteModalOpen}
+        setDeleteModalOpen={setDeleteModalOpen}
+        scheduleId={CalendarTrayProps.scheduleId}
+      />
     </Grid>
   );
 }
