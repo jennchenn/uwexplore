@@ -91,7 +91,7 @@ export default function SearchCards({
   // corresponds to the value of the section dropdowns
   const [sectionsToAdd, setSectionsToAdd] = useState({} as any);
   // corresponds to the api call to add courses
-  const [coursesForCall, setCoursesForCall] = useState([] as any);
+  const [coursesForCall, setCoursesForCall] = useState({} as any);
   const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
   const handleCloseAddedSnack = () => {
@@ -107,10 +107,8 @@ export default function SearchCards({
     type: string,
     sectionsByTypeAndNumber: any,
   ) => {
+    setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
     if (event.target.value) {
-      setSectionsToAdd({ ...sectionsToAdd, [type]: event.target.value });
-
-      // classIds -> an object that looks like { LEC: ["id1", "id2"], TUT: ["id1"]}
       const classIds: any = [];
       const extractIdsArray = sectionsByTypeAndNumber[type][event.target.value];
       for (let i = 0; i < extractIdsArray.length; i++) {
@@ -120,6 +118,12 @@ export default function SearchCards({
         ...prevState,
         [type]: classIds,
       }));
+    } else {
+      setCoursesForCall((prevState: any) => {
+        const copy = { ...prevState };
+        delete copy[type];
+        return copy;
+      });
     }
   };
 
@@ -317,10 +321,7 @@ export default function SearchCards({
                 onOpen={() => setSectionDropdownOpen(true)}
                 onClose={() => setSectionDropdownOpen(false)}
                 onMouseOver={() => {
-                  if (
-                    sectionsToAdd[type] !== undefined &&
-                    !sectionDropdownOpen
-                  ) {
+                  if (sectionsToAdd[type] && !sectionDropdownOpen) {
                     setCourseHovered(
                       (sectionsByTypeAndNumber as any)[type][
                         sectionsToAdd[type]
@@ -464,8 +465,7 @@ export default function SearchCards({
                         id: course.id,
                       });
                     } else if (expandedCard === course.id) {
-                      if (coursesForCall.length === 0) {
-                        // show snack
+                      if (Object.keys(coursesForCall).length === 0) {
                         showNothingToAddSnack(true);
                       } else {
                         addCourseToSchedule(course.id, coursesForCall);
