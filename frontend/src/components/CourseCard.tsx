@@ -51,6 +51,7 @@ interface CourseCardProps extends Props {
   bookmarkedCourses: Record<string, any>;
   setBookmarkedCourses: (value: any) => void;
   handleCeabPlanChange: any;
+
   setCourseHovered?: any;
   type?: "search" | "added";
 }
@@ -189,10 +190,10 @@ export default function CourseCard({
               arrow
             >
               <IconButton
-                aria-label="expand more"
+                aria-label="pin course"
                 style={{
                   padding: "0px",
-                  margin: "0px 6px",
+                  marginRight: "6px",
                 }}
                 onClick={() => handleBookmarkClick(CourseCardProps.course)}
               >

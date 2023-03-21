@@ -119,6 +119,7 @@ function App() {
               ) : (
                 <Search
                   setCourseHovered={setCourseHovered}
+                  coursesOnSchedule={coursesOnSchedule}
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
                   handleCeabPlanChange={handleCeabPlanChange}
@@ -127,6 +128,10 @@ function App() {
                 />
               )}
             </PerfectScrollbar>
+            <CalendarTray
+              setCourseHovered={setCourseHovered}
+              addedCourses={coursesOnSchedule}
+            />
           </Box>
           <CalendarTray
             setCourseHovered={setCourseHovered}
