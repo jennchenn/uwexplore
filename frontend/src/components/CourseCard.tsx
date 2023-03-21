@@ -372,6 +372,12 @@ export default function CourseCard({
                   onChange={(e: any) => {
                     if (isPastCourse) {
                       setIsPastCourse(false);
+                      CourseCardProps.setPastCourses(
+                        getRevisedPastCourses(
+                          term,
+                          CourseCardProps.course.full_code,
+                        ),
+                      );
                       CourseCardProps.handleCeabPlanChange();
                     }
                     setOpenTermSelect(e.target.checked);
@@ -436,7 +442,7 @@ export default function CourseCard({
                   CourseCardProps.setPastCourses(
                     getRevisedPastCourses(
                       term,
-                      `${CourseCardProps.course.full_code}`,
+                      CourseCardProps.course.full_code,
                     ),
                   );
                   CourseCardProps.handleCeabPlanChange();

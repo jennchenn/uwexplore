@@ -12,48 +12,6 @@ import Paper from "@mui/material/Paper";
 
 //MUI icon imports
 import CourseCard from "./CourseCard";
-import { UserObject } from "../APIClients/UserClient";
-
-const abd: CourseObject = {
-  id: "id",
-  full_code: "full code",
-  requisites: "1",
-  ceab_eng_design: 3,
-  ceab_eng_sci: 4,
-  ceab_math: 5,
-  ceab_sci: 6,
-  code: "123",
-  course_id: "course id",
-  cse_weight: 7,
-  department: "syde",
-  description_abbreviated: "description abbreviated",
-  description: "description",
-  name: "name",
-  sections: [{ day: ["TH", "M"], type: "sfdjk" }],
-  tags: ["10", "11"],
-};
-
-const user: UserObject = {
-  auth_id: "auth_id",
-  name: "name",
-  email: "email",
-  grad_year: "grad_year",
-  program: "program",
-  schedule: { term: "term", courses: [] },
-  role: "role",
-  saved_courses: ["course1", "course2"],
-  past_courses: {
-    term_1a: [],
-    term_1b: [],
-    term_2a: [],
-    term_2b: [],
-    term_3a: [],
-    term_3b: [],
-    term_4a: ["syde123", "syde321"],
-    term_4b: [],
-    term_other: [],
-  },
-};
 
 interface searchProps {
   resultsLoading: boolean;
@@ -63,6 +21,8 @@ interface searchProps {
   setCoursesOnSchedule: any;
   scheduleId: string;
   handleCeabPlanChange: any;
+  pastCourses: { [key: string]: string[] };
+  setPastCourses: (value: { [term: string]: string[] }) => void;
 }
 
 export default function SearchCards({
@@ -73,8 +33,9 @@ export default function SearchCards({
   setCoursesOnSchedule,
   scheduleId,
   handleCeabPlanChange,
+  pastCourses,
+  setPastCourses,
 }: searchProps) {
-  const [pastCourses, setPastCourses] = useState(user.past_courses);
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
@@ -180,7 +141,7 @@ export default function SearchCards({
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
         .map((course, i) => (
           <CourseCard
-            course={abd}
+            course={course}
             expandedCard={expandedCard}
             bookmarkedCourses={bookmarkedCourses}
             setExpandedCard={setExpandedCard}

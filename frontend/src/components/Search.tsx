@@ -13,6 +13,8 @@ interface courseHoverProps {
   setCoursesOnSchedule: any;
   scheduleId: string;
   handleCeabPlanChange: any;
+  pastCourses: { [key: string]: string[] };
+  setPastCourses: (value: { [term: string]: string[] }) => void;
 }
 
 export default function Search({
@@ -20,6 +22,8 @@ export default function Search({
   setCoursesOnSchedule,
   scheduleId,
   handleCeabPlanChange,
+  pastCourses,
+  setPastCourses,
 }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -112,6 +116,8 @@ export default function Search({
             setCoursesOnSchedule={setCoursesOnSchedule}
             scheduleId={scheduleId}
             handleCeabPlanChange={handleCeabPlanChange}
+            pastCourses={pastCourses}
+            setPastCourses={setPastCourses}
           />
         </Stack>
       </Box>

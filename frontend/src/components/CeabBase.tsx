@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,6 +11,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import ProgressBar from "./ProgressBar";
 import "../styles/CustomButton.css";
+import PastCourseCard from "./PastCourseCard";
 
 const CeabRequirements = [
   { label: "LIST A", requirement: 1 },
@@ -30,10 +31,47 @@ const CeabRequirements = [
   { label: "CSE WEIGHT", requirement: 225 },
 ];
 
-export default function CeabBase() {
-  const [term, setTerm] = useState("");
+interface CeabBaseProps {
+  handleCeabPlanChange: any;
+  pastCourses: { [key: string]: string[] };
+  setPastCourses: (value: { [term: string]: string[] }) => void;
+}
 
-  const handleChange = (event: SelectChangeEvent) => {
+export default function CeabBase({
+  handleCeabPlanChange,
+  pastCourses,
+  setPastCourses,
+}: CeabBaseProps) {
+  const [term, setTerm] = useState("all");
+  const [courseList, setCourseList] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    let newList: { [key: string]: string } = {};
+    if (term === "all") {
+      for (let term in pastCourses) {
+        for (let course of pastCourses[term]) {
+          newList[course] = term;
+        }
+      }
+    } else {
+      for (let course of pastCourses[term]) newList[course] = term;
+    }
+    setCourseList(newList);
+  }, [term, pastCourses]);
+
+  const handlePastCourseRemoval = (term: string, courseCode: string) => {
+    let revisedObject = pastCourses;
+    let revisedArray = revisedObject[term];
+    revisedArray = revisedArray.filter((obj) => obj !== courseCode);
+    revisedObject[term] = revisedArray;
+    setPastCourses(revisedObject);
+
+    let tempDict = courseList;
+    delete tempDict[courseCode];
+    setCourseList(tempDict);
+  };
+
+  const handleTermChange = (event: SelectChangeEvent) => {
     setTerm(event.target.value);
   };
 
@@ -121,31 +159,28 @@ export default function CeabBase() {
                   size="small"
                   className="custom-button-primary"
                 >
-                  <InputLabel id="demo-select-small">Term</InputLabel>
+                  <InputLabel id="term-select-small">TERM</InputLabel>
                   <Select
-                    labelId="demo-select-small"
-                    id="demo-select-small"
+                    labelId="term-select-small"
                     value={term}
-                    onChange={handleChange}
+                    onChange={handleTermChange}
+                    label="TERM"
                     sx={{
                       "& .MuiSelect-select": {
                         color: "white",
                       },
                     }}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {/* todo: can map these once I know how they'll be used */}
-                    <MenuItem value={1}>1A</MenuItem>
-                    <MenuItem value={2}>1B</MenuItem>
-                    <MenuItem value={3}>2A</MenuItem>
-                    <MenuItem value={4}>2B</MenuItem>
-                    <MenuItem value={5}>3A</MenuItem>
-                    <MenuItem value={6}>3B</MenuItem>
-                    <MenuItem value={7}>4A</MenuItem>
-                    <MenuItem value={8}>4B</MenuItem>
-                    <MenuItem value={9}>Other</MenuItem>
+                    <MenuItem value="all">ALL</MenuItem>
+                    <MenuItem value="term_1a">1A</MenuItem>
+                    <MenuItem value="term_1b">1B</MenuItem>
+                    <MenuItem value="term_2a">2A</MenuItem>
+                    <MenuItem value="term_2b">2B</MenuItem>
+                    <MenuItem value="term_3a">3A</MenuItem>
+                    <MenuItem value="term_3b">3B</MenuItem>
+                    <MenuItem value="term_4a">4A</MenuItem>
+                    <MenuItem value="term_4b">4B</MenuItem>
+                    <MenuItem value="term_other">Other</MenuItem>
                   </Select>
                 </FormControl>
               </Stack>
@@ -158,19 +193,31 @@ export default function CeabBase() {
                     borderRadius: "var(--border-radius)",
                   }}
                 >
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      backgroundColor: "var(--bg-3)",
-                      p: 2,
-                      borderRadius: "var(--border-radius)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
-                      <em>Added past courses will appear here</em>
-                    </h5>
-                  </Paper>
+                  {!Object.keys(courseList).length ? (
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        backgroundColor: "var(--bg-3)",
+                        p: 2,
+                        borderRadius: "var(--border-radius)",
+                        textAlign: "center",
+                      }}
+                    >
+                      <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
+                        <em>Added past courses will appear here</em>
+                      </h5>
+                    </Paper>
+                  ) : (
+                    Object.keys(courseList).map((courseCode, index) => (
+                      <PastCourseCard
+                        key={`past-courses-cards-${index}`}
+                        courseCode={courseCode}
+                        completedTerm={courseList[courseCode]}
+                        handleRemove={handlePastCourseRemoval}
+                        handleCeabPlanChange={handleCeabPlanChange}
+                      />
+                    ))
+                  )}
                 </Paper>
               </Box>
             </CardContent>

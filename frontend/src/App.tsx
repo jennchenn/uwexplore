@@ -16,6 +16,30 @@ import CalendarTray from "./components/CalendarTray";
 import clients from "./APIClients/CourseClient";
 import { TokenObject } from "./APIClients/UserClient";
 
+import { UserObject } from "./APIClients/UserClient";
+
+const user: UserObject = {
+  auth_id: "auth_id",
+  name: "name",
+  email: "email",
+  grad_year: "grad_year",
+  program: "program",
+  schedule: { term: "term", courses: [] },
+  role: "role",
+  saved_courses: ["course1", "course2"],
+  past_courses: {
+    term_1a: [],
+    term_1b: [],
+    term_2a: [],
+    term_2b: [],
+    term_3a: [],
+    term_3b: [],
+    term_4a: ["SYDE123", "SYDE321"],
+    term_4b: [],
+    term_other: [],
+  },
+};
+
 export interface Props {
   id?: string;
   className?: string;
@@ -41,6 +65,8 @@ function App() {
   const [token, setToken] = useState<TokenObject>();
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
+
+  const [pastCourses, setPastCourses] = useState(user.past_courses);
   // todo: useState for scheduleId when accounts are integrated
   // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
   const scheduleId = "64127ede93deee8bdc7a9121";
@@ -96,6 +122,8 @@ function App() {
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
                   handleCeabPlanChange={handleCeabPlanChange}
+                  pastCourses={pastCourses}
+                  setPastCourses={setPastCourses}
                 />
               )}
             </PerfectScrollbar>
@@ -103,6 +131,9 @@ function App() {
           <CalendarTray
             setCourseHovered={setCourseHovered}
             handleCeabPlanChange={handleCeabPlanChange}
+            pastCourses={pastCourses}
+            setPastCourses={setPastCourses}
+            addedCourses={coursesOnSchedule}
           />
         </Grid>
         {/* RHS CALENDAR */}
@@ -130,7 +161,11 @@ function App() {
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
                 />
-                <Ceab />
+                <Ceab
+                  handleCeabPlanChange={handleCeabPlanChange}
+                  pastCourses={pastCourses}
+                  setPastCourses={setPastCourses}
+                />
               </Stack>
             </PerfectScrollbar>
           </Box>
