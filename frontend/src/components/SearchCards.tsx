@@ -1,15 +1,8 @@
+import { Box, CircularProgress, Paper, Portal, Snackbar } from "@mui/material";
 import { useState } from "react";
 import { CourseObject } from "../APIClients/CourseClient";
-import SearchDeleteModal from "./SearchDeleteModal";
-
-// MUI component imports
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import Portal from "@mui/material/Portal";
-import Snackbar from "@mui/material/Snackbar";
-
-import Paper from "@mui/material/Paper";
 import CourseCard from "./CourseCard";
+import SearchDeleteModal from "./SearchDeleteModal";
 
 interface searchProps {
   resultsLoading: boolean;

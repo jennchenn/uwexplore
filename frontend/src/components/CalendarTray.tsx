@@ -53,7 +53,7 @@ export default function CalendarTrayCalendar({
             direction="row"
             onClick={() => handleExpandClick()}
           >
-            <div className="calendar-tray-heading heading-1">Added Courses</div>
+            <div className="calendar-tray-heading heading-2">Added Courses</div>
             <Box>
               <IconButton
                 aria-label="expand more"
