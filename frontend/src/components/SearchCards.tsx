@@ -95,8 +95,6 @@ export default function SearchCards({
   const [coursesForCall, setCoursesForCall] = useState([] as any);
   const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
-  let [colorIndex, setColorIndex] = useState(0);
-
   const handleCloseAddedSnack = () => {
     showCourseAddedSnack(false);
   };
@@ -140,7 +138,10 @@ export default function SearchCards({
           formattedArray.push({
             course_id: course_id,
             section_id: section_ids[key][i],
-            color: backgroundColors[colorIndex % backgroundColors.length],
+            color:
+              backgroundColors[
+                Math.floor(Math.random() * backgroundColors.length + 1)
+              ],
           });
         }
         clients
@@ -150,7 +151,6 @@ export default function SearchCards({
               setCoursesOnSchedule(value);
               showCourseAddedSnack(true);
               setAddLoading(false);
-              setColorIndex(colorIndex++);
             }
           });
       });
