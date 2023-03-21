@@ -26,21 +26,30 @@ export type ScheduleId = {
 
 export type CalendarCourseObject = CourseObject & { color: string };
 
-const addCoursesByScheduleId = async (
-  id: string,
-  course_id: string,
-  section_id: string,
-  color: string,
-) => {
+const addCoursesByScheduleId = async (id: string, course: any) => {
   try {
-    const payload = {
-      course_id: course_id,
-      section_id: section_id,
-      color: color,
-    };
-    const { data } = await APIClient.post(
-      `/schedules/${id}`,
-      JSON.stringify(payload),
+    const { data } = await APIClient.post(`/schedules/${id}`, course, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
+const deleteCoursesByScheduleId = async (id: string, course_id: string) => {
+  try {
+    const { data } = await APIClient.delete(
+      `/schedules/${id}/course/${course_id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -60,17 +69,19 @@ const addCoursesByScheduleId = async (
   }
 };
 
-const deleteCoursesByScheduleId = async (id: string, section_id: string) => {
+const deleteSingleCourseByScheduleId = async (
+  id: string,
+  section_id: string,
+) => {
   try {
-    const payload = {
-      id: section_id,
-    };
-    const { data } = await APIClient.delete(`/schedules/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
+    const { data } = await APIClient.delete(
+      `/schedules/${id}/uid/${section_id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-      data: JSON.stringify(payload),
-    });
+    );
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -173,6 +184,7 @@ const updateCourseColorByScheduleId = async (
 const clients = {
   addCoursesByScheduleId,
   deleteCoursesByScheduleId,
+  deleteSingleCourseByScheduleId,
   getCourses,
   getScheduleId,
   getCoursesByScheduleId,

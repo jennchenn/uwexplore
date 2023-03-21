@@ -59,12 +59,14 @@ export default function CalendarModal({
   };
 
   const handleDeleteCourse = (id: string) => {
-    clients.deleteCoursesByScheduleId(scheduleId, id).then((value: any) => {
-      if (value.length !== 0) {
-        setCoursesOnSchedule(value);
-      }
-      setModalOpen(false);
-    });
+    clients
+      .deleteSingleCourseByScheduleId(scheduleId, id)
+      .then((value: any) => {
+        if (value.length !== 0) {
+          setCoursesOnSchedule(value);
+        }
+        setModalOpen(false);
+      });
   };
 
   const modalRadioButtons = () => {
