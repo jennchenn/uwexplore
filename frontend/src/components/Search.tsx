@@ -10,12 +10,14 @@ import clients from "../APIClients/CourseClient";
 
 interface courseHoverProps {
   setCourseHovered: any;
+  coursesOnSchedule: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
 }
 
 export default function Search({
   setCourseHovered,
+  coursesOnSchedule,
   setCoursesOnSchedule,
   scheduleId,
 }: courseHoverProps) {
@@ -107,6 +109,7 @@ export default function Search({
             searchResults={searchResults}
             searchQuery={searchQuery}
             setCourseHovered={setCourseHovered}
+            coursesOnSchedule={coursesOnSchedule}
             setCoursesOnSchedule={setCoursesOnSchedule}
             scheduleId={scheduleId}
           />
