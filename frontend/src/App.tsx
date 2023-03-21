@@ -14,7 +14,7 @@ import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
 import clients from "./APIClients/CourseClient";
-import { TokenObject } from "./APIClients/UserClient";
+import userClient, { TokenObject } from "./APIClients/UserClient";
 
 export interface Props {
   id?: string;
@@ -57,10 +57,12 @@ function App() {
 
   useEffect(() => {
     const lsToken = localStorage.getItem("token");
-    const token = lsToken ? JSON.parse(lsToken) : null;
-    if (token) {
-      setToken(token);
-    }
+    if (!lsToken) return;
+    // refresh the token
+    const oldToken = lsToken ? JSON.parse(lsToken) : null;
+    userClient.refresh(oldToken.refresh_token).then((value: any) => {
+      setToken(value);
+    });
   }, []);
 
   useEffect(() => {
