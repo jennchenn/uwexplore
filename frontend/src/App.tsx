@@ -13,30 +13,8 @@ import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
-import userClients, { UserObject, TokenObject } from "./APIClients/UserClient";
+import { TokenObject } from "./APIClients/UserClient";
 import courseClients from "./APIClients/CourseClient";
-
-const user: UserObject = {
-  auth_id: "auth_id",
-  name: "name",
-  email: "email",
-  grad_year: "grad_year",
-  program: "program",
-  schedule: { term: "term", courses: [] },
-  role: "role",
-  saved_courses: ["course1", "course2"],
-  past_courses: {
-    term_1a: [],
-    term_1b: [],
-    term_2a: [],
-    term_2b: [],
-    term_3a: [],
-    term_3b: [],
-    term_4a: ["SYDE123", "SYDE321"],
-    term_4b: [],
-    term_other: [],
-  },
-};
 
 export interface Props {
   id?: string;
@@ -64,11 +42,10 @@ function App() {
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
 
-  const [pastCourses, setPastCourses] = useState(user.past_courses);
+  const [pastCourses, setPastCourses] = useState({});
   // todo: useState for scheduleId when accounts are integrated
   // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
   const scheduleId = "64127ede93deee8bdc7a9121";
-  const email = "";
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -90,13 +67,17 @@ function App() {
         setCoursesOnSchedule(value);
       }
     });
-    console.log(token);
-      console.log(value2);
-      if (value2.length !== 0) {
-        setPastCourses(value2.past_courses);
-      }
-    });
   }, []);
+
+  useEffect(() => {
+    if (token?.id_token) {
+      courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
+        if (value.length !== 0) {
+          setPastCourses(value.past_courses);
+        }
+      });
+    }
+  }, [token]);
 
   return (
     <Box>

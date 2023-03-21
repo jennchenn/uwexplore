@@ -84,43 +84,9 @@ const createUser = async (email: string, password: string) => {
   }
 };
 
-const getUserByToken = async (token: string | null): Promise<UserObject[]> => {
-  try {
-    const { data } = await APIClient.get(`/courses?token=${token}`);
-    return data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
-  }
-};
-
-const getUserByEmail = async (email: string | null): Promise<UserObject[]> => {
-  try {
-    const { data } = await APIClient.get(`/users?email=${email}`);
-    return data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
-  }
-};
-
 const userClients = {
   login,
   createUser,
-  getUserByToken,
-  getUserByEmail,
 };
 
 export default userClients;

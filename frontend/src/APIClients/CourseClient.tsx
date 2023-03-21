@@ -109,6 +109,26 @@ const getCourses = async (
   }
 };
 
+const getPastCourses = async (
+  token: string | null,
+): Promise<CourseObject[]> => {
+  try {
+    const { data } = await APIClient.get(`courses/past`, {
+      headers: { Authorization: `bearer ${token}` },
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
 const getCoursesOnCalendar = async (): Promise<CalendarCourseObject[]> => {
   // FIXME: this should be thrown into a try catch
   // FIXME: add authorization header! "Authorization: Bearer <>"
@@ -174,6 +194,7 @@ const courseClients = {
   deleteCoursesByScheduleId,
   deleteSingleCourseByScheduleId,
   getCourses,
+  getPastCourses,
   getCoursesOnCalendar,
   getCoursesByScheduleId,
   updateCourseColorByScheduleId,
