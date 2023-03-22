@@ -5,6 +5,7 @@ import requests
 from flask import current_app as app
 from flask_mail import Mail
 
+from ..models.schedule import Schedule
 from ..models.user import User
 
 
@@ -25,23 +26,13 @@ class UserService:
         :raise Exception: if error encountered adding user in Firebase or MongoDB
         """
         try:
-            if user.sign_up_method == "PASSWORD":
-                firebase_user = firebase_admin.auth.create_user(
-                    email=user.email, password=user.password
-                )
-                auth_id = firebase_user.uid
-            elif user.sign_up_method == "GOOGLE":
-                if not user.on_firebase:
-                    firebase_user = firebase_admin.auth.create_user(uid=user.auth_id)
-                auth_id = user.auth_id
-
+            firebase_user = firebase_admin.auth.create_user(
+                email=user.email, password=user.password
+            )
+            auth_id = firebase_user.uid
             try:
-                new_user = User(
-                    auth_id=auth_id,
-                    name=user.name,
-                    email=user.email,
-                    grad_year=user.grad_year,
-                    role=user.role,
+                User(
+                    auth_id=auth_id, email=user.email, schedule=Schedule().save()
                 ).save()
             except Exception as mongo_error:
                 # rollback user creation in Firebase
@@ -70,7 +61,7 @@ class UserService:
             )
             raise e
 
-        return new_user.to_serializable_dict()
+        return self.login(user.email, user.password)
 
     def get_user_by_email(self, email):
         """
