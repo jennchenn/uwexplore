@@ -17,15 +17,15 @@ interface NavbarProps {
 export default function Navbar({ token, setToken }: NavbarProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signUpModalOpen, setSignUpModalOpen] = useState(false);
-  const [hideLogin, setHideLogin] = useState<boolean>(
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     token?.id_token ? true : false,
   );
 
   useEffect(() => {
     if (token && token.id_token) {
-      setHideLogin(true);
+      setIsLoggedIn(true);
     } else {
-      setHideLogin(false);
+      setIsLoggedIn(false);
     }
   }, [token]);
 
@@ -39,6 +39,11 @@ export default function Navbar({ token, setToken }: NavbarProps) {
     setSignUpModalOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -49,7 +54,14 @@ export default function Navbar({ token, setToken }: NavbarProps) {
               <h2 className="title">uw</h2>
               <h2 className="title font-light">explore</h2>
             </div>
-            {!hideLogin && (
+            {isLoggedIn ? (
+              <CustomButton
+                type="secondary"
+                className="login-signup-nav-button"
+                onClick={handleLogout}
+                text="Logout"
+              />
+            ) : (
               <CustomButton
                 type="secondary"
                 className="login-signup-nav-button"

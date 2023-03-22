@@ -50,6 +50,32 @@ const login = async (email: string, password: string) => {
     return [];
   }
 };
+const refresh = async (refreshToken: string): Promise<TokenObject | []> => {
+  try {
+    const payload = {
+      refresh_token: refreshToken,
+    };
+    const { data } = await APIClient.post(
+      `/auth/refresh`,
+      JSON.stringify(payload),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
 
 const createUser = async (email: string, password: string) => {
   try {
@@ -86,6 +112,7 @@ const createUser = async (email: string, password: string) => {
 
 const clients = {
   login,
+  refresh,
   createUser,
 };
 

@@ -14,7 +14,7 @@ import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
 import clients from "./APIClients/CourseClient";
-import { TokenObject } from "./APIClients/UserClient";
+import userClient, { TokenObject } from "./APIClients/UserClient";
 
 export interface Props {
   id?: string;
@@ -41,9 +41,7 @@ function App() {
   const [token, setToken] = useState<TokenObject>();
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
-  // todo: useState for scheduleId when accounts are integrated
-  // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
-  const scheduleId = "64127ede93deee8bdc7a9121";
+  const [scheduleId, setScheduleId] = useState("");
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -58,12 +56,33 @@ function App() {
   };
 
   useEffect(() => {
-    clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
-      if (value.length !== 0) {
-        setCoursesOnSchedule(value);
-      }
+    const lsToken = localStorage.getItem("token");
+    if (!lsToken) return;
+    // refresh the token
+    const oldToken = lsToken ? JSON.parse(lsToken) : null;
+    userClient.refresh(oldToken.refresh_token).then((value: any) => {
+      setToken(value);
     });
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", JSON.stringify(token));
+      clients.getScheduleId(token.id_token).then((value: any) => {
+        setScheduleId(value.schedule_id);
+      });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (scheduleId) {
+      clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
+        if (value.length !== 0) {
+          setCoursesOnSchedule(value);
+        }
+      });
+    }
+  }, [scheduleId]);
 
   return (
     <Box>
