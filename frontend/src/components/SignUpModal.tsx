@@ -80,7 +80,6 @@ export default function SignUp({
       userClient
         .createUser(email, password)
         .then((value: any) => {
-          console.log(value);
           SignUpModalProps.setToken(value);
           handleClose();
         })
