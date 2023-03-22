@@ -109,7 +109,9 @@ export default function CeabBase({
                       ceabOnSchedule[requirement.label]
                         ? ceabCounts[requirement.label].completed +
                           ceabOnSchedule[requirement.label].completed
-                        : ceabOnSchedule[requirement.label].completed || 0
+                        : ceabOnSchedule[requirement.label]
+                        ? ceabOnSchedule[requirement.label].completed
+                        : 0
                     }
                     total={requirement.requirement}
                     key={index}
