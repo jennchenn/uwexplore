@@ -62,6 +62,9 @@ function App() {
   const handleCeabPlanChange = () => {};
 
   useEffect(() => {
+    const scheduleId = localStorage.getItem("scheduleId");
+    const parsedId = scheduleId ? JSON.parse(scheduleId) : null;
+    setScheduleId(parsedId);
     const lsToken = localStorage.getItem("token");
     if (!lsToken) return;
     // refresh the token
@@ -107,7 +110,7 @@ function App() {
 
   return (
     <Box>
-      <Navbar token={token} setToken={setToken} />
+      <Navbar token={token} setToken={setToken} setScheduleId={setScheduleId} />
 
       <Grid container>
         {/* LHS SEARCH */}
