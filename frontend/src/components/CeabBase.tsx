@@ -105,12 +105,8 @@ export default function CeabBase({
                     label={requirement.label}
                     // todo: get user's ceab vals from taken courses and map properly
                     completed={
-                      ceabCounts &&
-                      ceabOnSchedule &&
                       ceabCounts[requirement.label] &&
-                      ceabOnSchedule[requirement.label] &&
-                      ceabCounts[requirement.label].completed &&
-                      ceabOnSchedule[requirement.label].completed
+                      ceabOnSchedule[requirement.label]
                         ? ceabCounts[requirement.label].completed +
                           ceabOnSchedule[requirement.label].completed
                         : ceabOnSchedule[requirement.label].completed || 0

@@ -27,7 +27,7 @@ interface CalendarTrayProps extends Props {
   scheduleId: string;
 }
 
-export default function CalendarTrayCalendar({
+export default function CalendarTray({
   addedCourses = [],
   ...CalendarTrayProps
 }: CalendarTrayProps) {
@@ -69,8 +69,9 @@ export default function CalendarTrayCalendar({
           </Stack>
           <Collapse in={expanded} className="tray-contents-container">
             <Stack className="tray-contents" spacing={1}>
-              {addedCourses.map((course, i) => (
+              {addedCourses.map((course, index) => (
                 <CourseCard
+                  key={`calendar-tray-course-card-${index}`}
                   course={course}
                   expandedCard={expandedCard}
                   setExpandedCard={setExpandedCard}
