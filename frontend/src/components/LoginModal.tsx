@@ -95,9 +95,8 @@ export default function LoginModal({
       <Box className="login-modal">
         <div className="login-modal-title heading-1">LOGIN</div>
         <div className="login-modal-description heading-6">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          sollicitudin dapibus nisi, quis eleifend felis pharetra vel. Mauris ac
-          iaculis mauris.
+          Welcome to your interactive planner. Plan your term and keep track of
+          your courses with UWExplore.
         </div>
         {!validate && alert !== "" && (
           <div className="login-modal-alert heading-4">{alert}</div>

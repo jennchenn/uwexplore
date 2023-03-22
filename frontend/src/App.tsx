@@ -13,7 +13,7 @@ import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
-import { TokenObject } from "./APIClients/UserClient";
+import userClient, { TokenObject } from "./APIClients/UserClient";
 import courseClients from "./APIClients/CourseClient";
 import ceabClients from "./APIClients/CeabClient";
 
@@ -42,14 +42,10 @@ function App() {
   const [token, setToken] = useState<TokenObject>();
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
-
   const [pastCourses, setPastCourses] = useState({});
   const [ceabOnSchedule, setCeabOnSchedule] = useState({});
   const [ceabCounts, setCeabCounts] = useState({});
-
-  // todo: useState for scheduleId when accounts are integrated
-  // const [scheduleId, setScheduleId] = useState("6406bb27bb90bab16078f4ac");
-  const scheduleId = "64127ede93deee8bdc7a9121";
+  const [scheduleId, setScheduleId] = useState("");
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -66,24 +62,20 @@ function App() {
   const handleCeabPlanChange = () => {};
 
   useEffect(() => {
-    courseClients.getCoursesByScheduleId(scheduleId).then((value: any) => {
-      if (value.length !== 0) {
-        setCoursesOnSchedule(value);
-      }
-    });
-    ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
-      if (value.length !== 0) {
-        setCeabOnSchedule(value);
-      }
+    const lsToken = localStorage.getItem("token");
+    if (!lsToken) return;
+    // refresh the token
+    const oldToken = lsToken ? JSON.parse(lsToken) : null;
+    userClient.refresh(oldToken.refresh_token).then((value: any) => {
+      setToken(value);
     });
   }, []);
 
   useEffect(() => {
-    if (token?.id_token) {
-      courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
-        if (value.length !== 0) {
-          setPastCourses(value.past_courses);
-        }
+    if (token) {
+      localStorage.setItem("token", JSON.stringify(token));
+      courseClients.getScheduleId(token.id_token).then((value: any) => {
+        setScheduleId(value.schedule_id);
       });
       ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
         if (value.length !== 0) {
@@ -92,6 +84,21 @@ function App() {
       });
     }
   }, [token]);
+
+  useEffect(() => {
+    if (scheduleId) {
+      courseClients.getCoursesByScheduleId(scheduleId).then((value: any) => {
+        if (value.length !== 0) {
+          setCoursesOnSchedule(value);
+        }
+      });
+      ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
+        if (value.length !== 0) {
+          setCeabOnSchedule(value);
+        }
+      });
+    }
+  }, [scheduleId]);
 
   return (
     <Box>

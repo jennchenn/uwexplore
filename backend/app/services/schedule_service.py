@@ -7,6 +7,16 @@ class ScheduleService:
     def __init__(self, logger):
         self.logger = logger
 
+    def get_schedule_id_by_user(self, user):
+        try:
+            return {"schedule_id": str(user.schedule.id)}
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get schedule id. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def get_schedule_courses_by_user(self, user):
         try:
             schedule_id = user.schedule.id
