@@ -242,54 +242,60 @@ export default function CourseCard({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {CourseCardProps.course.sections.map((section: any) => {
-                      // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
-                      let days = "";
-                      for (let i = 0; i < section.day.length; i++) {
-                        if (section.day[i].slice(0, 2) === "TH") {
-                          days = days.concat(section.day[i].slice(0, 2));
-                        } else {
-                          days = days.concat(section.day[i].slice(0, 1));
+                    {CourseCardProps.course.sections.length === 0 ? (
+                      <></>
+                    ) : (
+                      CourseCardProps.course.sections.map((section: any) => {
+                        // Format days of the week courses are held (TUESDAY, THURSDAY, FRIDAY -> T, TH, F)
+                        let days = "";
+                        for (let i = 0; i < section.day.length; i++) {
+                          if (section.day[i].slice(0, 2) === "TH") {
+                            days = days.concat(section.day[i].slice(0, 2));
+                          } else {
+                            days = days.concat(section.day[i].slice(0, 1));
+                          }
+                          if (i < section.day.length - 1) {
+                            days = days.concat(", ");
+                          }
                         }
-                        if (i < section.day.length - 1) {
-                          days = days.concat(", ");
-                        }
-                      }
-                      return (
-                        <TableRow
-                          key={section.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <StyledTableCell component="th" scope="row">
-                            {section.type.slice(0, 3)} {section.number}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            {section.class_number}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            {section.enrolled_number}/{section.capacity}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            {moment()
-                              .startOf("day")
-                              .add(section.start_time, "milliseconds")
-                              .format("hh:mm A")}
-                            {" - "}
-                            {moment()
-                              .startOf("day")
-                              .add(section.end_time, "milliseconds")
-                              .format("hh:mm A")}
-                          </StyledTableCell>
-                          <StyledTableCell>{days}</StyledTableCell>
-                          <StyledTableCell>{section.location}</StyledTableCell>
-                          <StyledTableCell>
-                            {section.instructor}
-                          </StyledTableCell>
-                        </TableRow>
-                      );
-                    })}
+                        return (
+                          <TableRow
+                            key={section.id}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <StyledTableCell component="th" scope="row">
+                              {section.type.slice(0, 3)} {section.number}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.class_number}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.enrolled_number}/{section.capacity}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {moment()
+                                .startOf("day")
+                                .add(section.start_time, "milliseconds")
+                                .format("hh:mm A")}
+                              {" - "}
+                              {moment()
+                                .startOf("day")
+                                .add(section.end_time, "milliseconds")
+                                .format("hh:mm A")}
+                            </StyledTableCell>
+                            <StyledTableCell>{days}</StyledTableCell>
+                            <StyledTableCell>
+                              {section.location}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {section.instructor}
+                            </StyledTableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
                   </TableBody>
                 </Table>
               </PerfectScrollbar>
