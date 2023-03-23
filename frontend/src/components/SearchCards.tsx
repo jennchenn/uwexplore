@@ -149,8 +149,9 @@ export default function SearchCards({
       )}
       {searchResults
         .filter((course) => (course.id in bookmarkedCourses ? false : true))
-        .map((course, i) => (
+        .map((course, index) => (
           <CourseCard
+            key={`search-card-course-card-${index}`}
             course={course}
             expandedCard={expandedCard}
             bookmarkedCourses={bookmarkedCourses}

@@ -152,16 +152,6 @@ const getScheduleId = async (idToken: string): Promise<ScheduleId> => {
   }
 };
 
-const getCoursesOnCalendar = async (): Promise<CalendarCourseObject[]> => {
-  // FIXME: this should be thrown into a try catch
-  // FIXME: add authorization header! "Authorization: Bearer <>"
-  const bearerToken = "";
-  const { data } = await APIClient.get("/schedules", {
-    headers: { Authorization: bearerToken },
-  });
-  return data;
-};
-
 const getCoursesByScheduleId = async (
   id: string,
 ): Promise<CalendarCourseObject[]> => {
@@ -250,7 +240,6 @@ const courseClients = {
   deleteSingleCourseByScheduleId,
   getCourses,
   getPastCourses,
-  getCoursesOnCalendar,
   getScheduleId,
   getCoursesByScheduleId,
   updateCourseColorByScheduleId,
