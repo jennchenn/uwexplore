@@ -137,6 +137,7 @@ function App() {
                   handleCeabPlanChange={handleCeabPlanChange}
                   pastCourses={pastCourses}
                   setPastCourses={setPastCourses}
+                  tokenId={token?.id_token || null}
                 />
               )}
             </PerfectScrollbar>
@@ -148,6 +149,7 @@ function App() {
               pastCourses={pastCourses}
               setPastCourses={setPastCourses}
               scheduleId={scheduleId}
+              tokenId={token?.id_token || null}
             />
           </Box>
         </Grid>

@@ -16,6 +16,7 @@ interface courseHoverProps {
   handleCeabPlanChange: any;
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
+  tokenId?: string | null;
 }
 
 export default function Search({
@@ -26,6 +27,7 @@ export default function Search({
   handleCeabPlanChange,
   pastCourses,
   setPastCourses,
+  tokenId,
 }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -121,6 +123,7 @@ export default function Search({
             handleCeabPlanChange={handleCeabPlanChange}
             pastCourses={pastCourses}
             setPastCourses={setPastCourses}
+            tokenId={tokenId}
           />
         </Stack>
       </Box>

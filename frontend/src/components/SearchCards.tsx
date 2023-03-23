@@ -15,6 +15,7 @@ interface searchProps {
   handleCeabPlanChange: any;
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
+  tokenId?: string | null;
 }
 
 export default function SearchCards({
@@ -28,6 +29,7 @@ export default function SearchCards({
   handleCeabPlanChange,
   pastCourses,
   setPastCourses,
+  tokenId,
 }: searchProps) {
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
@@ -125,6 +127,7 @@ export default function SearchCards({
                   scheduleId={scheduleId}
                   showCourseAddedSnack={showCourseAddedSnack}
                   showNothingToAddSnack={showNothingToAddSnack}
+                  tokenId={tokenId}
                 />
               );
             })}
@@ -168,6 +171,7 @@ export default function SearchCards({
             scheduleId={scheduleId}
             showCourseAddedSnack={showCourseAddedSnack}
             showNothingToAddSnack={showNothingToAddSnack}
+            tokenId={tokenId}
           />
         ))}
 

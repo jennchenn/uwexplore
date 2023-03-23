@@ -25,10 +25,12 @@ interface CalendarTrayProps extends Props {
   addedCourses: CourseObject[];
   setAddedCourses: (value: any) => void;
   scheduleId: string;
+  tokenId: string | null;
 }
 
 export default function CalendarTray({
   addedCourses = [],
+  tokenId = "",
   ...CalendarTrayProps
 }: CalendarTrayProps) {
   const [expanded, setExpanded] = useState(false);
@@ -85,6 +87,7 @@ export default function CalendarTray({
                   setCourseToDelete={setCourseToDelete}
                   scheduleId={CalendarTrayProps.scheduleId}
                   type="added"
+                  tokenId={tokenId}
                 />
               ))}
               {!addedCourses.length && (

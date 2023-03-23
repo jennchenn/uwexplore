@@ -61,12 +61,14 @@ interface CourseCardProps extends Props {
   showNothingToAddSnack?: (value: boolean) => void;
   setCourseHovered?: any;
   type?: "search" | "added";
+  tokenId?: string | null;
 }
 
 export default function CourseCard({
   type = "search",
   bookmarkedCourses = {},
   setBookmarkedCourses = () => {},
+  tokenId = "",
   ...CourseCardProps
 }: CourseCardProps) {
   const [isPastCourse, setIsPastCourse] = useState(false);
@@ -156,26 +158,32 @@ export default function CourseCard({
           revisedArray = revisedObject[term].filter(
             (obj) => obj !== courseCode,
           );
+          courseClients
+            .getCourses(`?query=${courseCode}`)
+            .then((value: any) => {
+              if (value.length !== 0) {
+                const courseId = value[0].id;
+                courseClients.deletePastCourses(tokenId, courseId, term);
+              }
+            });
+          break;
         }
       }
     } else {
       revisedArray.push(courseCode);
+      courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
+        if (value.length !== 0) {
+          const courseId = value[0].id;
+          courseClients.addPastCourses(tokenId, courseId, term);
+        }
+      });
     }
     revisedObject[term] = revisedArray;
+
     return revisedObject;
   };
 
   const handleClose = () => {
-    // if (selectedTerm !== " ") {
-    //   courseClients
-    //     .updateCourseColorByScheduleId(scheduleId, modalClass.uid, selectedTerm)
-    //     .then((value: any) => {
-    //       setCoursesOnSchedule(value);
-    //     })
-    //     .then(() => {
-    //       setSelectedTerm(" ");
-    //     });
-    // }
     setShowSelectError(false);
     setOpenTermSelect(false);
   };
