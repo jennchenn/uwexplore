@@ -75,8 +75,7 @@ function App() {
         localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
     } else if (lsScheduleId && lsScheduleId !== "null") {
-      const scheduleId =
-        lsScheduleId && lsScheduleId !== "null" ? JSON.parse(lsScheduleId) : "";
+      const scheduleId = JSON.parse(lsScheduleId);
       setScheduleId(scheduleId);
     } else {
       clients.createSchedule().then((value: any) => {

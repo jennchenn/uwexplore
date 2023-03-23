@@ -86,7 +86,9 @@ def create_new_schedule():
 @require_login
 def delete_courses_by_user_by_course_id(curr_user, course_id):
     try:
-        result = schedule_service.create_new_schedule()
+        result = schedule_service.delete_courses_from_schedule_by_user(
+            curr_user, course_id
+        )
         return jsonify(result), 200
     except Exception as e:
         error_message = getattr(e, "message", None)
