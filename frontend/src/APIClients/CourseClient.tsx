@@ -131,6 +131,22 @@ const getScheduleId = async (idToken: string): Promise<ScheduleId> => {
   }
 };
 
+const createSchedule = async (): Promise<ScheduleId> => {
+  try {
+    const { data } = await APIClient.post("/schedules/new");
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return { schedule_id: null };
+  }
+};
+
 const getCoursesByScheduleId = async (
   id: string,
 ): Promise<CalendarCourseObject[]> => {
@@ -219,6 +235,7 @@ const clients = {
   deleteSingleCourseByScheduleId,
   getCourses,
   getScheduleId,
+  createSchedule,
   getCoursesByScheduleId,
   updateCourseColorByScheduleId,
   updateSectionColorByScheduleId,

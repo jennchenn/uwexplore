@@ -34,7 +34,7 @@ class ScheduleCourses(EmbeddedDocument):
 
 class Schedule(Document):
     term = StringField()
-    courses = ListField(EmbeddedDocumentField(ScheduleCourses), required=True)
+    courses = ListField(EmbeddedDocumentField(ScheduleCourses))
 
     def to_serializable_dict(self):
         """

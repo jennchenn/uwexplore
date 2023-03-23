@@ -72,13 +72,21 @@ def delete_course_by_user_by_id(curr_user, uid):
         return jsonify({"error": (error_message if error_message else str(e))}), 500
 
 
+@blueprint.route("/new", methods=["POST"], strict_slashes=False)
+def create_new_schedule():
+    try:
+        result = schedule_service.create_new_schedule()
+        return jsonify(result), 200
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
 @blueprint.route("/course/<course_id>", methods=["DELETE"], strict_slashes=False)
 @require_login
 def delete_courses_by_user_by_course_id(curr_user, course_id):
     try:
-        result = schedule_service.delete_courses_from_schedule_by_user(
-            curr_user, course_id
-        )
+        result = schedule_service.create_new_schedule()
         return jsonify(result), 200
     except Exception as e:
         error_message = getattr(e, "message", None)

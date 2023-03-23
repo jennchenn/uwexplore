@@ -59,17 +59,29 @@ function App() {
     const lsToken = localStorage.getItem("token");
     if (!lsToken) return;
     // refresh the token
-    const oldToken = lsToken ? JSON.parse(lsToken) : null;
+    const oldToken = JSON.parse(lsToken);
     userClient.refresh(oldToken.refresh_token).then((value: any) => {
       setToken(value);
     });
   }, []);
 
   useEffect(() => {
+    const lsScheduleId = localStorage.getItem("scheduleId");
+
     if (token) {
       localStorage.setItem("token", JSON.stringify(token));
       clients.getScheduleId(token.id_token).then((value: any) => {
         setScheduleId(value.schedule_id);
+        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
+      });
+    } else if (lsScheduleId && lsScheduleId !== "null") {
+      const scheduleId =
+        lsScheduleId && lsScheduleId !== "null" ? JSON.parse(lsScheduleId) : "";
+      setScheduleId(scheduleId);
+    } else {
+      clients.createSchedule().then((value: any) => {
+        setScheduleId(value.schedule_id);
+        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
     }
   }, [token]);
