@@ -176,7 +176,10 @@ const deletePastCourses = async (
     };
     const { data } = await APIClient.delete(`/courses/past`, {
       data: JSON.stringify(payload),
-      headers: { Authorization: `bearer ${token}` },
+      headers: {
+        Authorization: `bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
     return data;
   } catch (error) {
