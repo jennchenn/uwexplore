@@ -145,7 +145,10 @@ const addPastCourses = async (
       `/courses/past`,
       JSON.stringify(payload),
       {
-        headers: { Authorization: `bearer ${token}` },
+        headers: {
+          Authorization: `bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       },
     );
     return data;
