@@ -150,8 +150,14 @@ export default function CourseCard({
   const getRevisedPastCourses = (term: string, courseCode: string) => {
     let revisedObject = CourseCardProps.pastCourses;
     let revisedArray = revisedObject[term];
-    if (revisedArray.includes(courseCode)) {
-      revisedArray = revisedArray.filter((obj) => obj !== courseCode);
+    let revisedArray: string[] = [];
+    if (term === "remove") {
+      for (let term in revisedObject) {
+        if (revisedObject[term].includes(courseCode)) {
+          revisedArray = revisedObject[term].filter(
+          );
+        }
+      }
     } else {
       revisedArray.push(courseCode);
     }
@@ -655,7 +661,7 @@ export default function CourseCard({
                       setIsPastCourse(false);
                       CourseCardProps.setPastCourses(
                         getRevisedPastCourses(
-                          term,
+                          "remove",
                           CourseCardProps.course.full_code,
                         ),
                       );

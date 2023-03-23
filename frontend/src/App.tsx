@@ -79,7 +79,12 @@ function App() {
       });
       ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
         if (value.length !== 0) {
-          setCeabCounts(value.past_courses);
+          setCeabCounts(value);
+        }
+      });
+      courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
+        if (value.length !== 0) {
+          setPastCourses(value);
         }
       });
     }
