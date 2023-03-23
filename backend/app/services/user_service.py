@@ -32,7 +32,9 @@ class UserService:
             auth_id = firebase_user.uid
             try:
                 User(
-                    auth_id=auth_id, email=user.email, schedule=Schedule().save()
+                    auth_id=auth_id,
+                    email=user.email,
+                    schedule=Schedule(courses=[]).save(),
                 ).save()
             except Exception as mongo_error:
                 # rollback user creation in Firebase
