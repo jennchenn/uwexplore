@@ -15,7 +15,9 @@ class ScheduleCourses(EmbeddedDocument):
     _id = ObjectIdField(required=True, default=ObjectId, primary_key=True)
     course_id = ObjectIdField(required=True)
     section_id = ObjectIdField(required=True)
-    color = StringField(required=True)
+    color = StringField(
+        required=True, default="#9d94ff"
+    )  # choose one of the colors to be the default one
 
     def to_serializable_dict(self):
         """
@@ -34,7 +36,7 @@ class ScheduleCourses(EmbeddedDocument):
 
 class Schedule(Document):
     term = StringField()
-    courses = ListField(EmbeddedDocumentField(ScheduleCourses), required=True)
+    courses = ListField(EmbeddedDocumentField(ScheduleCourses))
 
     def to_serializable_dict(self):
         """

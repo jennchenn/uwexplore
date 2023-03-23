@@ -73,6 +73,9 @@ class CourseService:
                 )
 
             for result in query_results:
+                result.sections = sorted(
+                    result.sections, key=lambda section: (section.type, section.number)
+                )
                 result_dict = result.to_serializable_dict()
                 courses.append(result_dict)
             return courses
