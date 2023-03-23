@@ -149,12 +149,12 @@ export default function CourseCard({
 
   const getRevisedPastCourses = (term: string, courseCode: string) => {
     let revisedObject = CourseCardProps.pastCourses;
-    let revisedArray = revisedObject[term];
     let revisedArray: string[] = [];
     if (term === "remove") {
       for (let term in revisedObject) {
         if (revisedObject[term].includes(courseCode)) {
           revisedArray = revisedObject[term].filter(
+            (obj) => obj !== courseCode,
           );
         }
       }
