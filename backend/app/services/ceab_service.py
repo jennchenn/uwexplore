@@ -46,6 +46,14 @@ LABEL_TO_REQ = {
 
 # https://uwaterloo.ca/engineering/undergraduate-students/co-op-experience/watpd-engineering
 COMPULSORY_PD_COURSE_CODES = set(["PD19", "PD20", "PD21"])
+CSE_LISTS = set(
+    [
+        CeabRequirements.LIST_A.value,
+        CeabRequirements.LIST_B.value,
+        CeabRequirements.LIST_C.value,
+        CeabRequirements.LIST_D.value,
+    ]
+)
 
 
 class CeabService:
@@ -133,6 +141,10 @@ class CeabService:
                     requirements_counts[CeabRequirements.PD_ELEC.value] += 1
                 else:
                     requirements_counts[course_info.course_type.value] += 1
+
+                # check if CSE as well
+                if course_info.course_type.value in CSE_LISTS:
+                    requirements_counts[CeabRequirements.CSE.value] += 1
 
         # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
         self._sum_requirements(requirements_counts)
