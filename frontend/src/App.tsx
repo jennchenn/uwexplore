@@ -83,14 +83,6 @@ function App() {
         setScheduleId(value.schedule_id);
         localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
-    } else if (lsScheduleId && lsScheduleId !== "null") {
-      const scheduleId = JSON.parse(lsScheduleId);
-      setScheduleId(scheduleId);
-    } else {
-      clients.createSchedule().then((value: any) => {
-        setScheduleId(value.schedule_id);
-        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
-      });
       ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
         if (value.length !== 0) {
           setCeabCounts(value);
@@ -100,6 +92,14 @@ function App() {
         if (value.length !== 0) {
           setPastCourses(value);
         }
+      });
+    } else if (lsScheduleId && lsScheduleId !== "null") {
+      const scheduleId = JSON.parse(lsScheduleId);
+      setScheduleId(scheduleId);
+    } else {
+      courseClients.createSchedule().then((value: any) => {
+        setScheduleId(value.schedule_id);
+        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
     }
   }, [token]);
