@@ -13,8 +13,9 @@ import Search from "./components/Search";
 import Calendar from "./components/CalendarBase";
 import Ceab from "./components/CeabBase";
 import CalendarTray from "./components/CalendarTray";
-import clients from "./APIClients/CourseClient";
 import userClient, { TokenObject } from "./APIClients/UserClient";
+import courseClients from "./APIClients/CourseClient";
+import ceabClients from "./APIClients/CeabClient";
 
 export interface Props {
   id?: string;
@@ -41,6 +42,9 @@ function App() {
   const [token, setToken] = useState<TokenObject>();
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
+  const [pastCourses, setPastCourses] = useState({});
+  const [ceabOnSchedule, setCeabOnSchedule] = useState({});
+  const [ceabCounts, setCeabCounts] = useState({});
   const [scheduleId, setScheduleId] = useState("");
 
   const collapseSearch = () => {
@@ -55,7 +59,12 @@ function App() {
     setSectionInView("both");
   };
 
+  const handleCeabPlanChange = () => {};
+
   useEffect(() => {
+    const scheduleId = localStorage.getItem("scheduleId");
+    const parsedId = scheduleId ? JSON.parse(scheduleId) : null;
+    setScheduleId(parsedId);
     const lsToken = localStorage.getItem("token");
     if (!lsToken) return;
     // refresh the token
@@ -70,7 +79,7 @@ function App() {
 
     if (token) {
       localStorage.setItem("token", JSON.stringify(token));
-      clients.getScheduleId(token.id_token).then((value: any) => {
+      courseClients.getScheduleId(token.id_token).then((value: any) => {
         setScheduleId(value.schedule_id);
         localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
@@ -82,14 +91,29 @@ function App() {
         setScheduleId(value.schedule_id);
         localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
+      ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
+        if (value.length !== 0) {
+          setCeabCounts(value);
+        }
+      });
+      courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
+        if (value.length !== 0) {
+          setPastCourses(value);
+        }
+      });
     }
   }, [token]);
 
   useEffect(() => {
     if (scheduleId) {
-      clients.getCoursesByScheduleId(scheduleId).then((value: any) => {
+      courseClients.getCoursesByScheduleId(scheduleId).then((value: any) => {
         if (value.length !== 0) {
           setCoursesOnSchedule(value);
+        }
+      });
+      ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
+        if (value.length !== 0) {
+          setCeabOnSchedule(value);
         }
       });
     }
@@ -97,7 +121,7 @@ function App() {
 
   return (
     <Box>
-      <Navbar token={token} setToken={setToken} />
+      <Navbar token={token} setToken={setToken} setScheduleId={setScheduleId} />
 
       <Grid container>
         {/* LHS SEARCH */}
@@ -124,12 +148,22 @@ function App() {
                   coursesOnSchedule={coursesOnSchedule}
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
+                  handleCeabPlanChange={handleCeabPlanChange}
+                  pastCourses={pastCourses}
+                  setPastCourses={setPastCourses}
+                  tokenId={token?.id_token || null}
                 />
               )}
             </PerfectScrollbar>
             <CalendarTray
               setCourseHovered={setCourseHovered}
               addedCourses={coursesOnSchedule}
+              setAddedCourses={setCoursesOnSchedule}
+              handleCeabPlanChange={handleCeabPlanChange}
+              pastCourses={pastCourses}
+              setPastCourses={setPastCourses}
+              scheduleId={scheduleId}
+              tokenId={token?.id_token || null}
             />
           </Box>
         </Grid>
@@ -158,7 +192,14 @@ function App() {
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
                 />
-                <Ceab />
+                <Ceab
+                  handleCeabPlanChange={handleCeabPlanChange}
+                  pastCourses={pastCourses}
+                  setPastCourses={setPastCourses}
+                  ceabOnSchedule={ceabOnSchedule}
+                  ceabCounts={ceabCounts}
+                  tokenId={token?.id_token || null}
+                />
               </Stack>
             </PerfectScrollbar>
           </Box>

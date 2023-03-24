@@ -60,18 +60,18 @@ class CeabService:
         :raise Exception: if error encountered when fetching CEAB numbers or adding them
         """
         try:
-            courses = []
+            courses = set()
 
             if user.schedule:
                 current_schedule = user.schedule
-                courses += [
-                    str(course["course_id"]) for course in current_schedule["courses"]
-                ]
+                for course in current_schedule["courses"]:
+                    courses.add(str(course["course_id"]))
 
             if user.past_courses:
                 for term in user.past_courses:
                     past_course_list = user.past_courses[term]
-                    courses += [str(id) for id in past_course_list]
+                    for id in past_course_list:
+                        courses.add(str(id))
 
             completed_totals = self._calculate_requirements(courses)
             requirements = self._get_ceab_requirements_by_grad_year(user.grad_year)
@@ -92,9 +92,9 @@ class CeabService:
         """
         try:
             current_schedule = Schedule.objects(id=schedule_id).first()
-            courses = [
-                str(course["course_id"]) for course in current_schedule["courses"]
-            ]
+            courses = set()
+            for course in current_schedule["courses"]:
+                courses.add(str(course["course_id"]))
             completed_totals = self._calculate_requirements(courses)
             requirements = self._get_ceab_requirements_by_grad_year()
             return self._map_totals_requirements(completed_totals, requirements)

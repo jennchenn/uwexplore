@@ -113,6 +113,82 @@ const getCourses = async (
   }
 };
 
+const getPastCourses = async (token: string | null) => {
+  try {
+    const { data } = await APIClient.get(`/courses/past`, {
+      headers: { Authorization: `bearer ${token}` },
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
+const addPastCourses = async (
+  token: string | null,
+  course_id: string,
+  term: string,
+) => {
+  try {
+    const payload = {
+      course_id: course_id,
+      term: term,
+    };
+    const { data } = await APIClient.post(
+      `/courses/past`,
+      JSON.stringify(payload),
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
+const deletePastCourses = async (token: string | null, course_id: string) => {
+  try {
+    const payload = {
+      course_id: course_id,
+    };
+    const { data } = await APIClient.delete(`/courses/past`, {
+      data: JSON.stringify(payload),
+      headers: {
+        Authorization: `bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(`Axios Error: ${axiosError.message}`);
+    } else {
+      const otherError = error as Error;
+      console.log(`Error: ${otherError.message}`);
+    }
+    return [];
+  }
+};
+
 const getScheduleId = async (idToken: string): Promise<ScheduleId> => {
   try {
     const { data } = await APIClient.get("/schedules/id", {
@@ -127,6 +203,7 @@ const getScheduleId = async (idToken: string): Promise<ScheduleId> => {
       const otherError = error as Error;
       console.log(`Error: ${otherError.message}`);
     }
+
     return { schedule_id: null };
   }
 };
@@ -229,15 +306,18 @@ const updateSectionColorByScheduleId = async (
   }
 };
 
-const clients = {
+const courseClients = {
   addCoursesByScheduleId,
   deleteCoursesByScheduleId,
   deleteSingleCourseByScheduleId,
   getCourses,
+  getPastCourses,
+  addPastCourses,
+  deletePastCourses,
   getScheduleId,
   createSchedule,
   getCoursesByScheduleId,
   updateCourseColorByScheduleId,
   updateSectionColorByScheduleId,
 };
-export default clients;
+export default courseClients;

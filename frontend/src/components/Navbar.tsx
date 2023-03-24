@@ -12,9 +12,14 @@ import { TokenObject } from "../APIClients/UserClient";
 interface NavbarProps {
   token: TokenObject | undefined;
   setToken: (value: TokenObject) => void;
+  setScheduleId: (value: string) => void;
 }
 
-export default function Navbar({ token, setToken }: NavbarProps) {
+export default function Navbar({
+  token,
+  setToken,
+  setScheduleId,
+}: NavbarProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signUpModalOpen, setSignUpModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(

@@ -41,7 +41,7 @@ class Role(Enum):
 
 class User(Document):
     auth_id = StringField(required=True)
-    name = StringField(required=True)
+    name = StringField()
     email = StringField(required=True, unique=True)
     grad_year = StringField()
     program = StringField()
