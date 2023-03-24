@@ -10,7 +10,7 @@ interface PastCourseCardProps extends Props {
   courseCode: string;
   completedTerm: string;
   handleCeabPlanChange: any;
-  handleRemove: (term: string, code: string) => void;
+  handleRemove: (code: string) => void;
 }
 
 export default function PastCourseCard({
@@ -75,7 +75,6 @@ export default function PastCourseCard({
               sx={{ marginLeft: "5px", marginRight: "0px", padding: "4px" }}
               onClick={() => {
                 PastCourseCardProps.handleRemove(
-                  PastCourseCardProps.completedTerm,
                   PastCourseCardProps.courseCode,
                 );
               }}

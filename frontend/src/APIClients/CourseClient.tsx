@@ -164,15 +164,10 @@ const addPastCourses = async (
   }
 };
 
-const deletePastCourses = async (
-  token: string | null,
-  course_id: string,
-  term: string,
-) => {
+const deletePastCourses = async (token: string | null, course_id: string) => {
   try {
     const payload = {
       course_id: course_id,
-      term: term,
     };
     const { data } = await APIClient.delete(`/courses/past`, {
       data: JSON.stringify(payload),

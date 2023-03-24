@@ -66,12 +66,12 @@ export default function CeabBase({
     setCourseList(newList);
   }, [term, pastCourses]);
 
-  const handlePastCourseRemoval = (term: string, courseCode: string) => {
+  const handlePastCourseRemoval = (courseCode: string) => {
     courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
       if (value.length !== 0) {
         const courseId = value[0].id;
         courseClients
-          .deletePastCourses(tokenId, courseId, term)
+          .deletePastCourses(tokenId, courseId)
           .then((value) => setPastCourses(value));
       }
     });

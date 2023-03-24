@@ -154,24 +154,14 @@ export default function CourseCard({
     let revisedObject = CourseCardProps.pastCourses;
     let revisedArray: string[] = [];
     if (term === "remove") {
-      for (let term in revisedObject) {
-        if (revisedObject[term].includes(courseCode)) {
-          revisedArray = revisedObject[term].filter(
-            (obj) => obj !== courseCode,
-          );
+      courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
+        if (value.length !== 0) {
+          const courseId = value[0].id;
           courseClients
-            .getCourses(`?query=${courseCode}`)
-            .then((value: any) => {
-              if (value.length !== 0) {
-                const courseId = value[0].id;
-                courseClients
-                  .deletePastCourses(tokenId, courseId, term)
-                  .then((value) => CourseCardProps.setPastCourses(value));
-              }
-            });
-          break;
+            .deletePastCourses(tokenId, courseId)
+            .then((value) => CourseCardProps.setPastCourses(value));
         }
-      }
+      });
     } else {
       revisedArray.push(courseCode);
       courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
