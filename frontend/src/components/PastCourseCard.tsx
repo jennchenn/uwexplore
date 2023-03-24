@@ -2,7 +2,7 @@ import { Card, CardContent, IconButton, Stack, Tooltip } from "@mui/material";
 import "../styles/CourseCard.css";
 
 //MUI icon imports
-import RemoveCircleOutlinedIcon from "@mui/icons-material/RemoveCircleOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 import { Props } from "../App";
 
@@ -24,7 +24,7 @@ export default function PastCourseCard({
       key={PastCourseCardProps.courseCode}
       sx={{
         "& .MuiCardContent-root": {
-          padding: "17px",
+          padding: "10px",
         },
         borderRadius: "var(--border-radius)",
         backgroundColor: "var(--bg-3)",
@@ -40,7 +40,7 @@ export default function PastCourseCard({
         >
           <Tooltip title={PastCourseCardProps.courseCode} arrow>
             <div
-              className="heading-1"
+              className="heading-3"
               style={{
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -57,13 +57,15 @@ export default function PastCourseCard({
             arrow
           >
             <div
-              className="heading-3"
+              className="heading-4"
               style={{
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 marginRight: "0px",
                 marginLeft: "auto",
+                color: "var(--black-3)",
+                fontWeight: "var(--font-weight-regular)",
               }}
             >
               COMPLETED{" "}
@@ -79,10 +81,14 @@ export default function PastCourseCard({
                 );
               }}
             >
-              <RemoveCircleOutlinedIcon
+              <DeleteOutlineIcon
                 sx={{
-                  color: "var(--alerts-warning-1)",
-                  fontSize: "28px",
+                  backgroundColor: "var(--alerts-warning-1)",
+                  borderRadius: "50%",
+                  padding: "4px",
+                  color: "white",
+                  fontSize: "17px",
+                  marginRight: "1px",
                 }}
               />
             </IconButton>

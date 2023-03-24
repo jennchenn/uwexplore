@@ -658,7 +658,6 @@ export default function CourseCard({
               <em>{CourseCardProps.course.requisites}</em>
             </h5>
             <FormControlLabel
-              className="past-course-check"
               control={
                 <Checkbox
                   checked={isPastCourse}
@@ -678,9 +677,7 @@ export default function CourseCard({
                 />
               }
               label={
-                <div className="past-course-checkbox-text">
-                  I have completed this course
-                </div>
+                <h5 style={{ margin: "0px" }}>I have completed this course</h5>
               }
             />
           </Collapse>
