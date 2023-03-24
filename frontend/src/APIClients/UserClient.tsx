@@ -80,13 +80,8 @@ const refresh = async (refreshToken: string): Promise<TokenObject | []> => {
 const createUser = async (email: string, password: string) => {
   try {
     const payload = {
-      name: "",
       email: email,
       password: password,
-      grad_year: 2022,
-      program: "SYDE",
-      role: "STUDENT",
-      sign_up_method: "PASSWORD",
     };
     const { data } = await APIClient.post(
       `/auth/signup`,
