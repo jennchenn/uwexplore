@@ -6,13 +6,17 @@ import TextField from "@mui/material/TextField";
 import CustomButton from "./CustomButton";
 import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
-import clients from "../APIClients/CourseClient";
+import courseClients from "../APIClients/CourseClient";
 
 interface courseHoverProps {
   setCourseHovered: any;
   coursesOnSchedule: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
+  handleCeabPlanChange: any;
+  pastCourses: { [key: string]: string[] };
+  setPastCourses: (value: { [term: string]: string[] }) => void;
+  tokenId?: string | null;
 }
 
 export default function Search({
@@ -20,6 +24,10 @@ export default function Search({
   coursesOnSchedule,
   setCoursesOnSchedule,
   scheduleId,
+  handleCeabPlanChange,
+  pastCourses,
+  setPastCourses,
+  tokenId,
 }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,7 +46,7 @@ export default function Search({
       setSearchResults([]);
       setResultsLoading(false);
     } else {
-      const results = clients.getCourses(
+      const results = courseClients.getCourses(
         `?query=${searchQuery}&${filteringQuery}`,
       );
 
@@ -112,6 +120,10 @@ export default function Search({
             coursesOnSchedule={coursesOnSchedule}
             setCoursesOnSchedule={setCoursesOnSchedule}
             scheduleId={scheduleId}
+            handleCeabPlanChange={handleCeabPlanChange}
+            pastCourses={pastCourses}
+            setPastCourses={setPastCourses}
+            tokenId={tokenId}
           />
         </Stack>
       </Box>

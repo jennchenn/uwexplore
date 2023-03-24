@@ -15,18 +15,28 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CourseCard from "./CourseCard";
 import { CourseObject } from "../APIClients/CourseClient";
 import { Props } from "../App";
+import SearchDeleteModal from "./SearchDeleteModal";
 
 interface CalendarTrayProps extends Props {
   setCourseHovered: any;
-  addedCourses?: CourseObject[];
+  handleCeabPlanChange: any;
+  pastCourses: { [key: string]: string[] };
+  setPastCourses: (value: { [term: string]: string[] }) => void;
+  addedCourses: CourseObject[];
+  setAddedCourses: (value: any) => void;
+  scheduleId: string;
+  tokenId: string | null;
 }
 
-export default function CalendarTrayCalendar({
+export default function CalendarTray({
   addedCourses = [],
+  tokenId = "",
   ...CalendarTrayProps
 }: CalendarTrayProps) {
   const [expanded, setExpanded] = useState(false);
   const [expandedCard, setExpandedCard] = useState("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState({} as any);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -61,13 +71,23 @@ export default function CalendarTrayCalendar({
           </Stack>
           <Collapse in={expanded} className="tray-contents-container">
             <Stack className="tray-contents" spacing={1}>
-              {addedCourses.map((course, i) => (
+              {addedCourses.map((course, index) => (
                 <CourseCard
+                  key={`calendar-tray-course-card-${index}`}
                   course={course}
                   expandedCard={expandedCard}
                   setExpandedCard={setExpandedCard}
                   setCourseHovered={CalendarTrayProps.setCourseHovered}
+                  pastCourses={CalendarTrayProps.pastCourses}
+                  setPastCourses={CalendarTrayProps.setPastCourses}
+                  handleCeabPlanChange={CalendarTrayProps.handleCeabPlanChange}
+                  setDeleteModalOpen={setDeleteModalOpen}
+                  coursesOnSchedule={addedCourses}
+                  setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
+                  setCourseToDelete={setCourseToDelete}
+                  scheduleId={CalendarTrayProps.scheduleId}
                   type="added"
+                  tokenId={tokenId}
                 />
               ))}
               {!addedCourses.length && (
@@ -79,6 +99,14 @@ export default function CalendarTrayCalendar({
           </Collapse>
         </CardContent>
       </Card>
+      <SearchDeleteModal
+        courseToDelete={courseToDelete}
+        setCourseToDelete={setCourseToDelete}
+        setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
+        deleteModalOpen={deleteModalOpen}
+        setDeleteModalOpen={setDeleteModalOpen}
+        scheduleId={CalendarTrayProps.scheduleId}
+      />
     </Grid>
   );
 }

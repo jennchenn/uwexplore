@@ -6,7 +6,7 @@ import "../styles/LoginSignUpModal.css";
 
 import CustomButton from "./CustomButton";
 import { TextInput } from "./TextInput";
-import clients, { TokenObject } from "../APIClients/UserClient";
+import userClients, { TokenObject } from "../APIClients/UserClient";
 
 interface LoginModalProps extends Props {
   open: boolean;
@@ -58,7 +58,7 @@ export default function LoginModal({
       setValidate(false);
       setAlert("Please input a valid email/password.");
     } else if (email && regEmail.test(email) && password) {
-      clients
+      userClients
         .login(email, password)
         .then((value: any) => {
           LoginModalProps.setToken(value);

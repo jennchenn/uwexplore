@@ -110,10 +110,10 @@ const createUser = async (email: string, password: string) => {
   }
 };
 
-const clients = {
+const userClients = {
   login,
   refresh,
   createUser,
 };
 
-export default clients;
+export default userClients;
