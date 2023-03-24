@@ -60,9 +60,8 @@ def past_courses(curr_user):
             result = course_service.add_past_course(curr_user, term, course_id)
         elif request.method == "DELETE":
             request_data = request.get_json()
-            term = request_data["term"]
             course_id = request_data["course_id"]
-            result = course_service.delete_past_course(curr_user, term, course_id)
+            result = course_service.delete_past_course(curr_user, course_id)
         else:
             raise Exception(f"Unsupported method {request.method}")
         return jsonify(result), 200

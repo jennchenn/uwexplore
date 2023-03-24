@@ -162,21 +162,16 @@ class CourseService:
             )
             raise e
 
-    def delete_past_course(self, user, term, course_id):
+    def delete_past_course(self, user, course_id):
         try:
             past_courses = user.past_courses or PastCourses()
-            if term not in past_courses:
-                raise KeyError(f"Invalid term={term}")
-            try:
-                past_courses[term].remove(
-                    ObjectId(course_id)
-                )  # will raise ValueError if course id not found
-            except Exception as e:
-                raise KeyError(
-                    f"Course with id={course_id} does not exist in term={term}"
-                )
-            user.save()
-            return self._format_past_courses(past_courses)
+            course_id = ObjectId(course_id)
+            for term in past_courses:
+                if course_id in past_courses[term]:
+                    past_courses[term].remove(course_id)
+                    user.save()
+                    return self._format_past_courses(past_courses)
+            raise Exception(f"Course with id={course_id} does not exist in term={term}")
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
