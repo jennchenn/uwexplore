@@ -166,15 +166,12 @@ class CourseService:
         try:
             past_courses = user.past_courses or PastCourses()
             course_id = ObjectId(course_id)
-            try:
-                for term in past_courses:
-                    if course_id in past_courses[term]:
-                        past_courses[term].remove(course_id)
-                        user.save()
-                        return self._format_past_courses(past_courses)
-                raise Exception(
-                    f"Course with id={course_id} does not exist in term={term}"
-                )
+            for term in past_courses:
+                if course_id in past_courses[term]:
+                    past_courses[term].remove(course_id)
+                    user.save()
+                    return self._format_past_courses(past_courses)
+            raise Exception(f"Course with id={course_id} does not exist in term={term}")
         except Exception as e:
             reason = getattr(e, "message", None)
             self.logger.error(
