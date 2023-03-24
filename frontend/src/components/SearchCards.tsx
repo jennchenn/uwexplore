@@ -1,8 +1,9 @@
-import { Box, CircularProgress, Paper, Portal, Snackbar } from "@mui/material";
+import { Box, CircularProgress, Paper, Portal } from "@mui/material";
 import { useState } from "react";
 import { CourseObject } from "../APIClients/CourseClient";
 import CourseCard from "./CourseCard";
 import SearchDeleteModal from "./SearchDeleteModal";
+import CustomSnackbar from "./Snackbar";
 
 interface searchProps {
   resultsLoading: boolean;
@@ -42,14 +43,6 @@ export default function SearchCards({
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState({} as any);
-
-  const handleCloseAddedSnack = () => {
-    showCourseAddedSnack(false);
-  };
-
-  const handleCloseNothingSnack = () => {
-    showNothingToAddSnack(false);
-  };
 
   const renderSearchResultsFoundMessage = () => {
     if (!resultsLoading) {
@@ -185,34 +178,17 @@ export default function SearchCards({
         scheduleId={scheduleId}
       ></SearchDeleteModal>
       <Portal>
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={courseAddedSnack}
-          autoHideDuration={2000}
-          onClose={handleCloseAddedSnack}
+        <CustomSnackbar
+          showSnackbar={courseAddedSnack}
+          setShowSnackbar={showCourseAddedSnack}
           message="Success! Course added to schedule."
-          sx={{
-            "& .MuiSnackbarContent-root": {
-              backgroundColor: "var(--alerts-success-7)",
-              color: "var(--alerts-success-1)",
-              minWidth: "150px",
-              marginTop: "64px",
-            },
-          }}
+          type="success"
         />
-        <Snackbar
-          open={nothingToAddSnack}
-          autoHideDuration={2000}
-          onClose={handleCloseNothingSnack}
+        <CustomSnackbar
+          showSnackbar={nothingToAddSnack}
+          setShowSnackbar={showNothingToAddSnack}
           message="Please select at least one section to add."
-          sx={{
-            "& .MuiSnackbarContent-root": {
-              backgroundColor: "var(--alerts-conflict-5)",
-              color: "var(--black-3)",
-              minWidth: "150px",
-              marginTop: "64px",
-            },
-          }}
+          type="alert"
         />
       </Portal>
     </Box>
