@@ -29,6 +29,7 @@ import {
 } from "@mui/material";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "../styles/CourseCard.css";
+import backgroundColors from "../styles/calendarCourseBackgroundColors";
 
 //MUI icon imports
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -83,7 +84,7 @@ export default function CourseCard({
   const [sectionsToAdd, setSectionsToAdd] = useState({} as any);
 
   // corresponds to the api call to add courses
-  const [coursesForCall, setCoursesForCall] = useState({} as any);
+  const [coursesForCall, setCoursesForCall] = useState([] as any);
 
   const [sectionDropdownOpen, setSectionDropdownOpen] = useState(false);
 
@@ -348,7 +349,10 @@ export default function CourseCard({
           formattedArray.push({
             course_id: course_id,
             section_id: section_ids[key][i],
-            color: "#000000",
+            color:
+              backgroundColors[
+                Math.floor(Math.random() * backgroundColors.length + 1)
+              ],
           });
         }
         courseClients
