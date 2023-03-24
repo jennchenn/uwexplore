@@ -163,7 +163,9 @@ export default function CourseCard({
             .then((value: any) => {
               if (value.length !== 0) {
                 const courseId = value[0].id;
-                courseClients.deletePastCourses(tokenId, courseId, term);
+                courseClients
+                  .deletePastCourses(tokenId, courseId, term)
+                  .then((value) => CourseCardProps.setPastCourses(value));
               }
             });
           break;
@@ -174,7 +176,9 @@ export default function CourseCard({
       courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
         if (value.length !== 0) {
           const courseId = value[0].id;
-          courseClients.addPastCourses(tokenId, courseId, term);
+          courseClients
+            .addPastCourses(tokenId, courseId, term)
+            .then((value) => CourseCardProps.setPastCourses(value));
         }
       });
     }

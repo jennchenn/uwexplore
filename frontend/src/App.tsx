@@ -184,6 +184,7 @@ function App() {
                   setPastCourses={setPastCourses}
                   ceabOnSchedule={ceabOnSchedule}
                   ceabCounts={ceabCounts}
+                  tokenId={token?.id_token || null}
                 />
               </Stack>
             </PerfectScrollbar>
