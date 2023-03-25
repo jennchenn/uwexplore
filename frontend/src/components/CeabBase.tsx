@@ -210,8 +210,10 @@ export default function CeabBase({
                   sx={{
                     paddingRight: 2,
                     paddingLeft: 2,
-                    paddingBottom: 0,
+                    paddingBottom: 2,
                     width: "100%",
+                    height: "433px",
+                    overflowY: "scroll",
                     borderRadius: "var(--border-radius)",
                   }}
                 >
