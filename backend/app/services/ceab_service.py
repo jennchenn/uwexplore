@@ -148,7 +148,7 @@ class CeabService:
 
         # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
         self._sum_requirements(requirements_counts)
-        self._round_requirements(requirements_counts)
+        requirements_counts = self._round_requirements(requirements_counts)
         return requirements_counts
 
     def _sum_requirements(self, requirements_counts):
@@ -167,8 +167,10 @@ class CeabService:
 
     def _round_requirements(self, requirements_counts):
         # Python float addition sometimes adds lots of decimals - round this before returning
+        rounded_reqs = {}
         for req, value in requirements_counts.items():
-            requirements_counts[req] = round(value, 2)
+            rounded_reqs[req] = round(value, 2)
+        return rounded_reqs
 
     def _get_ceab_requirements_by_grad_year(self, grad_year=DEFAULT_GRAD_YEAR):
         grad_year = DEFAULT_GRAD_YEAR if grad_year is None else int(grad_year)
