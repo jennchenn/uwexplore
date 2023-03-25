@@ -45,16 +45,16 @@ class CourseService:
                 filters.append(
                     {
                         "$or": [
+                            {
+                                "full_code": {
+                                    "$regex": f"{stripped_keyword}",
+                                    "$options": "i",
+                                }
+                            },
                             {"name": {"$regex": f"{keyword}", "$options": "i"}},
                             {
                                 "description": {
                                     "$regex": f"{keyword}",
-                                    "$options": "i",
-                                }
-                            },
-                            {
-                                "full_code": {
-                                    "$regex": f"{stripped_keyword}",
                                     "$options": "i",
                                 }
                             },
@@ -64,10 +64,8 @@ class CourseService:
 
             courses = []
             if filters:
-                query_results = (
-                    Course.objects(__raw__={"$and": filters})
-                    .order_by("full_code")
-                    .limit(MAX_QUERY_SIZE)
+                query_results = Course.objects(__raw__={"$and": filters}).order_by(
+                    "full_code"
                 )
             else:
                 query_results = Course.objects.order_by("full_code").limit(
@@ -83,7 +81,7 @@ class CourseService:
                 reverse=True,
             )
 
-            for result in query_results:
+            for result in query_results[:30]:
                 result.sections = sorted(
                     result.sections, key=lambda section: (section.type, section.number)
                 )
