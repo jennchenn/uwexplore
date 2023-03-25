@@ -51,7 +51,7 @@ export default function PastCourseCard({
             </div>
           </Tooltip>
           <Tooltip
-            title={`COMPLETED ${PastCourseCardProps.completedTerm
+            title={`${PastCourseCardProps.completedTerm
               .split("_")[1]
               .toUpperCase()}`}
             arrow
@@ -68,11 +68,10 @@ export default function PastCourseCard({
                 fontWeight: "var(--font-weight-regular)",
               }}
             >
-              COMPLETED{" "}
               {PastCourseCardProps.completedTerm.split("_")[1].toUpperCase()}
             </div>
           </Tooltip>
-          <Tooltip title="Delete from past courses" arrow>
+          <Tooltip title="Delete from your courses" arrow>
             <IconButton
               sx={{ marginLeft: "5px", marginRight: "0px", padding: "4px" }}
               onClick={() => {

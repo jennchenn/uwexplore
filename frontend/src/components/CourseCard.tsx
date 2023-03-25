@@ -672,7 +672,9 @@ export default function CourseCard({
                 />
               }
               label={
-                <h5 style={{ margin: "0px" }}>I have completed this course</h5>
+                <h5 style={{ margin: "0px" }}>
+                  I have completed/plan to complete this course
+                </h5>
               }
             />
           </Collapse>
@@ -686,7 +688,7 @@ export default function CourseCard({
       >
         <Box className="modal-style">
           <h4 className="past-modal-info">
-            When did you complete this course?
+            When did you complete/do you plan to complete this course?
           </h4>
           <FormControl className="term-select-root">
             <InputLabel className="term-select-label heading-5">
