@@ -204,14 +204,16 @@ function App() {
                   scheduleId={scheduleId}
                   showCourseDeletedSnack={showCourseDeletedSnack}
                 />
-                <Ceab
-                  handleCeabPlanChange={handleCeabPlanChange}
-                  pastCourses={pastCourses}
-                  setPastCourses={setPastCourses}
-                  ceabOnSchedule={ceabOnSchedule}
-                  ceabCounts={ceabCounts}
-                  tokenId={token?.id_token || null}
-                />
+                {token && (
+                  <Ceab
+                    handleCeabPlanChange={handleCeabPlanChange}
+                    pastCourses={pastCourses}
+                    setPastCourses={setPastCourses}
+                    ceabOnSchedule={ceabOnSchedule}
+                    ceabCounts={ceabCounts}
+                    tokenId={token?.id_token || null}
+                  />
+                )}
               </Stack>
             </PerfectScrollbar>
           </Box>
