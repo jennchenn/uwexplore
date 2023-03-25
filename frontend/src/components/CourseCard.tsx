@@ -420,7 +420,8 @@ export default function CourseCard({
               {CourseCardProps.course.department}&nbsp;
               {CourseCardProps.course.code} - {CourseCardProps.course.name}
             </h3>
-            {CourseCardProps.expandedCard === CourseCardProps.course.id
+            {CourseCardProps.expandedCard === CourseCardProps.course.id &&
+            type === "search"
               ? createSectionDropdowns(CourseCardProps.course)
               : false}
             <Tooltip
