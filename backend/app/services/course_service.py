@@ -23,6 +23,7 @@ class CourseService:
         """
         try:
             filters = []
+            stripped_keyword = ""
 
             if course_codes:
                 code_filter = []
