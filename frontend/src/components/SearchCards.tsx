@@ -55,7 +55,7 @@ export default function SearchCards({
     if (!resultsLoading) {
       let message = `${searchResults.length} Search results found for "${searchQuery}"`;
       if (searchQuery === "") {
-        message = "Search Results";
+        return <></>;
       }
       return (
         <h4
@@ -84,7 +84,7 @@ export default function SearchCards({
             padding: "24px",
             borderRadius: "var(--border-radius)",
             textAlign: "center",
-            margin: "24px 0px",
+            margin: "16px 0px",
           }}
         >
           <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
