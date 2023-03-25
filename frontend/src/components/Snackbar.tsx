@@ -24,7 +24,7 @@ export default function CustomSnackbar({
     <Snackbar
       anchorOrigin={{ vertical: anchorVertical, horizontal: anchorHorizontal }}
       open={SnackbarProps.showSnackbar}
-      autoHideDuration={2000}
+      autoHideDuration={3000}
       onClose={() => SnackbarProps.setShowSnackbar(false)}
       message={SnackbarProps.message}
       sx={{
