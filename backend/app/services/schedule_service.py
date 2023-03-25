@@ -174,6 +174,17 @@ class ScheduleService:
             )
             raise e
 
+    def create_new_schedule(self, term="1229"):
+        try:
+            schedule = Schedule(term=term, courses=[]).save()
+            return {"schedule_id": str(schedule.id)}
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get courses. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
     def add_courses_to_schedule_by_id(self, schedule_id, courses):
         try:
             new_courses = []
