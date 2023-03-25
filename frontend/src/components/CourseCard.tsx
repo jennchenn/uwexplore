@@ -346,7 +346,6 @@ export default function CourseCard({
           });
         }
         courseClients
-          // todo: don't set default colour to black?
           .addCoursesByScheduleId(CourseCardProps.scheduleId, formattedArray)
           .then((value: any) => {
             if (value.length !== 0 && CourseCardProps.showCourseAddedSnack) {
