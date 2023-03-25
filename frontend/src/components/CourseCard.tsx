@@ -120,8 +120,6 @@ export default function CourseCard({
     [`&.${tableCellClasses.body}`]: {
       fontSize: "0.8rem",
       padding: "6px",
-      overflow: "hidden",
-      textOverflow: "ellipses",
       whiteSpace: "nowrap",
     },
   }));
@@ -368,13 +366,9 @@ export default function CourseCard({
         sx={{
           "& .MuiCardContent-root": {
             padding: "2px",
-            paddingBottom: "28px",
           },
           borderRadius: "var(--border-radius)",
           backgroundColor: "var(--bg-3)",
-          "& :last-child": {
-            padding: "0px !important",
-          },
         }}
       >
         <CardContent>

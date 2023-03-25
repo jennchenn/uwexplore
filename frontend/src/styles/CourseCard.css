@@ -1,43 +1,44 @@
 @import "//styles/Constants.css";
 
 .course-card-container {
-    margin-top: 16px;
-    padding-left: 16px;
+  margin-top: 16px;
+  padding-left: 10px;
 }
 
 .past-modal-info {
-    color: var(--black-1);
+  color: var(--black-1);
 }
 
 .term-select-root {
-    width: inherit;
+  width: inherit;
 }
 
-.term-select-root .term-select-label, .term-select .MuiSelect-select {
-    font-weight: var(--font-weight-bold);
-    color: var(--black-4);
-    padding-left: 15px;
+.term-select-root .term-select-label,
+.term-select .MuiSelect-select {
+  font-weight: var(--font-weight-bold);
+  color: var(--black-4);
+  padding-left: 15px;
 }
 
 .term-select {
-    background-color: var(--bg-1);
-    margin: 0 20px 0 20px;
-    border: 1px solid rgba(153, 153, 153, 0.5);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-    border-radius: 10px !important;
+  background-color: var(--bg-1);
+  margin: 0 20px 0 20px;
+  border: 1px solid rgba(153, 153, 153, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 10px !important;
 }
 
 .modal-past-term-button-container {
-    margin-top: 24px;
-    display: flex;
-    justify-content: center;
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
 }
 
 .modal-past-term-confirm-button {
-    margin-right: 28px;
+  margin-right: 28px;
 }
 
 .select-error-message {
-    margin-left: 20px !important;
-    color: var(--alerts-warning-1) !important;
+  margin-left: 20px !important;
+  color: var(--alerts-warning-1) !important;
 }
