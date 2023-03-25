@@ -208,7 +208,9 @@ export default function CeabBase({
                 <Paper
                   elevation={0}
                   sx={{
-                    padding: 2,
+                    paddingRight: 2,
+                    paddingLeft: 2,
+                    paddingBottom: 0,
                     width: "100%",
                     borderRadius: "var(--border-radius)",
                   }}
@@ -221,6 +223,7 @@ export default function CeabBase({
                         p: 2,
                         borderRadius: "var(--border-radius)",
                         textAlign: "center",
+                        marginTop: "16px",
                       }}
                     >
                       <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
