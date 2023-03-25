@@ -17,6 +17,9 @@ interface courseHoverProps {
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
   tokenId?: string | null;
+  showCourseAddedSnack: (open: boolean) => void;
+  showNothingToAddSnack: (open: boolean) => void;
+  showCourseDeletedSnack: (open: boolean) => void;
 }
 
 export default function Search({
@@ -28,6 +31,9 @@ export default function Search({
   pastCourses,
   setPastCourses,
   tokenId,
+  showCourseAddedSnack,
+  showNothingToAddSnack,
+  showCourseDeletedSnack,
 }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -124,6 +130,9 @@ export default function Search({
             pastCourses={pastCourses}
             setPastCourses={setPastCourses}
             tokenId={tokenId}
+            showCourseAddedSnack={showCourseAddedSnack}
+            showNothingToAddSnack={showNothingToAddSnack}
+            showCourseDeletedSnack={showCourseDeletedSnack}
           />
         </Stack>
       </Box>

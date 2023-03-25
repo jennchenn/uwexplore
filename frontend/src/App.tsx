@@ -16,6 +16,8 @@ import CalendarTray from "./components/CalendarTray";
 import userClient, { TokenObject } from "./APIClients/UserClient";
 import courseClients from "./APIClients/CourseClient";
 import ceabClients from "./APIClients/CeabClient";
+import { Portal } from "@mui/material";
+import CustomSnackbar from "./components/Snackbar";
 
 export interface Props {
   id?: string;
@@ -46,6 +48,11 @@ function App() {
   const [ceabOnSchedule, setCeabOnSchedule] = useState({});
   const [ceabCounts, setCeabCounts] = useState({});
   const [scheduleId, setScheduleId] = useState("");
+
+  // snackbars
+  const [courseAddedSnack, showCourseAddedSnack] = useState(false);
+  const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
+  const [courseDeletedSnack, showCourseDeletedSnack] = useState(false);
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -152,6 +159,9 @@ function App() {
                   pastCourses={pastCourses}
                   setPastCourses={setPastCourses}
                   tokenId={token?.id_token || null}
+                  showCourseAddedSnack={showCourseAddedSnack}
+                  showNothingToAddSnack={showNothingToAddSnack}
+                  showCourseDeletedSnack={showCourseDeletedSnack}
                 />
               )}
             </PerfectScrollbar>
@@ -164,6 +174,7 @@ function App() {
               setPastCourses={setPastCourses}
               scheduleId={scheduleId}
               tokenId={token?.id_token || null}
+              showCourseDeletedSnack={showCourseDeletedSnack}
             />
           </Box>
         </Grid>
@@ -204,6 +215,26 @@ function App() {
             </PerfectScrollbar>
           </Box>
         </Grid>
+        <Portal>
+          <CustomSnackbar
+            showSnackbar={courseAddedSnack}
+            setShowSnackbar={showCourseAddedSnack}
+            message="Success! Course added to schedule."
+            type="success"
+          />
+          <CustomSnackbar
+            showSnackbar={nothingToAddSnack}
+            setShowSnackbar={showNothingToAddSnack}
+            message="Please select at least one section to add."
+            type="alert"
+          />
+          <CustomSnackbar
+            showSnackbar={courseDeletedSnack}
+            setShowSnackbar={showCourseDeletedSnack}
+            message="Course successfully deleted."
+            type="success"
+          />
+        </Portal>
       </Grid>
     </Box>
   );

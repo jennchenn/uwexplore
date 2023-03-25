@@ -3,7 +3,6 @@ import { useState } from "react";
 import { CourseObject } from "../APIClients/CourseClient";
 import CourseCard from "./CourseCard";
 import SearchDeleteModal from "./SearchDeleteModal";
-import CustomSnackbar from "./Snackbar";
 
 interface searchProps {
   resultsLoading: boolean;
@@ -17,6 +16,9 @@ interface searchProps {
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
   tokenId?: string | null;
+  showCourseAddedSnack: (open: boolean) => void;
+  showNothingToAddSnack: (open: boolean) => void;
+  showCourseDeletedSnack: (open: boolean) => void;
 }
 
 export default function SearchCards({
@@ -31,15 +33,14 @@ export default function SearchCards({
   pastCourses,
   setPastCourses,
   tokenId,
+  showCourseAddedSnack,
+  showNothingToAddSnack,
+  showCourseDeletedSnack,
 }: searchProps) {
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
-
-  // snackbars
-  const [courseAddedSnack, showCourseAddedSnack] = useState(false);
-  const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState({} as any);
@@ -176,21 +177,8 @@ export default function SearchCards({
         deleteModalOpen={deleteModalOpen}
         setDeleteModalOpen={setDeleteModalOpen}
         scheduleId={scheduleId}
+        showCourseDeletedSnack={showCourseDeletedSnack}
       ></SearchDeleteModal>
-      <Portal>
-        <CustomSnackbar
-          showSnackbar={courseAddedSnack}
-          setShowSnackbar={showCourseAddedSnack}
-          message="Success! Course added to schedule."
-          type="success"
-        />
-        <CustomSnackbar
-          showSnackbar={nothingToAddSnack}
-          setShowSnackbar={showNothingToAddSnack}
-          message="Please select at least one section to add."
-          type="alert"
-        />
-      </Portal>
     </Box>
   );
 }
