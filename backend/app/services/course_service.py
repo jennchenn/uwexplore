@@ -1,6 +1,6 @@
-from bson.objectid import ObjectId
-
 import difflib
+
+from bson.objectid import ObjectId
 
 from ..models.course import Course
 from ..models.user import PastCourses
