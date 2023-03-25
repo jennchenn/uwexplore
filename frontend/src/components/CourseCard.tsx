@@ -382,7 +382,7 @@ export default function CourseCard({
               alignItems: "center",
             }}
           >
-            {type === "search" && (
+            {type === "search" && tokenId && (
               <Tooltip
                 title={
                   CourseCardProps.course.id in bookmarkedCourses
@@ -655,6 +655,7 @@ export default function CourseCard({
             <FormControlLabel
               control={
                 <Checkbox
+                  disabled={tokenId === null}
                   checked={isPastCourse}
                   onChange={(e: any) => {
                     if (isPastCourse) {
@@ -673,7 +674,9 @@ export default function CourseCard({
               }
               label={
                 <h5 style={{ margin: "0px" }}>
-                  I have completed/plan to complete this course
+                  {tokenId
+                    ? "I have completed/plan to complete this course"
+                    : "Create an account to add this course to your course plan!"}
                 </h5>
               }
             />
