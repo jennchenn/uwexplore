@@ -682,6 +682,7 @@ export default function CourseCard({
         onClose={handleClose}
         aria-labelledby="past-modal-title"
         aria-describedby="past-modal-description"
+        sx={{ textAlign: "center" }}
       >
         <Box className="modal-style">
           <h4 className="past-modal-info">
@@ -738,7 +739,7 @@ export default function CourseCard({
             <CustomButton
               className="modal-past-term-cancel-button"
               text="cancel"
-              type="secondary"
+              type="tertiary"
               onClick={handleClose}
             />
           </div>

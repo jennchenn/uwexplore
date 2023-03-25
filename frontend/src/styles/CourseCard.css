@@ -6,11 +6,11 @@
 }
 
 .past-modal-info {
-  color: var(--black-1);
+  color: var(--black-3);
 }
 
 .term-select-root {
-  width: inherit;
+  width: 290px;
 }
 
 .term-select-root .term-select-label,
@@ -23,7 +23,6 @@
 .term-select {
   background-color: var(--bg-1);
   margin: 0 20px 0 20px;
-  border: 1px solid rgba(153, 153, 153, 0.5);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   border-radius: 10px !important;
 }
