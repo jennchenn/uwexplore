@@ -68,17 +68,20 @@ function App() {
     const lsToken = localStorage.getItem("token");
     if (!lsToken) return;
     // refresh the token
-    const oldToken = lsToken ? JSON.parse(lsToken) : null;
+    const oldToken = JSON.parse(lsToken);
     userClient.refresh(oldToken.refresh_token).then((value: any) => {
       setToken(value);
     });
   }, []);
 
   useEffect(() => {
+    const lsScheduleId = localStorage.getItem("scheduleId");
+
     if (token) {
       localStorage.setItem("token", JSON.stringify(token));
       courseClients.getScheduleId(token.id_token).then((value: any) => {
         setScheduleId(value.schedule_id);
+        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
       ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
         if (value.length !== 0) {
@@ -89,6 +92,14 @@ function App() {
         if (value.length !== 0) {
           setPastCourses(value);
         }
+      });
+    } else if (lsScheduleId && lsScheduleId !== "null") {
+      const scheduleId = JSON.parse(lsScheduleId);
+      setScheduleId(scheduleId);
+    } else {
+      courseClients.createSchedule().then((value: any) => {
+        setScheduleId(value.schedule_id);
+        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
     }
   }, [token]);
