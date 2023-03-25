@@ -1,5 +1,7 @@
 from bson.objectid import ObjectId
 
+import difflib
+
 from ..models.course import Course
 from ..models.user import PastCourses
 
@@ -37,7 +39,8 @@ class CourseService:
             if search_query_list:
                 # we expect search_query to be a list of size 1, so we fetch the actual string
                 keyword = search_query_list[0]
-                stripped_keyword = keyword.replace(" ", "")
+                # remove all whitespaces
+                stripped_keyword = "".join(keyword.split())
                 # {"$options": "i"} allows for case insensitive search
                 filters.append(
                     {
@@ -49,7 +52,6 @@ class CourseService:
                                     "$options": "i",
                                 }
                             },
-                            {"department": {"$regex": f"{keyword}", "$options": "i"}},
                             {
                                 "full_code": {
                                     "$regex": f"{stripped_keyword}",
@@ -71,6 +73,15 @@ class CourseService:
                 query_results = Course.objects.order_by("full_code").limit(
                     MAX_QUERY_SIZE
                 )
+
+            # sort results in order of closeness of keyword to the department
+            query_results = sorted(
+                query_results,
+                key=lambda course: difflib.SequenceMatcher(
+                    None, course.department, stripped_keyword.upper()
+                ).ratio(),
+                reverse=True,
+            )
 
             for result in query_results:
                 result.sections = sorted(
