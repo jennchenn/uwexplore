@@ -17,7 +17,7 @@ export default function CustomSnackbar({
   ...SnackbarProps
 }: SnackbarProps) {
   const color =
-    type == "success" ? "var(--alerts-success-1)" : "var(--black-3)";
+    type === "success" ? "var(--alerts-success-1)" : "var(--black-3)";
   const backgroundColor =
     type === "success" ? "var(--alerts-success-7)" : "var(--alerts-conflict-5)";
   return (

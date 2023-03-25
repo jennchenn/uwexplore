@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper, Portal } from "@mui/material";
+import { Box, CircularProgress, Paper } from "@mui/material";
 import { useState } from "react";
 import { CourseObject } from "../APIClients/CourseClient";
 import CourseCard from "./CourseCard";

@@ -21,6 +21,7 @@ type Props = {
   setModalOpen: (modalOpen: boolean) => any;
   setCoursesOnSchedule: any;
   scheduleId: string;
+  showCourseDeletedSnack: (open: boolean) => any;
 };
 
 export default function CalendarModal({
@@ -31,6 +32,7 @@ export default function CalendarModal({
   setModalOpen,
   setCoursesOnSchedule,
   scheduleId,
+  showCourseDeletedSnack,
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(" ");
   const [colorChanged, setColorChanged] = useState(false);
@@ -87,6 +89,7 @@ export default function CalendarModal({
           setCoursesOnSchedule(value);
         }
         setModalOpen(false);
+        showCourseDeletedSnack(true);
       });
   };
 

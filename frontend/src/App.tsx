@@ -202,6 +202,7 @@ function App() {
                   coursesOnSchedule={coursesOnSchedule}
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
+                  showCourseDeletedSnack={showCourseDeletedSnack}
                 />
                 <Ceab
                   handleCeabPlanChange={handleCeabPlanChange}
