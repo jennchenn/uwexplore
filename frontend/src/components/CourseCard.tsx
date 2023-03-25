@@ -415,6 +415,7 @@ export default function CourseCard({
                 textOverflow: "ellipsis",
                 flexGrow: 1,
               }}
+              onClick={() => handleExpandClick(CourseCardProps.course)}
             >
               {CourseCardProps.course.department}&nbsp;
               {CourseCardProps.course.code} - {CourseCardProps.course.name}
