@@ -47,6 +47,8 @@ function App() {
   const [ceabCounts, setCeabCounts] = useState({});
   const [scheduleId, setScheduleId] = useState("");
 
+  const [refreshCeab, setRefreshCeab] = useState(false);
+
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
     setCalendarWidth(sectionSizes.allCal.calendar);
@@ -59,7 +61,9 @@ function App() {
     setSectionInView("both");
   };
 
-  const handleCeabPlanChange = () => {};
+  const handleCeabPlanChange = () => {
+    setRefreshCeab(!refreshCeab);
+  };
 
   useEffect(() => {
     const scheduleId = localStorage.getItem("scheduleId");
@@ -73,6 +77,24 @@ function App() {
       setToken(value);
     });
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
+        if (value.length !== 0) {
+          setCeabCounts(value);
+        }
+      });
+    }
+    if (scheduleId) {
+      ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
+        if (value.length !== 0) {
+          setCeabOnSchedule(value);
+        }
+      });
+    }
+    // eslint-disable-next-line
+  }, [refreshCeab]);
 
   useEffect(() => {
     if (token) {

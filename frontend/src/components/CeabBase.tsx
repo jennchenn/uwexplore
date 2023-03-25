@@ -79,6 +79,7 @@ export default function CeabBase({
     let tempDict = courseList;
     delete tempDict[courseCode];
     setCourseList(tempDict);
+    handleCeabPlanChange();
   };
 
   const handleTermChange = (event: SelectChangeEvent) => {

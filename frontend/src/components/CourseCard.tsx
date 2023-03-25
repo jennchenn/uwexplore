@@ -357,6 +357,7 @@ export default function CourseCard({
           });
       });
     }
+    CourseCardProps.handleCeabPlanChange();
   };
 
   return (
