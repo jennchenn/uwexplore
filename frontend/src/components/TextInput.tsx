@@ -30,6 +30,13 @@ interface TextInputProps extends Props {
   onBlur?: (event: any) => void;
 }
 
+export const regEmail = new RegExp(
+  // eslint-disable-next-line
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+);
+
+export const regPassword = new RegExp(/^.{6,}$/);
+
 export const TextInput = React.forwardRef(
   (
     {
@@ -48,13 +55,6 @@ export const TextInput = React.forwardRef(
     const [showPassword, setShowPassword] = useState(show);
     const [inputValue, setInputValue] = useState(value);
     const [verified, setVerified] = useState(false);
-
-    const regEmail = new RegExp(
-      // eslint-disable-next-line
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-
-    const regPassword = new RegExp(/^.{6,8}$/);
 
     const handleClickShow = () =>
       setShowPassword((showPassword: any) => !showPassword);
