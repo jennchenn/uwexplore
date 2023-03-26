@@ -46,6 +46,14 @@ LABEL_TO_REQ = {
 
 # https://uwaterloo.ca/engineering/undergraduate-students/co-op-experience/watpd-engineering
 COMPULSORY_PD_COURSE_CODES = set(["PD19", "PD20", "PD21"])
+CSE_LISTS = set(
+    [
+        CeabRequirements.LIST_A.value,
+        CeabRequirements.LIST_B.value,
+        CeabRequirements.LIST_C.value,
+        CeabRequirements.LIST_D.value,
+    ]
+)
 
 
 class CeabService:
@@ -134,9 +142,13 @@ class CeabService:
                 else:
                     requirements_counts[course_info.course_type.value] += 1
 
+                # check if CSE as well
+                if course_info.course_type.value in CSE_LISTS:
+                    requirements_counts[CeabRequirements.CSE.value] += 1
+
         # certain requirements are sum of other ones; compute value in backend for easier parsing in frontend
         self._sum_requirements(requirements_counts)
-        self._round_requirements(requirements_counts)
+        requirements_counts = self._round_requirements(requirements_counts)
         return requirements_counts
 
     def _sum_requirements(self, requirements_counts):
@@ -155,8 +167,10 @@ class CeabService:
 
     def _round_requirements(self, requirements_counts):
         # Python float addition sometimes adds lots of decimals - round this before returning
+        rounded_reqs = {}
         for req, value in requirements_counts.items():
-            requirements_counts[req] = round(value, 2)
+            rounded_reqs[req] = round(value, 2)
+        return rounded_reqs
 
     def _get_ceab_requirements_by_grad_year(self, grad_year=DEFAULT_GRAD_YEAR):
         grad_year = DEFAULT_GRAD_YEAR if grad_year is None else int(grad_year)
