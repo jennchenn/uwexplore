@@ -1,4 +1,4 @@
-import APIClient from "./APIClient";
+import APIClient, { APIError } from "./APIClient";
 import axios, { AxiosError } from "axios";
 
 export type CourseObject = {
@@ -97,19 +97,13 @@ const deleteSingleCourseByScheduleId = async (
 
 const getCourses = async (
   queryParams: string | null,
-): Promise<CourseObject[]> => {
+): Promise<CourseObject[] | APIError> => {
   try {
     const { data } = await APIClient.get(`/courses${queryParams}`);
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    return new APIError(apiError.message);
   }
 };
 

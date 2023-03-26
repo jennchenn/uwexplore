@@ -55,6 +55,7 @@ function App() {
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
   const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
   const [courseDeletedSnack, showCourseDeletedSnack] = useState(false);
+  const [isError, showIsError] = useState(false);
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -184,6 +185,7 @@ function App() {
                   showCourseAddedSnack={showCourseAddedSnack}
                   showNothingToAddSnack={showNothingToAddSnack}
                   showCourseDeletedSnack={showCourseDeletedSnack}
+                  showIsError={showIsError}
                 />
               )}
             </PerfectScrollbar>
@@ -262,6 +264,12 @@ function App() {
             setShowSnackbar={showCourseDeletedSnack}
             message="Course successfully deleted."
             type="success"
+          />
+          <CustomSnackbar
+            showSnackbar={isError}
+            setShowSnackbar={showIsError}
+            message="Error occurred; please try again."
+            type="alert"
           />
         </Portal>
       </Grid>

@@ -20,6 +20,7 @@ interface courseHoverProps {
   showCourseAddedSnack: (open: boolean) => void;
   showNothingToAddSnack: (open: boolean) => void;
   showCourseDeletedSnack: (open: boolean) => void;
+  showIsError: (open: boolean) => void;
 }
 
 export default function Search({
@@ -34,6 +35,7 @@ export default function Search({
   showCourseAddedSnack,
   showNothingToAddSnack,
   showCourseDeletedSnack,
+  showIsError,
 }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,11 +57,17 @@ export default function Search({
       const results = courseClients.getCourses(
         `?query=${searchQuery}&${filteringQuery}`,
       );
-
-      results.then((value) => {
+      if (results instanceof Array) {
+        results.then((value) => {
+          setResultsLoading(false);
+          setSearchResults(value as any);
+        });
+      } else {
+        showIsError(true);
+        setSearchResults([]);
+        setSearchQuery("");
         setResultsLoading(false);
-        setSearchResults(value as any);
-      });
+      }
     }
   }, [searchQuery, filteringQuery]);
 
