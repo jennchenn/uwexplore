@@ -95,20 +95,18 @@ export default function CourseCard({
     }
   };
 
-  useEffect(() => {
+  const determineCeabCheckboxState = () => {
     for (let term in CourseCardProps.pastCourses) {
       if (
         CourseCardProps.pastCourses[term].includes(
           `${CourseCardProps.course.department} ${CourseCardProps.course.code}`,
         )
       ) {
-        setIsPastCourse(true);
-        return;
+        return true;
       }
     }
-    setIsPastCourse(false);
-    // eslint-disable-next-line
-  }, []);
+    return false;
+  };
 
   // styles for table cells, format taken from MUI docs
   const StyledTableCell: any = styled(TableCell)(() => ({
@@ -663,7 +661,8 @@ export default function CourseCard({
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={isPastCourse}
+                  // or maybe set false on expand
+                  checked={determineCeabCheckboxState()}
                   onChange={(e: any) => {
                     if (isPastCourse) {
                       setIsPastCourse(false);
