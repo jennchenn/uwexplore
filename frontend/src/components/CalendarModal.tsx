@@ -22,6 +22,7 @@ type Props = {
   setModalOpen: (modalOpen: boolean) => any;
   setCoursesOnSchedule: any;
   scheduleId: string;
+  showCourseDeletedSnack: (open: boolean) => any;
 };
 
 export default function CalendarModal({
@@ -32,10 +33,11 @@ export default function CalendarModal({
   setModalOpen,
   setCoursesOnSchedule,
   scheduleId,
+  showCourseDeletedSnack,
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(" ");
   const [colorChanged, setColorChanged] = useState(false);
-  const [applyColourTo, setApplyColorTo] = useState("section");
+  const [applyColourTo, setApplyColorTo] = useState("course");
 
   const [courseToDelete, setCourseToDelete] = useState({} as any);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -56,6 +58,7 @@ export default function CalendarModal({
             setSelectedValue(" ");
             setModalOpen(false);
             setColorChanged(false);
+            setApplyColorTo("course");
           });
       } else {
         courseClients

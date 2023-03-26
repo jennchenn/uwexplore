@@ -15,6 +15,7 @@ interface courseHoverProps {
   coursesOnSchedule: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
+  showCourseDeletedSnack: (open: boolean) => void;
 }
 
 export default function CalendarBase({
@@ -22,6 +23,7 @@ export default function CalendarBase({
   coursesOnSchedule,
   setCoursesOnSchedule,
   scheduleId,
+  showCourseDeletedSnack,
 }: courseHoverProps) {
   // localizer is required
   const localizer = momentLocalizer(moment);
@@ -242,6 +244,7 @@ export default function CalendarBase({
           setModalOpen={setModalOpen}
           setCoursesOnSchedule={setCoursesOnSchedule}
           scheduleId={scheduleId}
+          showCourseDeletedSnack={showCourseDeletedSnack}
         ></CalendarModal>
       </div>
     </Box>

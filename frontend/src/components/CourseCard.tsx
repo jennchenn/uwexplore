@@ -29,7 +29,6 @@ import {
 } from "@mui/material";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "../styles/CourseCard.css";
-import backgroundColors from "../styles/calendarCourseBackgroundColors";
 
 //MUI icon imports
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -335,10 +334,6 @@ export default function CourseCard({
           formattedArray.push({
             course_id: course_id,
             section_id: section_ids[key][i],
-            color:
-              backgroundColors[
-                Math.floor(Math.random() * backgroundColors.length + 1)
-              ],
           });
         }
         courseClients
@@ -354,6 +349,7 @@ export default function CourseCard({
           });
       });
     }
+    CourseCardProps.handleCeabPlanChange();
   };
 
   return (
@@ -380,7 +376,7 @@ export default function CourseCard({
               alignItems: "center",
             }}
           >
-            {type === "search" && (
+            {type === "search" && tokenId && (
               <Tooltip
                 title={
                   CourseCardProps.course.id in bookmarkedCourses
@@ -656,6 +652,7 @@ export default function CourseCard({
               control={
                 <Checkbox
                   checked={determineCeabCheckboxState()}
+                  disabled={tokenId === null}
                   onChange={(e: any) => {
                     if (isPastCourse) {
                       setIsPastCourse(false);
@@ -672,7 +669,11 @@ export default function CourseCard({
                 />
               }
               label={
-                <h5 style={{ margin: "0px" }}>I have completed this course</h5>
+                <h5 style={{ margin: "0px" }}>
+                  {tokenId
+                    ? "I have completed/plan to complete this course"
+                    : "Create an account to add this course to your course plan!"}
+                </h5>
               }
             />
           </Collapse>
@@ -687,7 +688,7 @@ export default function CourseCard({
       >
         <Box className="modal-style">
           <h4 className="past-modal-info">
-            When did you complete this course?
+            When did you complete/do you plan to complete this course?
           </h4>
           <FormControl className="term-select-root">
             <InputLabel className="term-select-label heading-5">

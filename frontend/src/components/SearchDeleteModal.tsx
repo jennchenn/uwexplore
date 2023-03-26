@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 
 interface searchDeleteModalProps {
+  handleCeabPlanChange: any;
   courseToDelete: any;
   setCourseToDelete: any;
   setCoursesOnSchedule: any;
@@ -13,9 +14,11 @@ interface searchDeleteModalProps {
   scheduleId: string;
   calModalOpen?: boolean;
   setCalModalOpen?: any;
+  showCourseDeletedSnack: (open: boolean) => void;
 }
 
 export default function SearchDeleteModal({
+  handleCeabPlanChange,
   courseToDelete,
   setCourseToDelete,
   setCoursesOnSchedule,
@@ -24,6 +27,7 @@ export default function SearchDeleteModal({
   scheduleId,
   calModalOpen,
   setCalModalOpen,
+  showCourseDeletedSnack,
 }: searchDeleteModalProps) {
   const modalStyles = {
     position: "absolute",
@@ -51,7 +55,10 @@ export default function SearchDeleteModal({
         if (calModalOpen) {
           setCalModalOpen(false);
         }
+        showCourseDeletedSnack(true);
       });
+
+    handleCeabPlanChange();
   };
 
   const handleClose = () => {

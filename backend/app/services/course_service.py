@@ -1,3 +1,5 @@
+import difflib
+
 from bson.objectid import ObjectId
 
 from ..models.course import Course
@@ -21,6 +23,7 @@ class CourseService:
         """
         try:
             filters = []
+            stripped_keyword = ""
 
             if course_codes:
                 code_filter = []
@@ -37,22 +40,22 @@ class CourseService:
             if search_query_list:
                 # we expect search_query to be a list of size 1, so we fetch the actual string
                 keyword = search_query_list[0]
-                stripped_keyword = keyword.replace(" ", "")
+                # remove all whitespaces
+                stripped_keyword = "".join(keyword.split())
                 # {"$options": "i"} allows for case insensitive search
                 filters.append(
                     {
                         "$or": [
+                            {
+                                "full_code": {
+                                    "$regex": f"{stripped_keyword}",
+                                    "$options": "i",
+                                }
+                            },
                             {"name": {"$regex": f"{keyword}", "$options": "i"}},
                             {
                                 "description": {
                                     "$regex": f"{keyword}",
-                                    "$options": "i",
-                                }
-                            },
-                            {"department": {"$regex": f"{keyword}", "$options": "i"}},
-                            {
-                                "full_code": {
-                                    "$regex": f"{stripped_keyword}",
                                     "$options": "i",
                                 }
                             },
@@ -62,17 +65,24 @@ class CourseService:
 
             courses = []
             if filters:
-                query_results = (
-                    Course.objects(__raw__={"$and": filters})
-                    .order_by("full_code")
-                    .limit(MAX_QUERY_SIZE)
+                query_results = Course.objects(__raw__={"$and": filters}).order_by(
+                    "full_code"
                 )
             else:
                 query_results = Course.objects.order_by("full_code").limit(
                     MAX_QUERY_SIZE
                 )
 
-            for result in query_results:
+            # sort results in order of closeness of keyword to the department
+            query_results = sorted(
+                query_results,
+                key=lambda course: difflib.SequenceMatcher(
+                    None, course.department, stripped_keyword.upper()
+                ).ratio(),
+                reverse=True,
+            )
+
+            for result in query_results[:30]:
                 result.sections = sorted(
                     result.sections, key=lambda section: (section.type, section.number)
                 )

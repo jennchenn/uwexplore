@@ -16,6 +16,8 @@ import CalendarTray from "./components/CalendarTray";
 import userClient, { TokenObject } from "./APIClients/UserClient";
 import courseClients from "./APIClients/CourseClient";
 import ceabClients from "./APIClients/CeabClient";
+import { Portal } from "@mui/material";
+import CustomSnackbar from "./components/Snackbar";
 
 export interface Props {
   id?: string;
@@ -48,6 +50,13 @@ function App() {
   const [ceabCounts, setCeabCounts] = useState({});
   const [scheduleId, setScheduleId] = useState("");
 
+  const [refreshCeab, setRefreshCeab] = useState(false);
+
+  // snackbars
+  const [courseAddedSnack, showCourseAddedSnack] = useState(false);
+  const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
+  const [courseDeletedSnack, showCourseDeletedSnack] = useState(false);
+
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
     setCalendarWidth(sectionSizes.allCal.calendar);
@@ -60,7 +69,9 @@ function App() {
     setSectionInView("both");
   };
 
-  const handleCeabPlanChange = () => {};
+  const handleCeabPlanChange = () => {
+    setRefreshCeab(!refreshCeab);
+  };
 
   useEffect(() => {
     const scheduleId = localStorage.getItem("scheduleId");
@@ -69,7 +80,7 @@ function App() {
     const lsToken = localStorage.getItem("token");
     if (!lsToken) return;
     // refresh the token
-    const oldToken = lsToken ? JSON.parse(lsToken) : null;
+    const oldToken = JSON.parse(lsToken);
     userClient.refresh(oldToken.refresh_token).then((value: any) => {
       setToken(value);
     });
@@ -77,9 +88,30 @@ function App() {
 
   useEffect(() => {
     if (token) {
+      ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
+        if (value.length !== 0) {
+          setCeabCounts(value);
+        }
+      });
+    }
+    if (scheduleId) {
+      ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
+        if (value.length !== 0) {
+          setCeabOnSchedule(value);
+        }
+      });
+    }
+    // eslint-disable-next-line
+  }, [refreshCeab, pastCourses, coursesOnSchedule]);
+
+  useEffect(() => {
+    const lsScheduleId = localStorage.getItem("scheduleId");
+
+    if (token) {
       localStorage.setItem("token", JSON.stringify(token));
       courseClients.getScheduleId(token.id_token).then((value: any) => {
         setScheduleId(value.schedule_id);
+        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
       ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
         if (value.length !== 0) {
@@ -90,6 +122,14 @@ function App() {
         if (value.length !== 0) {
           setPastCourses(value);
         }
+      });
+    } else if (lsScheduleId && lsScheduleId !== "null") {
+      const scheduleId = JSON.parse(lsScheduleId);
+      setScheduleId(scheduleId);
+    } else {
+      courseClients.createSchedule().then((value: any) => {
+        setScheduleId(value.schedule_id);
+        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
       });
     }
   }, [token]);
@@ -149,20 +189,12 @@ function App() {
                   pastCourses={pastCourses}
                   setPastCourses={setPastCourses}
                   tokenId={token?.id_token || null}
+                  showCourseAddedSnack={showCourseAddedSnack}
+                  showNothingToAddSnack={showNothingToAddSnack}
+                  showCourseDeletedSnack={showCourseDeletedSnack}
                 />
               )}
             </PerfectScrollbar>
-            <CalendarTray
-              setCourseHovered={setCourseHovered}
-              addedCourses={coursesOnSchedule}
-              trayCourses={trayCourses}
-              setAddedCourses={setCoursesOnSchedule}
-              handleCeabPlanChange={handleCeabPlanChange}
-              pastCourses={pastCourses}
-              setPastCourses={setPastCourses}
-              scheduleId={scheduleId}
-              tokenId={token?.id_token || null}
-            />
           </Box>
         </Grid>
         {/* RHS CALENDAR */}
@@ -189,19 +221,57 @@ function App() {
                   coursesOnSchedule={coursesOnSchedule}
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
+                  showCourseDeletedSnack={showCourseDeletedSnack}
                 />
-                <Ceab
-                  handleCeabPlanChange={handleCeabPlanChange}
-                  pastCourses={pastCourses}
-                  setPastCourses={setPastCourses}
-                  ceabOnSchedule={ceabOnSchedule}
-                  ceabCounts={ceabCounts}
-                  tokenId={token?.id_token || null}
-                />
+                {token && (
+                  <Ceab
+                    handleCeabPlanChange={handleCeabPlanChange}
+                    pastCourses={pastCourses}
+                    setPastCourses={setPastCourses}
+                    ceabOnSchedule={ceabOnSchedule}
+                    ceabCounts={ceabCounts}
+                    tokenId={token?.id_token || null}
+                  />
+                )}
               </Stack>
             </PerfectScrollbar>
+            <Portal>
+              <CalendarTray
+                style={{ width: "41.67%" }}
+                setCourseHovered={setCourseHovered}
+                addedCourses={coursesOnSchedule}
+                setAddedCourses={setCoursesOnSchedule}
+                handleCeabPlanChange={handleCeabPlanChange}
+                pastCourses={pastCourses}
+                setPastCourses={setPastCourses}
+                scheduleId={scheduleId}
+                tokenId={token?.id_token || null}
+                showCourseDeletedSnack={showCourseDeletedSnack}
+              />
+            </Portal>
           </Box>
         </Grid>
+        <Portal>
+          1
+          <CustomSnackbar
+            showSnackbar={courseAddedSnack}
+            setShowSnackbar={showCourseAddedSnack}
+            message="Success! Course added to schedule."
+            type="success"
+          />
+          <CustomSnackbar
+            showSnackbar={nothingToAddSnack}
+            setShowSnackbar={showNothingToAddSnack}
+            message="Please select at least one section to add."
+            type="alert"
+          />
+          <CustomSnackbar
+            showSnackbar={courseDeletedSnack}
+            setShowSnackbar={showCourseDeletedSnack}
+            message="Course successfully deleted."
+            type="success"
+          />
+        </Portal>
       </Grid>
     </Box>
   );

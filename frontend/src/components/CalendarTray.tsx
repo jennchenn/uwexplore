@@ -27,6 +27,7 @@ interface CalendarTrayProps extends Props {
   setAddedCourses: (value: any) => void;
   scheduleId: string;
   tokenId: string | null;
+  showCourseDeletedSnack: (open: boolean) => void;
 }
 
 export default function CalendarTray({
@@ -121,12 +122,14 @@ export default function CalendarTray({
         </CardContent>
       </Card>
       <SearchDeleteModal
+        handleCeabPlanChange={CalendarTrayProps.handleCeabPlanChange}
         courseToDelete={courseToDelete}
         setCourseToDelete={setCourseToDelete}
         setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
         deleteModalOpen={deleteModalOpen}
         setDeleteModalOpen={setDeleteModalOpen}
         scheduleId={CalendarTrayProps.scheduleId}
+        showCourseDeletedSnack={CalendarTrayProps.showCourseDeletedSnack}
       />
     </Grid>
   );
