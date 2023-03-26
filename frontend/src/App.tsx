@@ -75,10 +75,13 @@ function App() {
 
   useEffect(() => {
     const scheduleId = localStorage.getItem("scheduleId");
-    const parsedId = scheduleId ? JSON.parse(scheduleId) : null;
-    setScheduleId(parsedId);
+    const parsedId =
+      scheduleId && scheduleId !== "" ? JSON.parse(scheduleId) : null;
+    if (parsedId) {
+      setScheduleId(parsedId);
+    }
     const lsToken = localStorage.getItem("token");
-    if (!lsToken) return;
+    if (!lsToken || lsToken === "") return;
     // refresh the token
     const oldToken = JSON.parse(lsToken);
     userClient.refresh(oldToken.refresh_token).then((value: any) => {
@@ -123,7 +126,7 @@ function App() {
           setPastCourses(value);
         }
       });
-    } else if (lsScheduleId && lsScheduleId !== "null") {
+    } else if (lsScheduleId && lsScheduleId !== "" && lsScheduleId !== "null") {
       const scheduleId = JSON.parse(lsScheduleId);
       setScheduleId(scheduleId);
     } else {
