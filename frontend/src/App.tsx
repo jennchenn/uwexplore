@@ -46,7 +46,6 @@ function App() {
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
   const [pastCourses, setPastCourses] = useState({});
-  const [ceabOnSchedule, setCeabOnSchedule] = useState({});
   const [ceabCounts, setCeabCounts] = useState({});
   const [scheduleId, setScheduleId] = useState("");
 
@@ -119,11 +118,6 @@ function App() {
           localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
         }
       });
-      ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
-        if (value.length !== 0) {
-          setCeabCounts(value);
-        }
-      });
       courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
         if (!(value instanceof APIError)) {
           setPastCourses(value);
@@ -135,18 +129,23 @@ function App() {
     } else {
       createNewSchedule();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+
+  useEffect(() => {
+    ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
+      if (value.length !== 0) {
+        setCeabCounts(value);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coursesOnSchedule]);
 
   useEffect(() => {
     if (scheduleId) {
       courseClients.getCoursesByScheduleId(scheduleId).then((value: any) => {
         if (value.length !== 0) {
           setCoursesOnSchedule(value);
-        }
-      });
-      ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
-        if (value.length !== 0) {
-          setCeabOnSchedule(value);
         }
       });
     }
@@ -231,7 +230,6 @@ function App() {
                     handleCeabPlanChange={handleCeabPlanChange}
                     pastCourses={pastCourses}
                     setPastCourses={setPastCourses}
-                    ceabOnSchedule={ceabOnSchedule}
                     ceabCounts={ceabCounts}
                     tokenId={token?.id_token || null}
                     showIsErrorSnack={showIsErrorSnack}

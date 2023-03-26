@@ -38,7 +38,6 @@ interface CeabBaseProps {
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
   ceabCounts: any;
-  ceabOnSchedule: any;
   tokenId: string | null;
   showIsErrorSnack: (open: boolean) => void;
 }
@@ -48,7 +47,6 @@ export default function CeabBase({
   pastCourses,
   setPastCourses,
   ceabCounts,
-  ceabOnSchedule,
   tokenId,
   showIsErrorSnack,
 }: CeabBaseProps) {
@@ -115,14 +113,8 @@ export default function CeabBase({
                     label={requirement.label}
                     // todo: get user's ceab vals from taken courses and map properly
                     completed={
-                      ceabCounts &&
-                      ceabOnSchedule &&
-                      ceabCounts[requirement.label] &&
-                      ceabOnSchedule[requirement.label]
-                        ? ceabCounts[requirement.label].completed +
-                          ceabOnSchedule[requirement.label].completed
-                        : ceabOnSchedule && ceabOnSchedule[requirement.label]
-                        ? ceabOnSchedule[requirement.label].completed
+                      ceabCounts && ceabCounts[requirement.label]
+                        ? ceabCounts[requirement.label].completed
                         : 0
                     }
                     total={requirement.requirement}
