@@ -157,7 +157,7 @@ export default function CeabBase({
                 }}
               >
                 <h3 style={{ flexGrow: "1", color: "var(--black-3)" }}>
-                  Past Courses
+                  Course Planning
                 </h3>
                 <FormControl
                   sx={{
@@ -208,8 +208,12 @@ export default function CeabBase({
                 <Paper
                   elevation={0}
                   sx={{
-                    padding: 2,
+                    paddingRight: 2,
+                    paddingLeft: 2,
+                    paddingBottom: 2,
                     width: "100%",
+                    height: "433px",
+                    overflowY: "auto",
                     borderRadius: "var(--border-radius)",
                   }}
                 >
@@ -221,10 +225,13 @@ export default function CeabBase({
                         p: 2,
                         borderRadius: "var(--border-radius)",
                         textAlign: "center",
+                        marginTop: "16px",
                       }}
                     >
                       <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
-                        <em>Added past courses will appear here</em>
+                        <em>
+                          Added courses to your course plan will appear here
+                        </em>
                       </h5>
                     </Paper>
                   ) : (

@@ -8,7 +8,7 @@ import {
   Modal,
 } from "@mui/material";
 import { Props } from "../App";
-import { TextInput } from "./TextInput";
+import { TextInput, regPassword, regEmail } from "./TextInput";
 import "../styles/LoginSignUpModal.css";
 import CustomButton from "./CustomButton";
 import userClient, { TokenObject } from "../APIClients/UserClient";
@@ -38,14 +38,6 @@ export default function SignUp({
   const emailRef = React.createRef<HTMLElement>();
   const passwordRef = React.createRef<HTMLElement>();
   const repeatRef = React.createRef<HTMLElement>();
-
-  /* to do: make a utils file to house reused code */
-  const regEmail = new RegExp(
-    // eslint-disable-next-line
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-  );
-
-  const regPassword = new RegExp(/^.{6,8}$/);
 
   const handleConfirmPassword = () => {
     if (password === repeatPassword) {
@@ -145,7 +137,7 @@ export default function SignUp({
           checkReg
           required
           error={password && passwordError}
-          errorText="Password must be between 6-8 characters."
+          errorText="Password must be longer than 6 characters."
           success={password && !passwordError && regPassword.test(password)}
           successText="Your password is good!"
           onBlur={() => {

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper, Portal, Snackbar } from "@mui/material";
+import { Box, CircularProgress, Paper } from "@mui/material";
 import { useState } from "react";
 import { CourseObject } from "../APIClients/CourseClient";
 import CourseCard from "./CourseCard";
@@ -16,6 +16,9 @@ interface searchProps {
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
   tokenId?: string | null;
+  showCourseAddedSnack: (open: boolean) => void;
+  showNothingToAddSnack: (open: boolean) => void;
+  showCourseDeletedSnack: (open: boolean) => void;
 }
 
 export default function SearchCards({
@@ -30,32 +33,23 @@ export default function SearchCards({
   pastCourses,
   setPastCourses,
   tokenId,
+  showCourseAddedSnack,
+  showNothingToAddSnack,
+  showCourseDeletedSnack,
 }: searchProps) {
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
     Record<string, any>
   >({});
 
-  // snackbars
-  const [courseAddedSnack, showCourseAddedSnack] = useState(false);
-  const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
-
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState({} as any);
-
-  const handleCloseAddedSnack = () => {
-    showCourseAddedSnack(false);
-  };
-
-  const handleCloseNothingSnack = () => {
-    showNothingToAddSnack(false);
-  };
 
   const renderSearchResultsFoundMessage = () => {
     if (!resultsLoading) {
       let message = `${searchResults.length} Search results found for "${searchQuery}"`;
       if (searchQuery === "") {
-        message = "Search Results";
+        return <></>;
       }
       return (
         <h4
@@ -84,7 +78,7 @@ export default function SearchCards({
             padding: "24px",
             borderRadius: "var(--border-radius)",
             textAlign: "center",
-            margin: "24px 0px",
+            margin: "16px 0px",
           }}
         >
           <h5 style={{ margin: "0px", color: "var(--black-4)" }}>
@@ -183,38 +177,8 @@ export default function SearchCards({
         deleteModalOpen={deleteModalOpen}
         setDeleteModalOpen={setDeleteModalOpen}
         scheduleId={scheduleId}
+        showCourseDeletedSnack={showCourseDeletedSnack}
       ></SearchDeleteModal>
-      <Portal>
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={courseAddedSnack}
-          autoHideDuration={2000}
-          onClose={handleCloseAddedSnack}
-          message="Success! Course added to schedule."
-          sx={{
-            "& .MuiSnackbarContent-root": {
-              backgroundColor: "var(--alerts-success-7)",
-              color: "var(--alerts-success-1)",
-              minWidth: "150px",
-              marginTop: "64px",
-            },
-          }}
-        />
-        <Snackbar
-          open={nothingToAddSnack}
-          autoHideDuration={2000}
-          onClose={handleCloseNothingSnack}
-          message="Please select at least one section to add."
-          sx={{
-            "& .MuiSnackbarContent-root": {
-              backgroundColor: "var(--alerts-conflict-5)",
-              color: "var(--black-3)",
-              minWidth: "150px",
-              marginTop: "64px",
-            },
-          }}
-        />
-      </Portal>
     </Box>
   );
 }
