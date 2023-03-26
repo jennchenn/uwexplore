@@ -159,22 +159,18 @@ const deletePastCourses = async (token: string | null, course_id: string) => {
   }
 };
 
-const getScheduleId = async (idToken: string): Promise<ScheduleId> => {
+const getScheduleId = async (
+  idToken: string,
+): Promise<ScheduleId | APIError> => {
   try {
     const { data } = await APIClient.get("/schedules/id", {
       headers: { Authorization: `Bearer ${idToken}` },
     });
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-
-    return { schedule_id: null };
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
