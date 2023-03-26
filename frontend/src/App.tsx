@@ -240,6 +240,7 @@ function App() {
                 style={{ width: "41.67%" }}
                 setCourseHovered={setCourseHovered}
                 addedCourses={coursesOnSchedule}
+                trayCourses={trayCourses}
                 setAddedCourses={setCoursesOnSchedule}
                 handleCeabPlanChange={handleCeabPlanChange}
                 pastCourses={pastCourses}
