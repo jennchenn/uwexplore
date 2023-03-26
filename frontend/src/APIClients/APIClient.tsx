@@ -1,10 +1,11 @@
 import axios from "axios";
 
-export class APIError {
-  message: string;
+export class APIError extends Error {
+  __proto__ = Error;
 
   constructor(message: string) {
-    this.message = message;
+    super(message);
+    Object.setPrototypeOf(this, APIError.prototype);
   }
 }
 
