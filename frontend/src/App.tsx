@@ -241,6 +241,7 @@ function App() {
                     ceabOnSchedule={ceabOnSchedule}
                     ceabCounts={ceabCounts}
                     tokenId={token?.id_token || null}
+                    showIsErrorSnack={showIsErrorSnack}
                   />
                 )}
               </Stack>

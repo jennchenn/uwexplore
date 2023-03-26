@@ -154,9 +154,13 @@ export default function CourseCard({
       courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
         if (value.length !== 0) {
           const courseId = value[0].id;
-          courseClients
-            .deletePastCourses(tokenId, courseId)
-            .then((value) => CourseCardProps.setPastCourses(value));
+          courseClients.deletePastCourses(tokenId, courseId).then((value) => {
+            if (value instanceof APIError) {
+              CourseCardProps.showIsErrorSnack(true);
+            } else {
+              CourseCardProps.setPastCourses(value);
+            }
+          });
         }
       });
     } else {

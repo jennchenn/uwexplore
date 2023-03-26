@@ -13,6 +13,7 @@ import ProgressBar from "./ProgressBar";
 import "../styles/CustomButton.css";
 import PastCourseCard from "./PastCourseCard";
 import courseClients from "../APIClients/CourseClient";
+import { APIError } from "../APIClients/APIClient";
 
 const CeabRequirements = [
   { label: "LIST A", requirement: 1 },
@@ -39,6 +40,7 @@ interface CeabBaseProps {
   ceabCounts: any;
   ceabOnSchedule: any;
   tokenId: string | null;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function CeabBase({
@@ -48,6 +50,7 @@ export default function CeabBase({
   ceabCounts,
   ceabOnSchedule,
   tokenId,
+  showIsErrorSnack,
 }: CeabBaseProps) {
   const [term, setTerm] = useState("all");
   const [courseList, setCourseList] = useState<{ [key: string]: string }>({});
@@ -70,17 +73,16 @@ export default function CeabBase({
     courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
       if (value.length !== 0) {
         const courseId = value[0].id;
-        courseClients
-          .deletePastCourses(tokenId, courseId)
-          .then((value) => setPastCourses(value));
-        handleCeabPlanChange();
+        courseClients.deletePastCourses(tokenId, courseId).then((value) => {
+          if (value instanceof APIError) {
+            showIsErrorSnack(true);
+          } else {
+            setPastCourses(value);
+            handleCeabPlanChange();
+          }
+        });
       }
     });
-
-    let tempDict = courseList;
-    delete tempDict[courseCode];
-    setCourseList(tempDict);
-    handleCeabPlanChange();
   };
 
   const handleTermChange = (event: SelectChangeEvent) => {
