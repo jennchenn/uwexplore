@@ -94,7 +94,7 @@ function App() {
       });
     }
     // eslint-disable-next-line
-  }, [refreshCeab]);
+  }, [refreshCeab, pastCourses, coursesOnSchedule]);
 
   useEffect(() => {
     if (token) {

@@ -73,6 +73,7 @@ export default function CeabBase({
         courseClients
           .deletePastCourses(tokenId, courseId)
           .then((value) => setPastCourses(value));
+        handleCeabPlanChange();
       }
     });
 

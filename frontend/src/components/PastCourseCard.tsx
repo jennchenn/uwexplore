@@ -79,6 +79,7 @@ export default function PastCourseCard({
                 PastCourseCardProps.handleRemove(
                   PastCourseCardProps.courseCode,
                 );
+                PastCourseCardProps.handleCeabPlanChange();
               }}
             >
               <DeleteOutlineIcon
