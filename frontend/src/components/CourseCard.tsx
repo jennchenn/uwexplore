@@ -353,6 +353,8 @@ export default function CourseCard({
               CourseCardProps.setCoursesOnSchedule(value);
               CourseCardProps.showCourseAddedSnack(true);
               setAddLoading(false);
+            } else {
+              setAddLoading(false);
             }
           });
       });

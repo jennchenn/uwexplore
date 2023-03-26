@@ -200,6 +200,7 @@ function App() {
                 <Calendar
                   courseHovered={courseHovered}
                   coursesOnSchedule={coursesOnSchedule}
+                  handleCeabPlanChange={handleCeabPlanChange}
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
                 />

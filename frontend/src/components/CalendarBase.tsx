@@ -13,6 +13,7 @@ const { Calendar, momentLocalizer } = ReactBigCalendar;
 interface courseHoverProps {
   courseHovered: any;
   coursesOnSchedule: any;
+  handleCeabPlanChange: any;
   setCoursesOnSchedule: any;
   scheduleId: string;
 }
@@ -20,6 +21,7 @@ interface courseHoverProps {
 export default function CalendarBase({
   courseHovered,
   coursesOnSchedule,
+  handleCeabPlanChange,
   setCoursesOnSchedule,
   scheduleId,
 }: courseHoverProps) {
@@ -242,6 +244,7 @@ export default function CalendarBase({
           setModalOpen={setModalOpen}
           setCoursesOnSchedule={setCoursesOnSchedule}
           scheduleId={scheduleId}
+          handleCeabPlanChange={handleCeabPlanChange}
         ></CalendarModal>
       </div>
     </Box>
