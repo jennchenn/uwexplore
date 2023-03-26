@@ -7,12 +7,14 @@ import "../styles/LoginSignUpModal.css";
 import CustomButton from "./CustomButton";
 import { TextInput, regEmail } from "./TextInput";
 import userClient, { TokenObject } from "../APIClients/UserClient";
+import { APIError } from "../APIClients/APIClient";
 
 interface LoginModalProps extends Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   linkOpen: () => void;
   setToken: (token: TokenObject) => void;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function LoginModal({
@@ -53,18 +55,18 @@ export default function LoginModal({
       setValidate(false);
       setAlert("Please input a valid email/password.");
     } else if (email && regEmail.test(email) && password) {
-      userClient
-        .login(email, password)
-        .then((value: any) => {
+      userClient.login(email, password).then((value: any) => {
+        if (value instanceof APIError) {
+          setValidate(false);
+          handleClose();
+          LoginModalProps.showIsErrorSnack(true);
+        } else {
           LoginModalProps.setToken(value);
           setValidate(true);
           setAlert("");
           handleClose();
-        })
-        .catch((error) => {
-          setValidate(false);
-          setAlert(error);
-        });
+        }
+      });
     }
   };
 

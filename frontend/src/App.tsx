@@ -18,6 +18,7 @@ import courseClients from "./APIClients/CourseClient";
 import ceabClients from "./APIClients/CeabClient";
 import { Portal } from "@mui/material";
 import CustomSnackbar from "./components/Snackbar";
+import { APIError } from "./APIClients/APIClient";
 
 export interface Props {
   id?: string;
@@ -122,7 +123,7 @@ function App() {
         }
       });
       courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
-        if (value.length !== 0) {
+        if (!(value instanceof APIError)) {
           setPastCourses(value);
         }
       });
@@ -154,7 +155,12 @@ function App() {
 
   return (
     <Box>
-      <Navbar token={token} setToken={setToken} setScheduleId={setScheduleId} />
+      <Navbar
+        token={token}
+        setToken={setToken}
+        setScheduleId={setScheduleId}
+        showIsErrorSnack={showIsErrorSnack}
+      />
 
       <Grid container>
         {/* LHS SEARCH */}

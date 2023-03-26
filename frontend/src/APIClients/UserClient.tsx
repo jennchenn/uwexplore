@@ -1,4 +1,4 @@
-import APIClient from "./APIClient";
+import APIClient, { APIError } from "./APIClient";
 import axios, { AxiosError } from "axios";
 
 export type ScheduleObject = {
@@ -40,14 +40,9 @@ const login = async (email: string, password: string) => {
     );
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 const refresh = async (refreshToken: string): Promise<TokenObject | []> => {

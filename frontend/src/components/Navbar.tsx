@@ -13,12 +13,14 @@ interface NavbarProps {
   token: TokenObject | undefined;
   setToken: (value: TokenObject) => void;
   setScheduleId: (value: string) => void;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function Navbar({
   token,
   setToken,
   setScheduleId,
+  showIsErrorSnack,
 }: NavbarProps) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signUpModalOpen, setSignUpModalOpen] = useState(false);
@@ -83,6 +85,7 @@ export default function Navbar({
         setOpen={setLoginModalOpen}
         linkOpen={handleCreateModalOpen}
         setToken={setToken}
+        showIsErrorSnack={showIsErrorSnack}
       />
       <SignUp
         open={signUpModalOpen}
