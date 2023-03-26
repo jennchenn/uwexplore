@@ -44,7 +44,6 @@ function App() {
   const [token, setToken] = useState<TokenObject>();
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
-  const [trayCourses, setTrayCourses] = useState([]);
   const [pastCourses, setPastCourses] = useState({});
   const [ceabOnSchedule, setCeabOnSchedule] = useState({});
   const [ceabCounts, setCeabCounts] = useState({});
@@ -141,13 +140,6 @@ function App() {
           setCoursesOnSchedule(value);
         }
       });
-      // additional call is necessary to setTrayCourses
-      // if set in above call, duplicate courses appear for unknown reason
-      courseClients.getCoursesByScheduleId(scheduleId).then((value: any) => {
-        if (value.length !== 0) {
-          setTrayCourses(value);
-        }
-      });
       ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
         if (value.length !== 0) {
           setCeabOnSchedule(value);
@@ -241,7 +233,6 @@ function App() {
                 style={{ width: "41.67%" }}
                 setCourseHovered={setCourseHovered}
                 addedCourses={coursesOnSchedule}
-                trayCourses={trayCourses}
                 setAddedCourses={setCoursesOnSchedule}
                 handleCeabPlanChange={handleCeabPlanChange}
                 pastCourses={pastCourses}
@@ -254,7 +245,6 @@ function App() {
           </Box>
         </Grid>
         <Portal>
-          1
           <CustomSnackbar
             showSnackbar={courseAddedSnack}
             setShowSnackbar={showCourseAddedSnack}
