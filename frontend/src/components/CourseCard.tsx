@@ -410,6 +410,7 @@ export default function CourseCard({
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 flexGrow: 1,
+                cursor: "pointer",
               }}
               onClick={() => handleExpandClick(CourseCardProps.course)}
             >
