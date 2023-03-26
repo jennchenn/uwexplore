@@ -50,7 +50,7 @@ export default function SearchDeleteModal({
         setDeleteModalOpen(false);
         showCourseDeletedSnack(true);
       });
-      handleCeabPlanChange();
+    handleCeabPlanChange();
   };
 
   const handleClose = () => {
