@@ -12,6 +12,7 @@ interface searchDeleteModalProps {
   deleteModalOpen: boolean;
   setDeleteModalOpen: any;
   scheduleId: string;
+  showCourseDeletedSnack: (open: boolean) => void;
 }
 
 export default function SearchDeleteModal({
@@ -22,6 +23,7 @@ export default function SearchDeleteModal({
   deleteModalOpen,
   setDeleteModalOpen,
   scheduleId,
+  showCourseDeletedSnack,
 }: searchDeleteModalProps) {
   const modalStyles = {
     position: "absolute",
@@ -44,8 +46,11 @@ export default function SearchDeleteModal({
           setCoursesOnSchedule(value);
         }
       })
-      .then(() => setDeleteModalOpen(false));
-    handleCeabPlanChange();
+      .then(() => {
+        setDeleteModalOpen(false);
+        showCourseDeletedSnack(true);
+      });
+      handleCeabPlanChange();
   };
 
   const handleClose = () => {

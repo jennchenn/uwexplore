@@ -1,17 +1,15 @@
-import random
-
 from ..models.course import Course
 from ..models.schedule import Schedule, ScheduleCourses
 
 COLORS = [
-    "#ff6961",
-    "#ffb480",
-    "#e5d54a",
-    "#42d6a4",
-    "#08cad1",
-    "#59adf6",
-    "#9d94ff",
-    "#c780e8",
+    "#F1768C",
+    "#FFB480",
+    "#42D6A4",
+    "#08CAD1",
+    "#59ADF6",
+    "#6A82FF",
+    "#907FF6",
+    "#C780E8",
 ]
 
 

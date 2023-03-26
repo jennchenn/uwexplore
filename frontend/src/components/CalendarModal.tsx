@@ -21,6 +21,7 @@ type Props = {
   setModalOpen: (modalOpen: boolean) => any;
   setCoursesOnSchedule: any;
   scheduleId: string;
+  showCourseDeletedSnack: (open: boolean) => any;
 };
 
 export default function CalendarModal({
@@ -31,10 +32,11 @@ export default function CalendarModal({
   setModalOpen,
   setCoursesOnSchedule,
   scheduleId,
+  showCourseDeletedSnack,
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(" ");
   const [colorChanged, setColorChanged] = useState(false);
-  const [applyColourTo, setApplyColorTo] = useState("section");
+  const [applyColourTo, setApplyColorTo] = useState("course");
 
   const handleClose = () => {
     if (selectedValue !== " ") {
@@ -52,6 +54,7 @@ export default function CalendarModal({
             setSelectedValue(" ");
             setModalOpen(false);
             setColorChanged(false);
+            setApplyColorTo("course");
           });
       } else {
         courseClients
@@ -87,6 +90,7 @@ export default function CalendarModal({
           setCoursesOnSchedule(value);
         }
         setModalOpen(false);
+        showCourseDeletedSnack(true);
       });
   };
 
@@ -149,7 +153,7 @@ export default function CalendarModal({
           <Select
             labelId="demo-select-small"
             id="demo-select-small"
-            defaultValue="section"
+            defaultValue="course"
             value={applyColourTo || ""}
             label="Apply Color To"
             onChange={(e) => handleColorDropdownChange(e)}
@@ -166,8 +170,8 @@ export default function CalendarModal({
               backgroundColor: "white",
             }}
           >
-            <MenuItem value="section">Section</MenuItem>
             <MenuItem value="course">Course</MenuItem>
+            <MenuItem value="section">Section</MenuItem>
           </Select>
         </FormControl>
         <h5 className="conflict-info">
