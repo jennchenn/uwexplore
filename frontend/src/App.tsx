@@ -55,7 +55,7 @@ function App() {
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
   const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
   const [courseDeletedSnack, showCourseDeletedSnack] = useState(false);
-  const [isError, showIsError] = useState(false);
+  const [isError, showIsErrorSnack] = useState(false);
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -185,10 +185,22 @@ function App() {
                   showCourseAddedSnack={showCourseAddedSnack}
                   showNothingToAddSnack={showNothingToAddSnack}
                   showCourseDeletedSnack={showCourseDeletedSnack}
-                  showIsError={showIsError}
+                  showIsErrorSnack={showIsErrorSnack}
                 />
               )}
             </PerfectScrollbar>
+            <CalendarTray
+              setCourseHovered={setCourseHovered}
+              addedCourses={coursesOnSchedule}
+              setAddedCourses={setCoursesOnSchedule}
+              handleCeabPlanChange={handleCeabPlanChange}
+              pastCourses={pastCourses}
+              setPastCourses={setPastCourses}
+              scheduleId={scheduleId}
+              tokenId={token?.id_token || null}
+              showCourseDeletedSnack={showCourseDeletedSnack}
+              showIsErrorSnack={showIsErrorSnack}
+            />
           </Box>
         </Grid>
         {/* RHS CALENDAR */}
@@ -267,7 +279,7 @@ function App() {
           />
           <CustomSnackbar
             showSnackbar={isError}
-            setShowSnackbar={showIsError}
+            setShowSnackbar={showIsErrorSnack}
             message="Error occurred; please try again."
             type="alert"
           />

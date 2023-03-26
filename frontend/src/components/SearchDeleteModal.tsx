@@ -3,6 +3,7 @@ import CustomButton from "./CustomButton";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
+import { APIError } from "../APIClients/APIClient";
 
 interface searchDeleteModalProps {
   handleCeabPlanChange: any;
@@ -15,6 +16,7 @@ interface searchDeleteModalProps {
   calModalOpen?: boolean;
   setCalModalOpen?: any;
   showCourseDeletedSnack: (open: boolean) => void;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function SearchDeleteModal({
@@ -28,6 +30,7 @@ export default function SearchDeleteModal({
   calModalOpen,
   setCalModalOpen,
   showCourseDeletedSnack,
+  showIsErrorSnack,
 }: searchDeleteModalProps) {
   const modalStyles = {
     position: "absolute",
@@ -46,16 +49,16 @@ export default function SearchDeleteModal({
     courseClients
       .deleteCoursesByScheduleId(scheduleId, id)
       .then((value: any) => {
-        if (value.length !== 0) {
-          setCoursesOnSchedule(value);
+        if (value instanceof APIError) {
+          setDeleteModalOpen(false);
+          showIsErrorSnack(true);
+        } else {
+          setDeleteModalOpen(false);
+          if (calModalOpen) {
+            setCalModalOpen(false);
+          }
+          showCourseDeletedSnack(true);
         }
-      })
-      .then(() => {
-        setDeleteModalOpen(false);
-        if (calModalOpen) {
-          setCalModalOpen(false);
-        }
-        showCourseDeletedSnack(true);
       });
 
     handleCeabPlanChange();
