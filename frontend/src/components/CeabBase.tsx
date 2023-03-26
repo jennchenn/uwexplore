@@ -213,7 +213,7 @@ export default function CeabBase({
                     paddingBottom: 2,
                     width: "100%",
                     height: "433px",
-                    overflowY: "scroll",
+                    overflowY: "auto",
                     borderRadius: "var(--border-radius)",
                   }}
                 >
