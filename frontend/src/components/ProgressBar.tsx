@@ -14,9 +14,9 @@ const ProgressBar = (props: any) => {
         <div
           className="filler-styles"
           style={{
-            width: `${completed > total ? 100 : (completed / total) * 100}%`,
+            width: `${completed >= total ? 100 : (completed / total) * 100}%`,
             backgroundColor: `${
-              completed > total
+              completed >= total
                 ? "var(--ceab-completed)"
                 : "var(--main-purple-2)"
             }`,
