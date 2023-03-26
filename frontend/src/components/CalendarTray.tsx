@@ -109,6 +109,7 @@ export default function CalendarTray({
                   scheduleId={CalendarTrayProps.scheduleId}
                   type="added"
                   tokenId={tokenId}
+                  showIsErrorSnack={CalendarTrayProps.showIsErrorSnack}
                 />
               ))}
               {!addedCourses.length && (

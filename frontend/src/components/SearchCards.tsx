@@ -124,6 +124,7 @@ export default function SearchCards({
                   showCourseAddedSnack={showCourseAddedSnack}
                   showNothingToAddSnack={showNothingToAddSnack}
                   tokenId={tokenId}
+                  showIsErrorSnack={showIsErrorSnack}
                 />
               );
             })}
@@ -168,6 +169,7 @@ export default function SearchCards({
             showCourseAddedSnack={showCourseAddedSnack}
             showNothingToAddSnack={showNothingToAddSnack}
             tokenId={tokenId}
+            showIsErrorSnack={showIsErrorSnack}
           />
         ))}
 
