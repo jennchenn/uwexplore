@@ -224,6 +224,7 @@ function App() {
                   scheduleId={scheduleId}
                   showCourseDeletedSnack={showCourseDeletedSnack}
                   handleCeabPlanChange={handleCeabPlanChange}
+                  showIsErrorSnack={showIsErrorSnack}
                 />
                 {token && (
                   <Ceab

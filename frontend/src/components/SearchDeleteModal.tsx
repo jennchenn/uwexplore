@@ -51,8 +51,13 @@ export default function SearchDeleteModal({
       .then((value: any) => {
         if (value instanceof APIError) {
           setDeleteModalOpen(false);
+          setDeleteModalOpen(false);
+          if (calModalOpen) {
+            setCalModalOpen(false);
+          }
           showIsErrorSnack(true);
         } else {
+          setCoursesOnSchedule(value);
           setDeleteModalOpen(false);
           if (calModalOpen) {
             setCalModalOpen(false);
