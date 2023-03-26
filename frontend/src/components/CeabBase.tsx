@@ -73,12 +73,14 @@ export default function CeabBase({
         courseClients
           .deletePastCourses(tokenId, courseId)
           .then((value) => setPastCourses(value));
+        handleCeabPlanChange();
       }
     });
 
     let tempDict = courseList;
     delete tempDict[courseCode];
     setCourseList(tempDict);
+    handleCeabPlanChange();
   };
 
   const handleTermChange = (event: SelectChangeEvent) => {

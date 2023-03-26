@@ -171,6 +171,7 @@ export default function SearchCards({
 
       {renderResultsDisplayedCard()}
       <SearchDeleteModal
+        handleCeabPlanChange={handleCeabPlanChange}
         courseToDelete={courseToDelete}
         setCourseToDelete={setCourseToDelete}
         setCoursesOnSchedule={setCoursesOnSchedule}

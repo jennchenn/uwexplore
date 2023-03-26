@@ -101,6 +101,7 @@ export default function CalendarTray({
         </CardContent>
       </Card>
       <SearchDeleteModal
+        handleCeabPlanChange={CalendarTrayProps.handleCeabPlanChange}
         courseToDelete={courseToDelete}
         setCourseToDelete={setCourseToDelete}
         setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
