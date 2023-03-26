@@ -16,6 +16,7 @@ interface courseHoverProps {
   setCoursesOnSchedule: any;
   scheduleId: string;
   showCourseDeletedSnack: (open: boolean) => void;
+  handleCeabPlanChange: any;
 }
 
 export default function CalendarBase({
@@ -24,6 +25,7 @@ export default function CalendarBase({
   setCoursesOnSchedule,
   scheduleId,
   showCourseDeletedSnack,
+  handleCeabPlanChange,
 }: courseHoverProps) {
   // localizer is required
   const localizer = momentLocalizer(moment);
@@ -245,6 +247,7 @@ export default function CalendarBase({
           setCoursesOnSchedule={setCoursesOnSchedule}
           scheduleId={scheduleId}
           showCourseDeletedSnack={showCourseDeletedSnack}
+          handleCeabPlanChange={handleCeabPlanChange}
         ></CalendarModal>
       </div>
     </Box>

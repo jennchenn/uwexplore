@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "../styles/CalendarTray.css";
 
@@ -23,6 +23,7 @@ interface CalendarTrayProps extends Props {
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
   addedCourses: CourseObject[];
+  // trayCourses: any;
   setAddedCourses: (value: any) => void;
   scheduleId: string;
   tokenId: string | null;
@@ -38,6 +39,24 @@ export default function CalendarTray({
   const [expandedCard, setExpandedCard] = useState("");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState({} as any);
+  const [courseList, setCourseList] = useState([] as any);
+
+  useEffect(() => {
+    // allows lookup of courses by id
+    let idDict: any = {};
+    for (let i = 0; i < addedCourses.length; i++) {
+      if (!(addedCourses[i].id in idDict)) {
+        // if id isn't in dict, add course obj
+        idDict[addedCourses[i].id] = addedCourses[i];
+      } else {
+        // if id is in dict, add this section to exisitng course obj
+        let section = addedCourses[i].sections[0];
+        idDict[addedCourses[i].id].sections.push(section);
+      }
+    }
+    // remove id keys and only return the course objs
+    setCourseList(Object.values(idDict));
+  }, [addedCourses]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -72,7 +91,7 @@ export default function CalendarTray({
           </Stack>
           <Collapse in={expanded} className="tray-contents-container">
             <Stack className="tray-contents" spacing={1}>
-              {addedCourses.map((course, index) => (
+              {courseList.map((course: CourseObject, index: number) => (
                 <CourseCard
                   key={`calendar-tray-course-card-${index}`}
                   course={course}

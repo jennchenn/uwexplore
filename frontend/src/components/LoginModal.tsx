@@ -91,7 +91,7 @@ export default function LoginModal({
         <div className="login-modal-title heading-1">LOGIN</div>
         <div className="login-modal-description heading-6">
           Welcome to your interactive planner. Plan your term and keep track of
-          your courses with UWExplore.
+          your courses with uwexplore.
         </div>
         {!validate && alert !== "" && (
           <div className="login-modal-alert heading-4">{alert}</div>

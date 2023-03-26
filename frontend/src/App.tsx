@@ -214,6 +214,7 @@ function App() {
                   setCoursesOnSchedule={setCoursesOnSchedule}
                   scheduleId={scheduleId}
                   showCourseDeletedSnack={showCourseDeletedSnack}
+                  handleCeabPlanChange={handleCeabPlanChange}
                 />
                 {token && (
                   <Ceab
@@ -244,7 +245,6 @@ function App() {
           </Box>
         </Grid>
         <Portal>
-          1
           <CustomSnackbar
             showSnackbar={courseAddedSnack}
             setShowSnackbar={showCourseAddedSnack}

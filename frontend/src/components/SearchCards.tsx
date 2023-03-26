@@ -78,7 +78,7 @@ export default function SearchCards({
             padding: "24px",
             borderRadius: "var(--border-radius)",
             textAlign: "center",
-            margin: "16px 0px",
+            margin: "24px 0px -5px",
           }}
         >
           <h5 style={{ margin: "0px", color: "var(--black-4)" }}>

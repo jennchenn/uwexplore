@@ -40,7 +40,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Props } from "../App";
 import courseClients, { CourseObject } from "../APIClients/CourseClient";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import CustomButton from "./CustomButton";
 
 interface CourseCardProps extends Props {
@@ -94,20 +94,18 @@ export default function CourseCard({
     }
   };
 
-  useEffect(() => {
+  const determineCeabCheckboxState = () => {
     for (let term in CourseCardProps.pastCourses) {
       if (
         CourseCardProps.pastCourses[term].includes(
           `${CourseCardProps.course.department} ${CourseCardProps.course.code}`,
         )
       ) {
-        setIsPastCourse(true);
-        return;
+        return true;
       }
     }
-    setIsPastCourse(false);
-    // eslint-disable-next-line
-  }, []);
+    return false;
+  };
 
   // styles for table cells, format taken from MUI docs
   const StyledTableCell: any = styled(TableCell)(() => ({
@@ -119,8 +117,6 @@ export default function CourseCard({
     [`&.${tableCellClasses.body}`]: {
       fontSize: "0.8rem",
       padding: "6px",
-      overflow: "hidden",
-      textOverflow: "ellipses",
       whiteSpace: "nowrap",
     },
   }));
@@ -341,12 +337,13 @@ export default function CourseCard({
           });
         }
         courseClients
-          // todo: don't set default colour to black?
           .addCoursesByScheduleId(CourseCardProps.scheduleId, formattedArray)
           .then((value: any) => {
             if (value.length !== 0 && CourseCardProps.showCourseAddedSnack) {
               CourseCardProps.setCoursesOnSchedule(value);
               CourseCardProps.showCourseAddedSnack(true);
+              setAddLoading(false);
+            } else {
               setAddLoading(false);
             }
           });
@@ -365,13 +362,9 @@ export default function CourseCard({
         sx={{
           "& .MuiCardContent-root": {
             padding: "2px",
-            paddingBottom: "28px",
           },
           borderRadius: "var(--border-radius)",
           backgroundColor: "var(--bg-3)",
-          "& :last-child": {
-            padding: "0px !important",
-          },
         }}
       >
         <CardContent>
@@ -417,12 +410,15 @@ export default function CourseCard({
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 flexGrow: 1,
+                cursor: "pointer",
               }}
+              onClick={() => handleExpandClick(CourseCardProps.course)}
             >
               {CourseCardProps.course.department}&nbsp;
               {CourseCardProps.course.code} - {CourseCardProps.course.name}
             </h3>
-            {CourseCardProps.expandedCard === CourseCardProps.course.id
+            {CourseCardProps.expandedCard === CourseCardProps.course.id &&
+            type === "search"
               ? createSectionDropdowns(CourseCardProps.course)
               : false}
             <Tooltip
@@ -656,8 +652,8 @@ export default function CourseCard({
             <FormControlLabel
               control={
                 <Checkbox
+                  checked={determineCeabCheckboxState()}
                   disabled={tokenId === null}
-                  checked={isPastCourse}
                   onChange={(e: any) => {
                     if (isPastCourse) {
                       setIsPastCourse(false);
@@ -689,6 +685,7 @@ export default function CourseCard({
         onClose={handleClose}
         aria-labelledby="past-modal-title"
         aria-describedby="past-modal-description"
+        sx={{ textAlign: "center" }}
       >
         <Box className="modal-style">
           <h4 className="past-modal-info">
@@ -745,7 +742,7 @@ export default function CourseCard({
             <CustomButton
               className="modal-past-term-cancel-button"
               text="cancel"
-              type="secondary"
+              type="tertiary"
               onClick={handleClose}
             />
           </div>

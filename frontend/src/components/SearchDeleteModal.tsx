@@ -12,6 +12,8 @@ interface searchDeleteModalProps {
   deleteModalOpen: boolean;
   setDeleteModalOpen: any;
   scheduleId: string;
+  calModalOpen?: boolean;
+  setCalModalOpen?: any;
   showCourseDeletedSnack: (open: boolean) => void;
 }
 
@@ -23,6 +25,8 @@ export default function SearchDeleteModal({
   deleteModalOpen,
   setDeleteModalOpen,
   scheduleId,
+  calModalOpen,
+  setCalModalOpen,
   showCourseDeletedSnack,
 }: searchDeleteModalProps) {
   const modalStyles = {
@@ -48,8 +52,12 @@ export default function SearchDeleteModal({
       })
       .then(() => {
         setDeleteModalOpen(false);
+        if (calModalOpen) {
+          setCalModalOpen(false);
+        }
         showCourseDeletedSnack(true);
       });
+
     handleCeabPlanChange();
   };
 

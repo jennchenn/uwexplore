@@ -12,6 +12,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import courseClients from "../APIClients/CourseClient";
+import SearchDeleteModal from "./SearchDeleteModal";
 
 type Props = {
   modalClass: any;
@@ -22,6 +23,7 @@ type Props = {
   setCoursesOnSchedule: any;
   scheduleId: string;
   showCourseDeletedSnack: (open: boolean) => any;
+  handleCeabPlanChange: any;
 };
 
 export default function CalendarModal({
@@ -33,10 +35,14 @@ export default function CalendarModal({
   setCoursesOnSchedule,
   scheduleId,
   showCourseDeletedSnack,
+  handleCeabPlanChange,
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(" ");
   const [colorChanged, setColorChanged] = useState(false);
   const [applyColourTo, setApplyColorTo] = useState("course");
+
+  const [courseToDelete, setCourseToDelete] = useState({} as any);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleClose = () => {
     if (selectedValue !== " ") {
@@ -82,16 +88,13 @@ export default function CalendarModal({
     setColorChanged(true);
   };
 
-  const handleDeleteCourse = (id: string) => {
-    courseClients
-      .deleteSingleCourseByScheduleId(scheduleId, id)
-      .then((value: any) => {
-        if (value.length !== 0) {
-          setCoursesOnSchedule(value);
-        }
-        setModalOpen(false);
-        showCourseDeletedSnack(true);
-      });
+  const handleDeleteCourse = (modalClass: any) => {
+    const title = modalClass.title.split("-");
+    setDeleteModalOpen(true);
+    setCourseToDelete({
+      title: title[0],
+      id: modalClass.courseId,
+    });
   };
 
   const handleColorDropdownChange = (e: any) => {
@@ -123,91 +126,107 @@ export default function CalendarModal({
   };
 
   return (
-    <Modal
-      open={modalOpen}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box className="modal-style">
-        <h1 className="modal-title">{modalClass.title}</h1>
-        <h4 className="modal-info">{modalInfo}</h4>
-        {modalRadioButtons()}
-        <FormControl
-          sx={{
-            m: 1,
-            minWidth: 120,
-            marginLeft: "-6px",
-          }}
-          size="small"
-        >
-          <InputLabel
-            id="demo-select-small"
-            sx={{
-              color: "var(--main-purple-2)",
-              fontWeight: "var(--font-weight-regular)",
-            }}
-          >
-            Apply Color To
-          </InputLabel>
-          <Select
-            labelId="demo-select-small"
-            id="demo-select-small"
-            defaultValue="course"
-            value={applyColourTo || ""}
-            label="Apply Color To"
-            onChange={(e) => handleColorDropdownChange(e)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                border: "red",
-                borderRadius: "8px",
-              },
-              "& .MuiSelect-select": {
-                color: "var(--main-purple-1)",
-                fontWeight: "var(--font-weight-regular)",
-              },
-              borderRadius: "10px",
-              backgroundColor: "white",
-            }}
-          >
-            <MenuItem value="course">Course</MenuItem>
-            <MenuItem value="section">Section</MenuItem>
-          </Select>
-        </FormControl>
-        <h5 className="conflict-info">
-          {modalConflicts === undefined ? (
-            <></>
-          ) : (
-            `This course conflicts with: ${modalConflicts.join(", ")}`
-          )}
-        </h5>
-        <IconButton
-          aria-label="delete course"
-          onClick={() => handleDeleteCourse(modalClass.uid)}
-          sx={{
-            marginLeft: "-8px",
-            "&:hover": {
-              borderRadius: "30px",
-            },
-          }}
-        >
-          <DeleteOutlineIcon
-            fontSize="small"
-            sx={{
-              backgroundColor: "var(--alerts-warning-1)",
-              borderRadius: "50%",
-              padding: "6px",
-              color: "white",
-            }}
-          />
-          <h5 style={{ margin: "0px" }}>Delete Course</h5>
-        </IconButton>
-        {colorChanged ? (
-          <h5 className="modal-info">Close popup to see colour changes!</h5>
-        ) : (
-          <></>
-        )}
-      </Box>
-    </Modal>
+    <>
+      <Modal
+        open={modalOpen}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-style">
+          <div style={{ marginLeft: "12px" }}>
+            <h1 className="modal-title">{modalClass.title}</h1>
+            <h4 className="modal-info">{modalInfo}</h4>
+            {modalRadioButtons()}
+            <FormControl
+              sx={{
+                m: 1,
+                minWidth: 120,
+                marginLeft: "-6px",
+              }}
+              size="small"
+            >
+              <InputLabel
+                id="demo-select-small"
+                sx={{
+                  color: "var(--main-purple-2)",
+                  fontWeight: "var(--font-weight-regular)",
+                }}
+              >
+                Apply Color To
+              </InputLabel>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                defaultValue="section"
+                value={applyColourTo || ""}
+                label="Apply Color To"
+                onChange={(e) => handleColorDropdownChange(e)}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    border: "red",
+                    borderRadius: "8px",
+                  },
+                  "& .MuiSelect-select": {
+                    color: "var(--main-purple-1)",
+                    fontWeight: "var(--font-weight-regular)",
+                  },
+                  borderRadius: "10px",
+                  backgroundColor: "white",
+                }}
+              >
+                <MenuItem value="section">Section</MenuItem>
+                <MenuItem value="course">Course</MenuItem>
+              </Select>
+            </FormControl>
+            <h5 className="conflict-info">
+              {modalConflicts === undefined ? (
+                <></>
+              ) : (
+                `This course conflicts with: ${modalConflicts.join(", ")}`
+              )}
+            </h5>
+            <IconButton
+              aria-label="delete course"
+              onClick={() => handleDeleteCourse(modalClass)}
+              sx={{
+                marginLeft: "-8px",
+                "&:hover": {
+                  borderRadius: "30px",
+                },
+              }}
+            >
+              <DeleteOutlineIcon
+                fontSize="small"
+                sx={{
+                  backgroundColor: "var(--alerts-warning-1)",
+                  borderRadius: "50%",
+                  padding: "6px",
+                  color: "white",
+                }}
+              />
+              <h5 style={{ margin: "0px" }}>Delete Course</h5>
+            </IconButton>
+            {colorChanged ? (
+              <h5 className="modal-info">Close popup to see colour changes!</h5>
+            ) : (
+              <></>
+            )}
+          </div>
+        </Box>
+      </Modal>
+      <SearchDeleteModal
+        handleCeabPlanChange={handleCeabPlanChange}
+        courseToDelete={courseToDelete}
+        setCourseToDelete={setCourseToDelete}
+        setCoursesOnSchedule={setCoursesOnSchedule}
+        deleteModalOpen={deleteModalOpen}
+        setDeleteModalOpen={setDeleteModalOpen}
+        scheduleId={scheduleId}
+        calModalOpen={modalOpen}
+        setCalModalOpen={setModalOpen}
+        showCourseDeletedSnack={showCourseDeletedSnack}
+      ></SearchDeleteModal>
+    </>
   );
 }

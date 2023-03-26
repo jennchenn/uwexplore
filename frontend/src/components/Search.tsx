@@ -66,7 +66,7 @@ export default function Search({
   return (
     <div>
       <Box sx={{ m: 2 }}>
-        <Stack direction="column" spacing={1}>
+        <Stack direction="column" spacing={1} sx={{ marginBottom: "70px" }}>
           <Stack direction="column" alignItems="flex-end" spacing={1}>
             <TextField
               fullWidth
@@ -115,6 +115,7 @@ export default function Search({
             <FilteringMenu
               setShowFilterMenu={setShowFilterMenu}
               setResultsLoading={setResultsLoading}
+              filteringQuery={filteringQuery}
               setFilteringQuery={setFilteringQuery}
             />
           )}
