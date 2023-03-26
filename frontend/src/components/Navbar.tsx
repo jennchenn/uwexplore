@@ -92,6 +92,7 @@ export default function Navbar({
         setOpen={setSignUpModalOpen}
         linkOpen={handleLoginModalOpen}
         setToken={setToken}
+        showIsErrorSnack={showIsErrorSnack}
       />
     </>
   );

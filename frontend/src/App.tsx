@@ -74,6 +74,11 @@ function App() {
     setRefreshCeab(!refreshCeab);
   };
 
+  const clearToken = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("scheduleId");
+  };
+
   useEffect(() => {
     const scheduleId = localStorage.getItem("scheduleId");
     const parsedId =
@@ -86,7 +91,12 @@ function App() {
     // refresh the token
     const oldToken = JSON.parse(lsToken);
     userClient.refresh(oldToken.refresh_token).then((value: any) => {
-      setToken(value);
+      if (value instanceof APIError) {
+        showIsErrorSnack(true);
+        clearToken();
+      } else {
+        setToken(value);
+      }
     });
   }, []);
 
