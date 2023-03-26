@@ -79,8 +79,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const lsScheduleId = localStorage.getItem("scheduleId");
-
     if (token) {
       ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
         if (value.length !== 0) {
@@ -99,6 +97,8 @@ function App() {
   }, [refreshCeab, pastCourses, coursesOnSchedule]);
 
   useEffect(() => {
+    const lsScheduleId = localStorage.getItem("scheduleId");
+
     if (token) {
       localStorage.setItem("token", JSON.stringify(token));
       courseClients.getScheduleId(token.id_token).then((value: any) => {
