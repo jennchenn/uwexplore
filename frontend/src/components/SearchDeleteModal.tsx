@@ -11,6 +11,8 @@ interface searchDeleteModalProps {
   deleteModalOpen: boolean;
   setDeleteModalOpen: any;
   scheduleId: string;
+  calModalOpen?: boolean;
+  setCalModalOpen?: any;
 }
 
 export default function SearchDeleteModal({
@@ -20,6 +22,8 @@ export default function SearchDeleteModal({
   deleteModalOpen,
   setDeleteModalOpen,
   scheduleId,
+  calModalOpen,
+  setCalModalOpen,
 }: searchDeleteModalProps) {
   const modalStyles = {
     position: "absolute",
@@ -42,7 +46,12 @@ export default function SearchDeleteModal({
           setCoursesOnSchedule(value);
         }
       })
-      .then(() => setDeleteModalOpen(false));
+      .then(() => {
+        setDeleteModalOpen(false);
+        if (calModalOpen) {
+          setCalModalOpen(false);
+        }
+      });
   };
 
   const handleClose = () => {

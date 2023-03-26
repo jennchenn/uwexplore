@@ -109,6 +109,7 @@ export default function Search({
             <FilteringMenu
               setShowFilterMenu={setShowFilterMenu}
               setResultsLoading={setResultsLoading}
+              filteringQuery={filteringQuery}
               setFilteringQuery={setFilteringQuery}
             />
           )}

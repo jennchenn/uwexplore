@@ -41,7 +41,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Props } from "../App";
 import courseClients, { CourseObject } from "../APIClients/CourseClient";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import CustomButton from "./CustomButton";
 
 interface CourseCardProps extends Props {
@@ -95,20 +95,18 @@ export default function CourseCard({
     }
   };
 
-  useEffect(() => {
+  const determineCeabCheckboxState = () => {
     for (let term in CourseCardProps.pastCourses) {
       if (
         CourseCardProps.pastCourses[term].includes(
           `${CourseCardProps.course.department} ${CourseCardProps.course.code}`,
         )
       ) {
-        setIsPastCourse(true);
-        return;
+        return true;
       }
     }
-    setIsPastCourse(false);
-    // eslint-disable-next-line
-  }, []);
+    return false;
+  };
 
   // styles for table cells, format taken from MUI docs
   const StyledTableCell: any = styled(TableCell)(() => ({
@@ -349,6 +347,8 @@ export default function CourseCard({
             if (value.length !== 0 && CourseCardProps.showCourseAddedSnack) {
               CourseCardProps.setCoursesOnSchedule(value);
               CourseCardProps.showCourseAddedSnack(true);
+              setAddLoading(false);
+            } else {
               setAddLoading(false);
             }
           });
@@ -655,7 +655,7 @@ export default function CourseCard({
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={isPastCourse}
+                  checked={determineCeabCheckboxState()}
                   onChange={(e: any) => {
                     if (isPastCourse) {
                       setIsPastCourse(false);

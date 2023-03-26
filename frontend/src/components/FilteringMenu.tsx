@@ -12,12 +12,14 @@ import "../styles/FilteringMenu.css";
 interface FilteringMenuProps {
   setShowFilterMenu: (showFilterMenu: boolean) => void;
   setResultsLoading: (resultsLoading: boolean) => void;
+  filteringQuery: string;
   setFilteringQuery: (filteringQuery: string) => void;
 }
 
 export default function FilteringMenu({
   setShowFilterMenu,
   setResultsLoading,
+  filteringQuery,
   setFilteringQuery,
 }: FilteringMenuProps) {
   const checkboxStyle = {
@@ -36,8 +38,10 @@ export default function FilteringMenu({
       new FormData(event.currentTarget) as any,
     ).toString();
 
-    setResultsLoading(true);
-    setFilteringQuery(queryString);
+    if (queryString !== filteringQuery) {
+      setResultsLoading(true);
+      setFilteringQuery(queryString);
+    }
   };
 
   const handleCancel = () => {
