@@ -71,25 +71,34 @@ export default function CalendarTray({
           </Stack>
           <Collapse in={expanded} className="tray-contents-container">
             <Stack className="tray-contents" spacing={1}>
-              {addedCourses.map((course, index) => (
-                <CourseCard
-                  key={`calendar-tray-course-card-${index}`}
-                  course={course}
-                  expandedCard={expandedCard}
-                  setExpandedCard={setExpandedCard}
-                  setCourseHovered={CalendarTrayProps.setCourseHovered}
-                  pastCourses={CalendarTrayProps.pastCourses}
-                  setPastCourses={CalendarTrayProps.setPastCourses}
-                  handleCeabPlanChange={CalendarTrayProps.handleCeabPlanChange}
-                  setDeleteModalOpen={setDeleteModalOpen}
-                  coursesOnSchedule={addedCourses}
-                  setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
-                  setCourseToDelete={setCourseToDelete}
-                  scheduleId={CalendarTrayProps.scheduleId}
-                  type="added"
-                  tokenId={tokenId}
-                />
-              ))}
+              {addedCourses
+                .filter(
+                  (value, index, self) =>
+                    self.findIndex(
+                      (val) => val.full_code === value.full_code,
+                    ) === index,
+                )
+                .map((course, index) => (
+                  <CourseCard
+                    key={`calendar-tray-course-card-${index}`}
+                    course={course}
+                    expandedCard={expandedCard}
+                    setExpandedCard={setExpandedCard}
+                    setCourseHovered={CalendarTrayProps.setCourseHovered}
+                    pastCourses={CalendarTrayProps.pastCourses}
+                    setPastCourses={CalendarTrayProps.setPastCourses}
+                    handleCeabPlanChange={
+                      CalendarTrayProps.handleCeabPlanChange
+                    }
+                    setDeleteModalOpen={setDeleteModalOpen}
+                    coursesOnSchedule={addedCourses}
+                    setCoursesOnSchedule={CalendarTrayProps.setAddedCourses}
+                    setCourseToDelete={setCourseToDelete}
+                    scheduleId={CalendarTrayProps.scheduleId}
+                    type="added"
+                    tokenId={tokenId}
+                  />
+                ))}
               {!addedCourses.length && (
                 <Card className="empty-tray-card heading-2">
                   Added courses will appear here!
