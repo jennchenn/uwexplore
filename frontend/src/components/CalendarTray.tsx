@@ -23,6 +23,7 @@ interface CalendarTrayProps extends Props {
   pastCourses: { [key: string]: string[] };
   setPastCourses: (value: { [term: string]: string[] }) => void;
   addedCourses: CourseObject[];
+  trayCourses: any;
   setAddedCourses: (value: any) => void;
   scheduleId: string;
   tokenId: string | null;
@@ -42,20 +43,21 @@ export default function CalendarTray({
   useEffect(() => {
     // allows lookup of courses by id
     let idDict: any = {};
-    for (let i = 0; i < addedCourses.length; i++) {
-      if (!(addedCourses[i].id in idDict)) {
+    for (let i = 0; i < CalendarTrayProps.trayCourses.length; i++) {
+      if (!(CalendarTrayProps.trayCourses[i].id in idDict)) {
         // if id isn't in dict, add course obj
-        idDict[addedCourses[i].id] = addedCourses[i];
+        idDict[CalendarTrayProps.trayCourses[i].id] =
+          CalendarTrayProps.trayCourses[i];
       } else {
         // if id is in dict, add this section to exisitng course obj
-        let section = addedCourses[i].sections[0];
-        idDict[addedCourses[i].id].sections.push(section);
+        let section = CalendarTrayProps.trayCourses[i].sections[0];
+        idDict[CalendarTrayProps.trayCourses[i].id].sections.push(section);
       }
     }
 
     // remove id keys and only return the course objs
     setCourseList(Object.values(idDict));
-  }, [addedCourses]);
+  }, [CalendarTrayProps.trayCourses]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
