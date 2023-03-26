@@ -1,6 +1,18 @@
+import random
+
 from ..models.course import Course
 from ..models.schedule import Schedule, ScheduleCourses
-from ..models.user import User
+
+COLORS = [
+    "#ff6961",
+    "#ffb480",
+    "#e5d54a",
+    "#42d6a4",
+    "#08cad1",
+    "#59adf6",
+    "#9d94ff",
+    "#c780e8",
+]
 
 
 class ScheduleService:
@@ -33,13 +45,33 @@ class ScheduleService:
             new_courses = []
             exceptions = []
             current_schedule = user.schedule
+            course_to_color = self._map_schedule_to_course_colors(current_schedule)
+            # reverse COLORS so we can pop from the end
+            remaining_colors = [
+                c for c in COLORS[::-1] if c not in course_to_color.values()
+            ]
 
             for course in courses:
                 course_obj = Course.objects(_id=course["course_id"]).first()
                 if not course_obj:
                     exceptions.append(f"No course with id={course['course_id']}")
                     continue
-                schedule_obj = ScheduleCourses(**course)
+                if course["course_id"] in course_to_color:
+                    color = course_to_color[course["course_id"]]
+                else:
+                    # we've used all colors at this point, just loop from the start of colors
+                    if not remaining_colors:
+                        num_added_courses = len(current_schedule.courses)
+                        color_idx = int(num_added_courses % len(COLORS))
+                        color = COLORS[color_idx]
+                    else:
+                        color = remaining_colors.pop()
+                    course_to_color[course["course_id"]] = color
+                schedule_obj = ScheduleCourses(
+                    course_id=course.course_id,
+                    section_id=course.section_id,
+                    color=color,
+                )
                 if current_schedule and self._is_duplicate_course(
                     current_schedule, schedule_obj
                 ):
@@ -158,13 +190,32 @@ class ScheduleService:
             new_courses = []
             exceptions = []
             current_schedule = Schedule.objects(id=schedule_id).first()
-
+            course_to_color = self._map_schedule_to_course_colors(current_schedule)
+            # reverse COLORS so we can pop from the end
+            remaining_colors = [
+                c for c in COLORS[::-1] if c not in course_to_color.values()
+            ]
             for course in courses:
                 course_obj = Course.objects(_id=course["course_id"]).first()
                 if not course_obj:
                     exceptions.append(f"No course with id={course['course_id']}")
                     continue
-                schedule_obj = ScheduleCourses(**course)
+                if course["course_id"] in course_to_color:
+                    color = course_to_color[course["course_id"]]
+                else:
+                    # we've used all colors at this point, just loop from the start of colors
+                    if not remaining_colors:
+                        num_added_courses = len(current_schedule.courses)
+                        color_idx = int(num_added_courses % len(COLORS))
+                        color = COLORS[color_idx]
+                    else:
+                        color = remaining_colors.pop()
+                    course_to_color[course["course_id"]] = color
+                schedule_obj = ScheduleCourses(
+                    course_id=course["course_id"],
+                    section_id=course["section_id"],
+                    color=color,
+                )
                 if current_schedule and self._is_duplicate_course(
                     current_schedule, schedule_obj
                 ):
@@ -258,8 +309,8 @@ class ScheduleService:
             raise e
 
     def _is_duplicate_course(self, schedule, new_course):
-        for courses in schedule.courses:
-            if courses.section_id == new_course.section_id:
+        for course in schedule.courses:
+            if course.section_id == new_course.section_id:
                 return True
         return False
 
@@ -314,3 +365,9 @@ class ScheduleService:
         for section in sections:
             if str(section._id) == section_id:
                 return section.to_serializable_dict()
+
+    def _map_schedule_to_course_colors(self, schedule):
+        course_to_color = {}
+        for course in schedule.courses:
+            course_to_color[str(course.course_id)] = course.color
+        return course_to_color
