@@ -166,7 +166,13 @@ export default function CourseCard({
           const courseId = value[0].id;
           courseClients
             .addPastCourses(tokenId, courseId, term)
-            .then((value) => CourseCardProps.setPastCourses(value));
+            .then((value) => {
+              if (value instanceof APIError) {
+                CourseCardProps.showIsErrorSnack(true);
+              } else {
+                CourseCardProps.setPastCourses(value);
+              }
+            });
         }
       });
     }

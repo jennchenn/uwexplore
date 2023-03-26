@@ -105,14 +105,9 @@ const getPastCourses = async (token: string | null) => {
     });
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
@@ -138,14 +133,9 @@ const addPastCourses = async (
     );
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
