@@ -192,18 +192,6 @@ function App() {
                 />
               )}
             </PerfectScrollbar>
-            <CalendarTray
-              setCourseHovered={setCourseHovered}
-              addedCourses={coursesOnSchedule}
-              setAddedCourses={setCoursesOnSchedule}
-              handleCeabPlanChange={handleCeabPlanChange}
-              pastCourses={pastCourses}
-              setPastCourses={setPastCourses}
-              scheduleId={scheduleId}
-              tokenId={token?.id_token || null}
-              showCourseDeletedSnack={showCourseDeletedSnack}
-              showIsErrorSnack={showIsErrorSnack}
-            />
           </Box>
         </Grid>
         {/* RHS CALENDAR */}
@@ -258,6 +246,7 @@ function App() {
                 scheduleId={scheduleId}
                 tokenId={token?.id_token || null}
                 showCourseDeletedSnack={showCourseDeletedSnack}
+                showIsErrorSnack={showIsErrorSnack}
               />
             </Portal>
           </Box>
