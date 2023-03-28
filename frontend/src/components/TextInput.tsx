@@ -28,6 +28,7 @@ interface TextInputProps extends Props {
   checkReg?: boolean;
   setValue: (value: string) => void;
   onBlur?: (event: any) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 export const regEmail = new RegExp(
@@ -48,6 +49,7 @@ export const TextInput = React.forwardRef(
       success = false,
       checkReg = false,
       onBlur = () => {},
+      onKeyDown = () => {},
       ...TextInputProps
     }: TextInputProps,
     ref,
@@ -117,6 +119,10 @@ export const TextInput = React.forwardRef(
             onChange={handleOnChange}
             onBlur={(event: any) => {
               onBlur(event);
+              handleOnChange(event);
+            }}
+            onKeyDown={(event: any) => {
+              onKeyDown(event);
               handleOnChange(event);
             }}
             endAdornment={

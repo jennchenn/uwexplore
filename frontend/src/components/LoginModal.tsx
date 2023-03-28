@@ -105,6 +105,11 @@ export default function LoginModal({
           setValue={setEmail}
           ref={emailRef}
           required
+          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (e.key === "Enter") {
+              handleSubmit();
+            }
+          }}
         />
         <TextInput
           className="modal-input-text"
@@ -115,6 +120,11 @@ export default function LoginModal({
           setValue={setPassword}
           ref={passwordRef}
           required
+          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (e.key === "Enter") {
+              handleSubmit();
+            }
+          }}
         />
         <Link href="#" style={linkStyles}>
           Forgot Password?
