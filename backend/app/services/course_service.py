@@ -54,8 +54,32 @@ class CourseService:
                             },
                             {"name": {"$regex": f"{keyword}", "$options": "i"}},
                             {
+                                "name": {
+                                    "$regex": f"{stripped_keyword}",
+                                    "$options": "i",
+                                }
+                            },
+                            {
                                 "description": {
                                     "$regex": f"{keyword}",
+                                    "$options": "i",
+                                }
+                            },
+                            {
+                                "description": {
+                                    "$regex": f"{stripped_keyword}",
+                                    "$options": "i",
+                                }
+                            },
+                            {
+                                "sections.instructor": {
+                                    "$regex": f"{keyword}",
+                                    "$options": "i",
+                                }
+                            },
+                            {
+                                "sections.instructor": {
+                                    "$regex": f"{stripped_keyword}",
                                     "$options": "i",
                                 }
                             },

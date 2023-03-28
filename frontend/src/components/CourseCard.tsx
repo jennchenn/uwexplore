@@ -42,6 +42,7 @@ import { Props } from "../App";
 import courseClients, { CourseObject } from "../APIClients/CourseClient";
 import { useCallback, useState } from "react";
 import CustomButton from "./CustomButton";
+import { APIError } from "../APIClients/APIClient";
 
 interface CourseCardProps extends Props {
   course: CourseObject;
@@ -62,6 +63,7 @@ interface CourseCardProps extends Props {
   setCourseHovered?: any;
   type?: "search" | "added";
   tokenId?: string | null;
+  showIsErrorSnack: (value: boolean) => void;
 }
 
 export default function CourseCard({
@@ -152,9 +154,13 @@ export default function CourseCard({
       courseClients.getCourses(`?query=${courseCode}`).then((value: any) => {
         if (value.length !== 0) {
           const courseId = value[0].id;
-          courseClients
-            .deletePastCourses(tokenId, courseId)
-            .then((value) => CourseCardProps.setPastCourses(value));
+          courseClients.deletePastCourses(tokenId, courseId).then((value) => {
+            if (value instanceof APIError) {
+              CourseCardProps.showIsErrorSnack(true);
+            } else {
+              CourseCardProps.setPastCourses(value);
+            }
+          });
         }
       });
     } else {
@@ -164,7 +170,13 @@ export default function CourseCard({
           const courseId = value[0].id;
           courseClients
             .addPastCourses(tokenId, courseId, term)
-            .then((value) => CourseCardProps.setPastCourses(value));
+            .then((value) => {
+              if (value instanceof APIError) {
+                CourseCardProps.showIsErrorSnack(true);
+              } else {
+                CourseCardProps.setPastCourses(value);
+              }
+            });
         }
       });
     }
@@ -339,7 +351,10 @@ export default function CourseCard({
         courseClients
           .addCoursesByScheduleId(CourseCardProps.scheduleId, formattedArray)
           .then((value: any) => {
-            if (value.length !== 0 && CourseCardProps.showCourseAddedSnack) {
+            if (value instanceof APIError) {
+              setAddLoading(false);
+              CourseCardProps.showIsErrorSnack(true);
+            } else if (CourseCardProps.showCourseAddedSnack) {
               CourseCardProps.setCoursesOnSchedule(value);
               CourseCardProps.showCourseAddedSnack(true);
               setAddLoading(false);

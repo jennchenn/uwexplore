@@ -7,6 +7,7 @@ import CustomButton from "./CustomButton";
 import FilteringMenu from "./FilteringMenu";
 import SearchCards from "./SearchCards";
 import courseClients from "../APIClients/CourseClient";
+import { APIError } from "../APIClients/APIClient";
 
 interface courseHoverProps {
   setCourseHovered: any;
@@ -20,6 +21,7 @@ interface courseHoverProps {
   showCourseAddedSnack: (open: boolean) => void;
   showNothingToAddSnack: (open: boolean) => void;
   showCourseDeletedSnack: (open: boolean) => void;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function Search({
@@ -34,6 +36,7 @@ export default function Search({
   showCourseAddedSnack,
   showNothingToAddSnack,
   showCourseDeletedSnack,
+  showIsErrorSnack,
 }: courseHoverProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,12 +58,19 @@ export default function Search({
       const results = courseClients.getCourses(
         `?query=${searchQuery}&${filteringQuery}`,
       );
-
       results.then((value) => {
-        setResultsLoading(false);
-        setSearchResults(value as any);
+        if (value instanceof APIError) {
+          showIsErrorSnack(true);
+          setSearchResults([]);
+          setSearchQuery("");
+          setResultsLoading(false);
+        } else {
+          setResultsLoading(false);
+          setSearchResults(value as any);
+        }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, filteringQuery]);
 
   return (
@@ -134,6 +144,7 @@ export default function Search({
             showCourseAddedSnack={showCourseAddedSnack}
             showNothingToAddSnack={showNothingToAddSnack}
             showCourseDeletedSnack={showCourseDeletedSnack}
+            showIsErrorSnack={showIsErrorSnack}
           />
         </Stack>
       </Box>

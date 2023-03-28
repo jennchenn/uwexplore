@@ -16,6 +16,7 @@ interface courseHoverProps {
   setCoursesOnSchedule: any;
   scheduleId: string;
   showCourseDeletedSnack: (open: boolean) => void;
+  showIsErrorSnack: (open: boolean) => void;
   handleCeabPlanChange: any;
 }
 
@@ -25,6 +26,7 @@ export default function CalendarBase({
   setCoursesOnSchedule,
   scheduleId,
   showCourseDeletedSnack,
+  showIsErrorSnack,
   handleCeabPlanChange,
 }: courseHoverProps) {
   // localizer is required
@@ -248,6 +250,7 @@ export default function CalendarBase({
           scheduleId={scheduleId}
           showCourseDeletedSnack={showCourseDeletedSnack}
           handleCeabPlanChange={handleCeabPlanChange}
+          showIsErrorSnack={showIsErrorSnack}
         ></CalendarModal>
       </div>
     </Box>

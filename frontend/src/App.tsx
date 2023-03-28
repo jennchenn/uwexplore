@@ -18,6 +18,7 @@ import courseClients from "./APIClients/CourseClient";
 import ceabClients from "./APIClients/CeabClient";
 import { Portal } from "@mui/material";
 import CustomSnackbar from "./components/Snackbar";
+import { APIError } from "./APIClients/APIClient";
 
 export interface Props {
   id?: string;
@@ -45,7 +46,6 @@ function App() {
 
   const [coursesOnSchedule, setCoursesOnSchedule] = useState([]);
   const [pastCourses, setPastCourses] = useState({});
-  const [ceabOnSchedule, setCeabOnSchedule] = useState({});
   const [ceabCounts, setCeabCounts] = useState({});
   const [scheduleId, setScheduleId] = useState("");
 
@@ -55,6 +55,7 @@ function App() {
   const [courseAddedSnack, showCourseAddedSnack] = useState(false);
   const [nothingToAddSnack, showNothingToAddSnack] = useState(false);
   const [courseDeletedSnack, showCourseDeletedSnack] = useState(false);
+  const [isError, showIsErrorSnack] = useState(false);
 
   const collapseSearch = () => {
     setSearchWidth(sectionSizes.allCal.search);
@@ -72,36 +73,37 @@ function App() {
     setRefreshCeab(!refreshCeab);
   };
 
+  const clearLocalStorage = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("scheduleId");
+    createNewSchedule();
+  };
+
+  const createNewSchedule = () => {
+    courseClients.createSchedule().then((value: any) => {
+      setScheduleId(value.schedule_id);
+      localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
+    });
+  };
+
   useEffect(() => {
-    const scheduleId = localStorage.getItem("scheduleId");
-    const parsedId = scheduleId ? JSON.parse(scheduleId) : null;
-    setScheduleId(parsedId);
     const lsToken = localStorage.getItem("token");
-    if (!lsToken) return;
+    if (!lsToken || lsToken === "") {
+      localStorage.removeItem("token");
+      return;
+    }
     // refresh the token
     const oldToken = JSON.parse(lsToken);
     userClient.refresh(oldToken.refresh_token).then((value: any) => {
-      setToken(value);
+      if (value instanceof APIError) {
+        showIsErrorSnack(true);
+        clearLocalStorage();
+      } else {
+        setToken(value);
+      }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (token) {
-      ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
-        if (value.length !== 0) {
-          setCeabCounts(value);
-        }
-      });
-    }
-    if (scheduleId) {
-      ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
-        if (value.length !== 0) {
-          setCeabOnSchedule(value);
-        }
-      });
-    }
-    // eslint-disable-next-line
-  }, [refreshCeab, pastCourses, coursesOnSchedule]);
 
   useEffect(() => {
     const lsScheduleId = localStorage.getItem("scheduleId");
@@ -109,29 +111,36 @@ function App() {
     if (token) {
       localStorage.setItem("token", JSON.stringify(token));
       courseClients.getScheduleId(token.id_token).then((value: any) => {
-        setScheduleId(value.schedule_id);
-        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
-      });
-      ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
-        if (value.length !== 0) {
-          setCeabCounts(value);
+        if (value instanceof APIError) {
+          showIsErrorSnack(true);
+          clearLocalStorage();
+        } else {
+          setScheduleId(value.schedule_id);
+          localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
         }
       });
       courseClients.getPastCourses(token?.id_token || "").then((value: any) => {
-        if (value.length !== 0) {
+        if (!(value instanceof APIError)) {
           setPastCourses(value);
         }
       });
-    } else if (lsScheduleId && lsScheduleId !== "null") {
+    } else if (lsScheduleId && lsScheduleId !== "" && lsScheduleId !== "null") {
       const scheduleId = JSON.parse(lsScheduleId);
       setScheduleId(scheduleId);
     } else {
-      courseClients.createSchedule().then((value: any) => {
-        setScheduleId(value.schedule_id);
-        localStorage.setItem("scheduleId", JSON.stringify(value.schedule_id));
-      });
+      createNewSchedule();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+
+  useEffect(() => {
+    ceabClients.getCeabByUser(token?.id_token || "").then((value: any) => {
+      if (value.length !== 0) {
+        setCeabCounts(value);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coursesOnSchedule]);
 
   useEffect(() => {
     if (scheduleId) {
@@ -140,17 +149,17 @@ function App() {
           setCoursesOnSchedule(value);
         }
       });
-      ceabClients.getCeabBySchedule(scheduleId).then((value: any) => {
-        if (value.length !== 0) {
-          setCeabOnSchedule(value);
-        }
-      });
     }
   }, [scheduleId]);
 
   return (
     <Box>
-      <Navbar token={token} setToken={setToken} setScheduleId={setScheduleId} />
+      <Navbar
+        token={token}
+        setToken={setToken}
+        setScheduleId={setScheduleId}
+        showIsErrorSnack={showIsErrorSnack}
+      />
 
       <Grid container>
         {/* LHS SEARCH */}
@@ -184,6 +193,7 @@ function App() {
                   showCourseAddedSnack={showCourseAddedSnack}
                   showNothingToAddSnack={showNothingToAddSnack}
                   showCourseDeletedSnack={showCourseDeletedSnack}
+                  showIsErrorSnack={showIsErrorSnack}
                 />
               )}
             </PerfectScrollbar>
@@ -215,15 +225,16 @@ function App() {
                   scheduleId={scheduleId}
                   showCourseDeletedSnack={showCourseDeletedSnack}
                   handleCeabPlanChange={handleCeabPlanChange}
+                  showIsErrorSnack={showIsErrorSnack}
                 />
                 {token && (
                   <Ceab
                     handleCeabPlanChange={handleCeabPlanChange}
                     pastCourses={pastCourses}
                     setPastCourses={setPastCourses}
-                    ceabOnSchedule={ceabOnSchedule}
                     ceabCounts={ceabCounts}
                     tokenId={token?.id_token || null}
+                    showIsErrorSnack={showIsErrorSnack}
                   />
                 )}
               </Stack>
@@ -240,6 +251,7 @@ function App() {
                 scheduleId={scheduleId}
                 tokenId={token?.id_token || null}
                 showCourseDeletedSnack={showCourseDeletedSnack}
+                showIsErrorSnack={showIsErrorSnack}
               />
             </Portal>
           </Box>
@@ -262,6 +274,12 @@ function App() {
             setShowSnackbar={showCourseDeletedSnack}
             message="Course successfully deleted."
             type="success"
+          />
+          <CustomSnackbar
+            showSnackbar={isError}
+            setShowSnackbar={showIsErrorSnack}
+            message="Error occurred; please try again."
+            type="alert"
           />
         </Portal>
       </Grid>
