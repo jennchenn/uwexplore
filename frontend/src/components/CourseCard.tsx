@@ -97,6 +97,10 @@ export default function CourseCard({
   };
 
   const determineCeabCheckboxState = () => {
+    console.log(CourseCardProps.pastCourses);
+    console.log(
+      `${CourseCardProps.course.department} ${CourseCardProps.course.code}`,
+    );
     for (let term in CourseCardProps.pastCourses) {
       if (
         CourseCardProps.pastCourses[term].includes(
@@ -670,7 +674,7 @@ export default function CourseCard({
                   checked={determineCeabCheckboxState()}
                   disabled={tokenId === null}
                   onChange={(e: any) => {
-                    if (isPastCourse) {
+                    if (determineCeabCheckboxState()) {
                       setIsPastCourse(false);
                       CourseCardProps.setPastCourses(
                         getRevisedPastCourses(
