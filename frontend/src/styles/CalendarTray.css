@@ -39,7 +39,7 @@
 
 .tray-contents-container .MuiCollapse-wrapper .MuiCollapse-wrapperInner {
   max-height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .MuiGrid2-grid-xs-0 .MuiBox-root .retractable-tray {
