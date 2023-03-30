@@ -23,6 +23,7 @@ type Props = {
   setCoursesOnSchedule: any;
   scheduleId: string;
   showCourseDeletedSnack: (open: boolean) => any;
+  showIsErrorSnack: (open: boolean) => any;
   handleCeabPlanChange: any;
 };
 
@@ -35,6 +36,7 @@ export default function CalendarModal({
   setCoursesOnSchedule,
   scheduleId,
   showCourseDeletedSnack,
+  showIsErrorSnack,
   handleCeabPlanChange,
 }: Props) {
   const [selectedValue, setSelectedValue] = useState(" ");
@@ -226,6 +228,7 @@ export default function CalendarModal({
         calModalOpen={modalOpen}
         setCalModalOpen={setModalOpen}
         showCourseDeletedSnack={showCourseDeletedSnack}
+        showIsErrorSnack={showIsErrorSnack}
       ></SearchDeleteModal>
     </>
   );

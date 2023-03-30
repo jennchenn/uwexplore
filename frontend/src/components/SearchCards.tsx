@@ -19,6 +19,7 @@ interface searchProps {
   showCourseAddedSnack: (open: boolean) => void;
   showNothingToAddSnack: (open: boolean) => void;
   showCourseDeletedSnack: (open: boolean) => void;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function SearchCards({
@@ -36,6 +37,7 @@ export default function SearchCards({
   showCourseAddedSnack,
   showNothingToAddSnack,
   showCourseDeletedSnack,
+  showIsErrorSnack,
 }: searchProps) {
   const [expandedCard, setExpandedCard] = useState("");
   const [bookmarkedCourses, setBookmarkedCourses] = useState<
@@ -122,6 +124,7 @@ export default function SearchCards({
                   showCourseAddedSnack={showCourseAddedSnack}
                   showNothingToAddSnack={showNothingToAddSnack}
                   tokenId={tokenId}
+                  showIsErrorSnack={showIsErrorSnack}
                 />
               );
             })}
@@ -166,6 +169,7 @@ export default function SearchCards({
             showCourseAddedSnack={showCourseAddedSnack}
             showNothingToAddSnack={showNothingToAddSnack}
             tokenId={tokenId}
+            showIsErrorSnack={showIsErrorSnack}
           />
         ))}
 
@@ -179,6 +183,7 @@ export default function SearchCards({
         setDeleteModalOpen={setDeleteModalOpen}
         scheduleId={scheduleId}
         showCourseDeletedSnack={showCourseDeletedSnack}
+        showIsErrorSnack={showIsErrorSnack}
       ></SearchDeleteModal>
     </Box>
   );

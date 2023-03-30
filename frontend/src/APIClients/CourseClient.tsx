@@ -1,4 +1,4 @@
-import APIClient from "./APIClient";
+import APIClient, { APIError } from "./APIClient";
 import axios, { AxiosError } from "axios";
 
 export type CourseObject = {
@@ -35,14 +35,9 @@ const addCoursesByScheduleId = async (id: string, course: any) => {
     });
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
@@ -58,14 +53,9 @@ const deleteCoursesByScheduleId = async (id: string, course_id: string) => {
     );
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
@@ -97,19 +87,14 @@ const deleteSingleCourseByScheduleId = async (
 
 const getCourses = async (
   queryParams: string | null,
-): Promise<CourseObject[]> => {
+): Promise<CourseObject[] | APIError> => {
   try {
     const { data } = await APIClient.get(`/courses${queryParams}`);
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
@@ -120,14 +105,9 @@ const getPastCourses = async (token: string | null) => {
     });
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
@@ -153,14 +133,9 @@ const addPastCourses = async (
     );
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
@@ -178,33 +153,24 @@ const deletePastCourses = async (token: string | null, course_id: string) => {
     });
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
-const getScheduleId = async (idToken: string): Promise<ScheduleId> => {
+const getScheduleId = async (
+  idToken: string,
+): Promise<ScheduleId | APIError> => {
   try {
     const { data } = await APIClient.get("/schedules/id", {
       headers: { Authorization: `Bearer ${idToken}` },
     });
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-
-    return { schedule_id: null };
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 

@@ -1,5 +1,4 @@
-import APIClient from "./APIClient";
-import axios, { AxiosError } from "axios";
+import APIClient, { APIError } from "./APIClient";
 
 export type ScheduleObject = {
   term: string;
@@ -40,17 +39,14 @@ const login = async (email: string, password: string) => {
     );
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
-const refresh = async (refreshToken: string): Promise<TokenObject | []> => {
+const refresh = async (
+  refreshToken: string,
+): Promise<TokenObject | APIError> => {
   try {
     const payload = {
       refresh_token: refreshToken,
@@ -66,18 +62,16 @@ const refresh = async (refreshToken: string): Promise<TokenObject | []> => {
     );
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 
-const createUser = async (email: string, password: string) => {
+const createUser = async (
+  email: string,
+  password: string,
+): Promise<TokenObject | APIError> => {
   try {
     const payload = {
       email: email,
@@ -94,14 +88,9 @@ const createUser = async (email: string, password: string) => {
     );
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.log(`Axios Error: ${axiosError.message}`);
-    } else {
-      const otherError = error as Error;
-      console.log(`Error: ${otherError.message}`);
-    }
-    return [];
+    const apiError = error as Error;
+    console.log(apiError.message);
+    return new APIError(apiError.message);
   }
 };
 

@@ -28,6 +28,7 @@ interface CalendarTrayProps extends Props {
   scheduleId: string;
   tokenId: string | null;
   showCourseDeletedSnack: (open: boolean) => void;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function CalendarTray({
@@ -108,6 +109,7 @@ export default function CalendarTray({
                   scheduleId={CalendarTrayProps.scheduleId}
                   type="added"
                   tokenId={tokenId}
+                  showIsErrorSnack={CalendarTrayProps.showIsErrorSnack}
                 />
               ))}
               {!addedCourses.length && (
@@ -128,6 +130,7 @@ export default function CalendarTray({
         setDeleteModalOpen={setDeleteModalOpen}
         scheduleId={CalendarTrayProps.scheduleId}
         showCourseDeletedSnack={CalendarTrayProps.showCourseDeletedSnack}
+        showIsErrorSnack={CalendarTrayProps.showIsErrorSnack}
       />
     </Grid>
   );

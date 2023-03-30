@@ -12,12 +12,14 @@ import { TextInput, regPassword, regEmail } from "./TextInput";
 import "../styles/LoginSignUpModal.css";
 import CustomButton from "./CustomButton";
 import userClient, { TokenObject } from "../APIClients/UserClient";
+import { APIError } from "../APIClients/APIClient";
 
 interface SignUpModalProps extends Props {
   open: boolean;
   setOpen: (open: boolean) => any;
   linkOpen: () => void;
   setToken: (token: TokenObject) => void;
+  showIsErrorSnack: (open: boolean) => void;
 }
 
 export default function SignUp({
@@ -72,8 +74,13 @@ export default function SignUp({
       userClient
         .createUser(email, password)
         .then((value: any) => {
-          SignUpModalProps.setToken(value);
-          handleClose();
+          if (value instanceof APIError) {
+            SignUpModalProps.showIsErrorSnack(true);
+            handleClose();
+          } else {
+            SignUpModalProps.setToken(value);
+            handleClose();
+          }
         })
         .catch(() => {
           setEmailUsed(true);
