@@ -4,9 +4,20 @@
   border-radius: 50px !important;
 }
 
+.login-signup-nav-button-container {
+  margin-left: auto;
+}
+
 .customize-toolbar {
   /* min-height: 7vh !important; */
   background: var(--main-purple-1);
+}
+
+.logo-container {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
 }
 
 .logo-styles {
@@ -15,6 +26,9 @@
 }
 
 .title-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
   flex-grow: 1;
   font-weight: var(--font-weight-regular);
 }

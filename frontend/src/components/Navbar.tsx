@@ -57,26 +57,37 @@ export default function Navbar({
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="fixed" elevation={0}>
           <Toolbar className="customize-toolbar" sx={{ height: "3vh" }}>
-            <img src={logo} alt="uwexplore logo" className="logo-styles" />
             <div className="title-container">
-              <h2 className="title">uw</h2>
-              <h2 className="title font-light">explore</h2>
+              <div
+                className="logo-container"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                <img src={logo} alt="uwexplore logo" className="logo-styles" />
+                <div>
+                  <h2 className="title">uw</h2>
+                  <h2 className="title font-light">explore</h2>
+                </div>
+              </div>
+              <div className="login-signup-nav-button-container">
+                {isLoggedIn ? (
+                  <CustomButton
+                    type="secondary"
+                    className="login-signup-nav-button"
+                    onClick={handleLogout}
+                    text="Logout"
+                  />
+                ) : (
+                  <CustomButton
+                    type="secondary"
+                    className="login-signup-nav-button"
+                    onClick={() => setLoginModalOpen(true)}
+                    text="Login/Signup"
+                  />
+                )}
+              </div>
             </div>
-            {isLoggedIn ? (
-              <CustomButton
-                type="secondary"
-                className="login-signup-nav-button"
-                onClick={handleLogout}
-                text="Logout"
-              />
-            ) : (
-              <CustomButton
-                type="secondary"
-                className="login-signup-nav-button"
-                onClick={() => setLoginModalOpen(true)}
-                text="Login/Signup"
-              />
-            )}
           </Toolbar>
         </AppBar>
       </Box>
