@@ -164,7 +164,7 @@ export default function CeabBase({
                       border: "0px",
                     },
                     "& .MuiFormLabel-root": {
-                      color: "white",
+                      color: "var(--black-2)",
                     },
                     "& .MuiSvgIcon-root": {
                       color: "var(--main-purple-5)",

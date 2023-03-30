@@ -380,6 +380,9 @@ export default function CourseCard({
           },
           borderRadius: "var(--border-radius)",
           backgroundColor: "var(--bg-3)",
+          "& :last-child": {
+            padding: "0px !important",
+          },
         }}
       >
         <CardContent>
@@ -426,6 +429,7 @@ export default function CourseCard({
                 textOverflow: "ellipsis",
                 flexGrow: 1,
                 cursor: "pointer",
+                marginLeft: `${type === "added" ? "6px" : "0px"}`,
               }}
               onClick={() => handleExpandClick(CourseCardProps.course)}
             >
@@ -524,7 +528,7 @@ export default function CourseCard({
             <IconButton
               aria-label="expand more"
               onClick={() => handleExpandClick(CourseCardProps.course)}
-              sx={{ padding: "6px", marginRight: "6px" }}
+              sx={{ padding: "6px", marginLeft: "4px", marginRight: "6px" }}
             >
               {CourseCardProps.expandedCard === CourseCardProps.course.id ? (
                 <ExpandLessIcon sx={{ color: "var(--main-purple-1)" }} />
@@ -540,7 +544,7 @@ export default function CourseCard({
                 ? true
                 : false
             }
-            sx={{ margin: "0px 10px" }}
+            sx={{ margin: "0px 10px", marginRight: "18px" }}
             onMouseOver={() => {
               CourseCardProps.setCourseHovered({});
             }}
