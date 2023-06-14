@@ -24,6 +24,14 @@ class CeabRequirements(Enum):
     ENG_SCI_DES = "ENG SCI & ENG DES"
 
 
+CSE_SET = set(
+    [
+        CeabRequirements.LIST_A.value,
+        CeabRequirements.LIST_B.value,
+        CeabRequirements.LIST_C.value,
+        CeabRequirements.LIST_D.value,
+    ]
+)
 DEFAULT_GRAD_YEAR = 2023  # set a default year to base CEAB requirements off of
 
 LABEL_TO_REQ = {
@@ -189,3 +197,68 @@ class CeabService:
                 "requirement": requirements.get(requirements_key, "NA"),
             }
         return label_to_completed_totals
+
+    def get_ceab_numbers_breakdown(self, schedule_id):
+        """
+        Calculate CEAB numbers based on provided schedule
+        :param schedule_id: ID of schedule to fetch CEAB numbers for
+        :type schedule_id: String
+        :raise Exception: if error encountered when fetching CEAB numbers or adding them
+        """
+        try:
+            current_schedule = Schedule.objects(id=schedule_id).first()
+            courses = [
+                str(course["course_id"]) for course in current_schedule["courses"]
+            ]
+            return self._get_ceab_numbers_breakdown(courses)
+        except Exception as e:
+            reason = getattr(e, "message", None)
+            self.logger.error(
+                f"Failed to get CEAB numbers. Reason={reason if reason else str(e)}"
+            )
+            raise e
+
+    def _get_ceab_numbers_breakdown(self, courses):
+        requirements = {}
+        for r in CeabRequirements:
+            requirements[r.value] = {}
+
+        for course_id in courses:
+            course_info = Course.objects(_id=course_id).first()
+            requirements[CeabRequirements.CSE_WEIGHT.value][
+                course_id
+            ] = course_info.cse_weight
+            requirements[CeabRequirements.MATH.value][course_id] = course_info.ceab_math
+            requirements[CeabRequirements.SCI.value][course_id] = course_info.ceab_sci
+            requirements[CeabRequirements.ENG_SCI.value][
+                course_id
+            ] = course_info.ceab_eng_sci
+            requirements[CeabRequirements.ENG_DES.value][
+                course_id
+            ] = course_info.ceab_eng_design
+
+            requirements[CeabRequirements.MATH_SCI.value][course_id] = (
+                course_info.ceab_math + course_info.ceab_sci
+            )
+            requirements[CeabRequirements.ENG_SCI_DES.value][course_id] = (
+                course_info.ceab_eng_sci + course_info.ceab_eng_design
+            )
+
+            if course_info.course_type:
+                if (
+                    course_info.course_type.value == "TE"
+                    or course_info.course_type.value in CSE_SET
+                ):
+                    requirements[CeabRequirements.TE_CSE.value][course_id] = 1
+                if (
+                    course_info.course_type.value == "PD"
+                    and course_info.full_code in COMPULSORY_PD_COURSE_CODES
+                ):
+                    requirements[CeabRequirements.PD_COMP.value][course_id] = 1
+                elif course_info.course_type.value == "PD":
+                    requirements[CeabRequirements.PD_ELEC.value][course_id] = 1
+                elif course_info.course_type.value in CSE_SET:
+                    requirements[CeabRequirements.CSE.value][course_id] = 1
+                else:
+                    requirements[course_info.course_type.value][course_id] = 1
+        return requirements

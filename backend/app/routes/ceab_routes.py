@@ -27,3 +27,13 @@ def get_ceab(curr_user):
     except Exception as e:
         error_message = getattr(e, "message", None)
         return jsonify({"error": (error_message if error_message else str(e))}), 500
+
+
+@blueprint.route("id/<id>/breakdown", methods=["GET"], strict_slashes=False)
+def get_ceab_breakdown_by_id(id):
+    try:
+        result = ceab_service.get_ceab_numbers_breakdown(id)
+        return jsonify(result), 200
+    except Exception as e:
+        error_message = getattr(e, "message", None)
+        return jsonify({"error": (error_message if error_message else str(e))}), 500
