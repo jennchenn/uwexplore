@@ -4,7 +4,7 @@
 
 **uw**explore is a web application that streamlines the course searching and planning process for University of Waterloo undergraduate students (with a special focus on Systems Design Engineering Students). The interactive planner allows students to view past information about courses, check that they satisfy their graduation requirements, and visualize their schedule for the upcoming term.
 
-_Winner of the 2023 Ojala Best Overall Systems Design Engineering Capstone Project._
+_[Winner of the 2023 Ojala Best Overall Systems Design Engineering Capstone Project](https://uwaterloo.ca/systems-design-engineering/news/2023-award-winning-capstone-design-teams)_.
 
 ## Software
 
